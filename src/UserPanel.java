@@ -40,58 +40,8 @@ public class UserPanel extends JPanel {
 		this.setPreferredSize(new Dimension(300, 800));
 		this.setBackground(Color.red);
 
-		Object[] options1 = { "2", "3", "4" };
-		this.numberOfPlayers = JOptionPane.showOptionDialog(null,
-				"How many players are there?", "Setup",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				options1, options1[1]) + 2;
-		Object[] options2 = { "Red", "Blue", "White", "Magenta", "Orange",
-				"Cyan" };
-		this.player = new Player[this.numberOfPlayers];
-		this.colorArray = new Color[this.numberOfPlayers];
-		for (int i = 0; i < this.numberOfPlayers; i++) {
-			boolean diffColor = true;
-			while (diffColor) {
-				int color = JOptionPane.showOptionDialog(null,
-						"What color would you like, Player " + (i + 1) + "?",
-						"Setup", JOptionPane.DEFAULT_OPTION,
-						JOptionPane.QUESTION_MESSAGE, null, options2, null);
-				diffColor = false;
-				switch (color) {
-				case 0:
-					this.colorArray[i] = Color.red;
-					break;
-				case 1:
-					this.colorArray[i] = Color.blue;
-					break;
-				case 2:
-					this.colorArray[i] = Color.white;
-					break;
-				case 3:
-					this.colorArray[i] = Color.magenta;
-					break;
-				case 4:
-					this.colorArray[i] = Color.orange;
-					break;
-				case 5:
-					this.colorArray[i] = Color.cyan;
-					break;
-				case 6:
-					this.colorArray[i] = Color.black;
-					break;
-				case 7:
-					this.colorArray[i] = Color.red;
-					break;
-				}
-				for (int j = 0; j < i; j++) {
-					if (this.colorArray[i] == this.colorArray[j])
-						diffColor = true;
-					// verifies that the user selects a color that hasn't
-					// already been chosen.
-				}
-				this.player[i] = new Player();
-			}
-		}
+		configureNumberOfPlayers();
+		configurePlayerColors();
 
 		JLabel hello = new JLabel("Current Player:");
 		hello.setFont(new Font("Times New Roman", 1, 30));
@@ -161,15 +111,7 @@ public class UserPanel extends JPanel {
 		this.cardButton.setPreferredSize(new Dimension(300, 40));
 		this.cardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (UserPanel.this.cardsShowed) {
-					UserPanel.this.cardButton.setText("vv Show Cards vv");
-					UserPanel.this.cardPanel.setVisible(false);
-					UserPanel.this.cardsShowed = false;
-				} else {
-					UserPanel.this.cardButton.setText("^^ Hide Cards ^^");
-					UserPanel.this.cardsShowed = true;
-					UserPanel.this.cardPanel.setVisible(true);
-				}
+				toggleCardPanel();
 			}
 		});
 
@@ -216,17 +158,15 @@ public class UserPanel extends JPanel {
 		this.rollButton = new JButton("Roll");
 		this.rollButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				UserPanel.this.dice.rollDice();
-				UserPanel.this.rollButton.setVisible(false);
-				UserPanel.this.buildButton.setVisible(true);
-				UserPanel.this.endButton.setVisible(true);
+				roll();
+				//
 			}
 		});
 		this.buildButton = new JButton("Build");
 		this.buildButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				UserPanel.this.buildPanel.setVisible(true);
-				//the dice are removed to make room for the build/buy options.
+				// the dice are removed to make room for the build/buy options.
 				UserPanel.this.dice.setVisible(false);
 			}
 		});
@@ -264,6 +204,89 @@ public class UserPanel extends JPanel {
 
 	}
 
+	private void configurePlayerColors() {
+		Object[] options2 = { "Red", "Blue", "White", "Magenta", "Orange",
+				"Cyan" };
+		this.player = new Player[this.numberOfPlayers];
+		this.colorArray = new Color[this.numberOfPlayers];
+		for (int i = 0; i < this.numberOfPlayers; i++) {
+			boolean diffColor = true;
+			while (diffColor) {
+				int color = JOptionPane.showOptionDialog(null,
+						"What color would you like, Player " + (i + 1) + "?",
+						"Setup", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, options2, null);
+				diffColor = false;
+				switch (color) {
+				case 0:
+					this.colorArray[i] = Color.red;
+					break;
+				case 1:
+					this.colorArray[i] = Color.blue;
+					break;
+				case 2:
+					this.colorArray[i] = Color.white;
+					break;
+				case 3:
+					this.colorArray[i] = Color.magenta;
+					break;
+				case 4:
+					this.colorArray[i] = Color.orange;
+					break;
+				case 5:
+					this.colorArray[i] = Color.cyan;
+					break;
+				case 6:
+					this.colorArray[i] = Color.black;
+					break;
+				case 7:
+					this.colorArray[i] = Color.red;
+					break;
+				}
+				for (int j = 0; j < i; j++) {
+					if (this.colorArray[i] == this.colorArray[j])
+						diffColor = true;
+					// verifies that the user selects a color that hasn't
+					// already been chosen.
+				}
+
+			}
+
+			this.player[i] = new Player();
+		}
+
+	}
+
+	private void configureNumberOfPlayers() {
+		Object[] options1 = { "2", "3", "4" };
+		this.numberOfPlayers = JOptionPane.showOptionDialog(null,
+				"How many players are there?", "Setup",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+				options1, options1[1]) + 2;
+	}
+
+	protected void toggleCardPanel() {
+		if (this.cardsShowed) {
+			this.cardButton.setText("vv Show Cards vv");
+			this.cardPanel.setVisible(false);
+			this.cardsShowed = false;
+		} else {
+			this.cardButton.setText("^^ Hide Cards ^^");
+			this.cardsShowed = true;
+			this.cardPanel.setVisible(true);
+		}
+
+	}
+
+	protected void roll() {
+		int[] rolls = new Dice().rollDice();
+		this.dice.setDice(rolls[1], rolls[2]);
+		this.rollButton.setVisible(false);
+		this.buildButton.setVisible(true);
+		this.endButton.setVisible(true);
+
+	}
+
 	/**
 	 * causes a pane to pop up showing a development card.
 	 * 
@@ -274,7 +297,7 @@ public class UserPanel extends JPanel {
 	}
 
 	/**
-	 *  returns the player number to be used in cunstructing new structures.
+	 * returns the player number to be used in cunstructing new structures.
 	 * 
 	 * @return current player
 	 */
@@ -283,7 +306,7 @@ public class UserPanel extends JPanel {
 	}
 
 	/**
-	 *  gives the structure type to the board to build new structures.
+	 * gives the structure type to the board to build new structures.
 	 * 
 	 * @return current type of structure to build
 	 */

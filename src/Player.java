@@ -1,4 +1,3 @@
-
 /**
  * this class manages all of the individual player's data.
  * 
@@ -30,6 +29,7 @@ public class Player {
 	 * adjusts, but does NOT replace the old number of cards the player holds.
 	 * 
 	 * @param delta
+	 *            - the number of cards to add or remove from the player's hand
 	 */
 	public void adjustCards(int[] delta) {
 		this.wheatCount += delta[0];
@@ -38,7 +38,7 @@ public class Player {
 		this.brickCount += delta[3];
 		this.oreCount += delta[4];
 		this.soldierCount += delta[5];
-		this.findTotal();
+		this.updateTotal();
 	}
 
 	/**
@@ -46,13 +46,14 @@ public class Player {
 	 * determine how many cards will be lost if a seven is rolled.
 	 * 
 	 */
-	private void findTotal() {
+	private void updateTotal() {
 		this.totalCards = this.wheatCount + this.woodCount + this.woolCount
 				+ this.brickCount + this.oreCount;
 	}
 
 	/**
-	 * tells panel how many victory points the player has. The player wins at 10.
+	 * tells panel how many victory points the player has. The player wins at
+	 * 10.
 	 * 
 	 * @return number of victory points
 	 */
