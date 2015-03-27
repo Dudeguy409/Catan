@@ -136,4 +136,18 @@ public class RoadManager {
 		return false;
 	}
 
+	public void addRoadPiece(int playerIndex, int roadIndex) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int findLongestRoadForPlayer(int playerIndex) {
+		return findLongestRoad();
+	}
+
+	public int getRoadCountForPlayer(int i) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
