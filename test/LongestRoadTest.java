@@ -8,7 +8,7 @@ public class LongestRoadTest {
 
 	@Before
 	public void setUp() throws Exception {
-		rm = new RoadManager();
+		rm = new RoadManager(3);
 	}
 
 	@Test

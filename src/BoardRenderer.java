@@ -18,7 +18,7 @@ import javax.swing.JComponent;
 public class BoardRenderer extends JComponent implements MouseListener {
 	private int startingX = 380;
 	private int startingY = 640;
-	private Hex[] boardArray = new Hex[Main.boardSize];
+	private HexComponent[] boardArray = new HexComponent[Main.boardSize];
 	private int[] colorNumberArray;
 	private int[] rollNumberArray;
 	private Point2D.Double[] pointArray = new Point2D.Double[Main.boardSize];
@@ -48,7 +48,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		g2.setColor(new Color(0, 0, 100));
 		g2.fill(new Rectangle2D.Double(0, 0, 900, 800));
 		for (int i = 0; i < Main.boardSize; i++)
-			this.boardArray[i].drawHex(g2);
+			this.boardArray[i].drawHexComponent(g2);
 		for (Structure structure : this.structureArray)
 			this.boardArray[structure.getHex()].drawStructures(g2, structure);
 	}
@@ -58,10 +58,10 @@ public class BoardRenderer extends JComponent implements MouseListener {
 	 * 
 	 */
 	public void setBoard() {
-		double rightShift = 1.5 * Hex.RADIUS;
-		double diagonalUpShift = (Hex.RADIUS * Hex.Y_SCALAR);
-		double leftShift = 1.5 * Hex.RADIUS;
-		double eachUpShift = Hex.RADIUS * Hex.Y_SCALAR;
+		double rightShift = 1.5 * HexComponent.RADIUS;
+		double diagonalUpShift = (HexComponent.RADIUS * HexComponent.Y_SCALAR);
+		double leftShift = 1.5 * HexComponent.RADIUS;
+		double eachUpShift = HexComponent.RADIUS * HexComponent.Y_SCALAR;
 
 		int diagonalSquares = 3;
 		int switcher = 1;
@@ -73,7 +73,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < diagonalSquares; j++) {
 
-				this.boardArray[j + startIndex] = new Hex(this.startingX
+				this.boardArray[j + startIndex] = new HexComponent(this.startingX
 						+ rightCoeff * rightShift - j * leftShift,
 						this.startingY - diagCoeff * diagonalUpShift - j
 								* eachUpShift, this.colorNumberArray[j
@@ -148,9 +148,9 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		if (nearHex[0] > nearHex[1] + 1 && nearHex[0] > nearHex[2] + 1)
 			pos = -3;
 		// deals with border hexes/positions
-		if (nearHex[4] > Hex.RADIUS * 1.5) {
+		if (nearHex[4] > HexComponent.RADIUS * 1.5) {
 
-			if (nearHex[3] < Hex.RADIUS * 1.5) {
+			if (nearHex[3] < HexComponent.RADIUS * 1.5) {
 				// deals with the settlements on the coast that border two
 				// hexes.
 				switch (nearHex[0]) {
@@ -263,7 +263,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 				}
 				// deals with hexes that have two positions that only border the
 				// ocean and the main hex.
-				if (nearHex[4] > Hex.RADIUS * 2.25) {
+				if (nearHex[4] > HexComponent.RADIUS * 2.25) {
 					switch (nearHex[0]) {
 					case 0:
 						if (nearHex[0] > nearHex[1] - 2) {
@@ -347,9 +347,9 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		int recordA = -1;
 		int recordB = -1;
 		int recordC = -1;
-		double distanceRecordB = 10 * Hex.RADIUS;
-		double distanceRecordA = 10 * Hex.RADIUS;
-		double distanceRecordC = 10 * Hex.RADIUS;
+		double distanceRecordB = 10 * HexComponent.RADIUS;
+		double distanceRecordA = 10 * HexComponent.RADIUS;
+		double distanceRecordC = 10 * HexComponent.RADIUS;
 		for (int i = 0; i < Main.boardSize; i++) {
 			double deltaX = xCoord - this.pointArray[i].getX();
 			double deltaY = yCoord - this.pointArray[i].getY();
@@ -390,7 +390,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		nearArray[4] = (int) distanceRecordC;
 		// if the mouse click was in the center of the hex, the neighbor is set
 		// to -1 to signal that the mouse click was not valid.
-		if (distanceRecordA < Hex.RADIUS / 2)
+		if (distanceRecordA < HexComponent.RADIUS / 2)
 			nearArray[1] = -1;
 		return nearArray;
 	}
@@ -458,7 +458,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 				pos = -2;
 			if (nearHex[0] == nearHex[1] - rowArray[row])
 				pos = 2;
-			if (nearHex[3] > Hex.RADIUS * Hex.Y_SCALAR)
+			if (nearHex[3] > HexComponent.RADIUS * HexComponent.Y_SCALAR)
 				System.out.println(nearHex[3]);
 
 		} else if (row == 2) {
@@ -485,7 +485,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		}
 		// catches the exception cases where the road is along the coast.
 
-		if (nearHex[4] > Hex.RADIUS * 2 - 5) {
+		if (nearHex[4] > HexComponent.RADIUS * 2 - 5) {
 			switch (nearHex[0]) {
 			case 1:
 				if (nearHex[0] > nearHex[1]) {
@@ -575,7 +575,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 
 			// catches the case when the road being built does not start or end
 			// at a different hex.
-			if (nearHex[3] > Hex.RADIUS * 2 - 5) {
+			if (nearHex[3] > HexComponent.RADIUS * 2 - 5) {
 				switch (nearHex[0]) {
 				case 0:
 					pos = -2;

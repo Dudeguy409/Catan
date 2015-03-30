@@ -70,8 +70,9 @@ public class RoadPiece {
 		return this.toString().equals(((RoadPiece) o).toString());
 	}
 
-	public int getRoadValue() {
-		return this.key;
-	}
+	//TODO remove?
+	// public int getRoadValue() {
+	// return this.key;
+	// }
 
 }

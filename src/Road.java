@@ -38,12 +38,4 @@ public class Road {
 		return this.toString().equals(((Road) o).toString());
 	}
 
-	public int[] getAdjacentRoadsA() {
-		return adjacentRoadsA;
-	}
-
-	public int[] getAdjacentRoadsB() {
-		return adjacentRoadsB;
-	}
-
 }
