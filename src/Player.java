@@ -1,17 +1,24 @@
+import java.awt.Color;
+
 /**
  * this class manages all of the individual player's data.
  * 
  * @author Andrew Davidson. Created May 28, 2010.
  */
 public class Player {
+	// TODO implement an enumeration for resource cards
+	// TODO add port and bank trade rates
 	private int wheatCount;
 	private int woodCount;
 	private int woolCount;
 	private int brickCount;
 	private int oreCount;
-	private int soldierCount;
+	private int playedSoldierCount;
 	private int victoryPoints;
-	private int totalCards;
+	private int totalResourceCards;
+	private int playerIndex;
+	private int[] unplayedDevCardCount;
+	private Color color;
 
 	/**
 	 * returns all of the player's cards in a convenient array.
@@ -20,8 +27,8 @@ public class Player {
 	 */
 	public int[] getCards() {
 		int[] cards = { this.wheatCount, this.woodCount, this.woolCount,
-				this.brickCount, this.oreCount, this.soldierCount,
-				this.totalCards };
+				this.brickCount, this.oreCount, this.playedSoldierCount,
+				this.totalResourceCards };
 		return cards;
 	}
 
@@ -37,7 +44,7 @@ public class Player {
 		this.woolCount += delta[2];
 		this.brickCount += delta[3];
 		this.oreCount += delta[4];
-		this.soldierCount += delta[5];
+		this.playedSoldierCount += delta[5];
 		this.updateTotal();
 	}
 
@@ -47,7 +54,7 @@ public class Player {
 	 * 
 	 */
 	private void updateTotal() {
-		this.totalCards = this.wheatCount + this.woodCount + this.woolCount
+		this.totalResourceCards = this.wheatCount + this.woodCount + this.woolCount
 				+ this.brickCount + this.oreCount;
 	}
 

@@ -38,41 +38,54 @@ public class HexComponent {
 	 * @param colorSelector
 	 * @param rollSelector
 	 */
-	public HexComponent(double xCoord, double yCoord, int colorSelector, int rollSelector) {
+	public HexComponent(double xCoord, double yCoord,
+			Game.Resource colorSelector, int rollSelector) {
 		this.centerX = xCoord;
 		this.centerY = yCoord;
 		this.rollNumber = rollSelector;
+
+		setColor(colorSelector);
+
+		createShape();
+
+	}
+
+	private void setColor(Game.Resource colorSelector) {
 		switch (colorSelector) {
-		case 1:
-			this.resourceColor = new Color(255, 255, 170);
+		case desert:
+			this.resourceColor = Game.desertColor;
 			break;
-		case 2:
-			this.resourceColor = new Color(255, 255, 0);
+		case wheat:
+			this.resourceColor = Game.wheatColor;
 			break;
-		case 3:
-			this.resourceColor = new Color(0, 255, 0);
+		case sheep:
+			this.resourceColor = Game.sheepColor;
 			break;
-		case 4:
-			this.resourceColor = new Color(0, 100, 0);
+		case wood:
+			this.resourceColor = Game.woodColor;
 			break;
-		case 5:
-			this.resourceColor = new Color(170, 170, 170);
+		case ore:
+			this.resourceColor = Game.oreColor;
 			break;
-		case 6:
-			this.resourceColor = new Color(200, 70, 0);
+		case brick:
+			this.resourceColor = Game.brickColor;
 			break;
 		}
+
+	}
+
+	private void createShape() {
 		Path2D hexagon = new Path2D.Double();
 		hexagon.moveTo(this.centerX - HexComponent.RADIUS, this.centerY);
-		hexagon.lineTo(this.centerX - HexComponent.RADIUS / 2, this.centerY - HexComponent.RADIUS
-				* HexComponent.Y_SCALAR);
-		hexagon.lineTo(this.centerX + HexComponent.RADIUS / 2, this.centerY - HexComponent.RADIUS
-				* HexComponent.Y_SCALAR);
+		hexagon.lineTo(this.centerX - HexComponent.RADIUS / 2, this.centerY
+				- HexComponent.RADIUS * HexComponent.Y_SCALAR);
+		hexagon.lineTo(this.centerX + HexComponent.RADIUS / 2, this.centerY
+				- HexComponent.RADIUS * HexComponent.Y_SCALAR);
 		hexagon.lineTo(this.centerX + HexComponent.RADIUS, this.centerY);
-		hexagon.lineTo(this.centerX + HexComponent.RADIUS / 2, this.centerY + HexComponent.RADIUS
-				* HexComponent.Y_SCALAR);
-		hexagon.lineTo(this.centerX - HexComponent.RADIUS / 2, this.centerY + HexComponent.RADIUS
-				* HexComponent.Y_SCALAR);
+		hexagon.lineTo(this.centerX + HexComponent.RADIUS / 2, this.centerY
+				+ HexComponent.RADIUS * HexComponent.Y_SCALAR);
+		hexagon.lineTo(this.centerX - HexComponent.RADIUS / 2, this.centerY
+				+ HexComponent.RADIUS * HexComponent.Y_SCALAR);
 		hexagon.lineTo(this.centerX - HexComponent.RADIUS, this.centerY);
 		this.hexagon = hexagon;
 
@@ -99,6 +112,24 @@ public class HexComponent {
 
 		}
 	}
+	
+	/**
+	 * returns the y-value of the center.
+	 * 
+	 * @return centerY
+	 */
+	public double getY() {
+		return this.centerY;
+	}
+
+	/**
+	 * returns the x-value of the center.
+	 * 
+	 * @return centerX
+	 */
+	public double getX() {
+		return this.centerX;
+	}
 
 	/**
 	 * this method is called numerously to draw each individual structure AFTER
@@ -113,80 +144,88 @@ public class HexComponent {
 		if (structure.getType() == 1)
 			switch (structure.getPos()) {
 			case 1:
-				shapeToAdd = new Ellipse2D.Double(this.centerX - HexComponent.RADIUS
-						- this.colonyDiameter / 2, this.centerY
-						- this.colonyDiameter / 2, this.colonyDiameter,
-						this.colonyDiameter);
+				shapeToAdd = new Ellipse2D.Double(this.centerX
+						- HexComponent.RADIUS - this.colonyDiameter / 2,
+						this.centerY - this.colonyDiameter / 2,
+						this.colonyDiameter, this.colonyDiameter);
 				break;
 			case 2:
-				shapeToAdd = new Ellipse2D.Double(this.centerX - HexComponent.RADIUS / 2
-						- this.colonyDiameter / 2, this.centerY - HexComponent.RADIUS
-						* HexComponent.Y_SCALAR - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
+				shapeToAdd = new Ellipse2D.Double(this.centerX
+						- HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
+						this.centerY - HexComponent.RADIUS
+								* HexComponent.Y_SCALAR - this.colonyDiameter
+								/ 2, this.colonyDiameter, this.colonyDiameter);
 				break;
 			case 3:
-				shapeToAdd = new Ellipse2D.Double(this.centerX + HexComponent.RADIUS / 2
-						- this.colonyDiameter / 2, this.centerY - HexComponent.RADIUS
-						* HexComponent.Y_SCALAR - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
+				shapeToAdd = new Ellipse2D.Double(this.centerX
+						+ HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
+						this.centerY - HexComponent.RADIUS
+								* HexComponent.Y_SCALAR - this.colonyDiameter
+								/ 2, this.colonyDiameter, this.colonyDiameter);
 				break;
 			case -1:
-				shapeToAdd = new Ellipse2D.Double(this.centerX + HexComponent.RADIUS
-						- this.colonyDiameter / 2, this.centerY
-						- this.colonyDiameter / 2, this.colonyDiameter,
-						this.colonyDiameter);
+				shapeToAdd = new Ellipse2D.Double(this.centerX
+						+ HexComponent.RADIUS - this.colonyDiameter / 2,
+						this.centerY - this.colonyDiameter / 2,
+						this.colonyDiameter, this.colonyDiameter);
 				break;
 			case -2:
-				shapeToAdd = new Ellipse2D.Double(this.centerX + HexComponent.RADIUS / 2
-						- this.colonyDiameter / 2, this.centerY + HexComponent.RADIUS
-						* HexComponent.Y_SCALAR - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
+				shapeToAdd = new Ellipse2D.Double(this.centerX
+						+ HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
+						this.centerY + HexComponent.RADIUS
+								* HexComponent.Y_SCALAR - this.colonyDiameter
+								/ 2, this.colonyDiameter, this.colonyDiameter);
 				break;
 			case -3:
-				shapeToAdd = new Ellipse2D.Double(this.centerX - HexComponent.RADIUS / 2
-						- this.colonyDiameter / 2, this.centerY + HexComponent.RADIUS
-						* HexComponent.Y_SCALAR - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
+				shapeToAdd = new Ellipse2D.Double(this.centerX
+						- HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
+						this.centerY + HexComponent.RADIUS
+								* HexComponent.Y_SCALAR - this.colonyDiameter
+								/ 2, this.colonyDiameter, this.colonyDiameter);
 				break;
 
 			}
 		else if (structure.getType() == 2)
 			switch (structure.getPos()) {
 			case 1:
-				shapeToAdd = new Rectangle2D.Double(this.centerX - HexComponent.RADIUS
-						- this.colonyDiameter / 2, this.centerY
-						- this.colonyDiameter / 2, this.colonyDiameter,
-						this.colonyDiameter);
+				shapeToAdd = new Rectangle2D.Double(this.centerX
+						- HexComponent.RADIUS - this.colonyDiameter / 2,
+						this.centerY - this.colonyDiameter / 2,
+						this.colonyDiameter, this.colonyDiameter);
 				break;
 			case 2:
-				shapeToAdd = new Rectangle2D.Double(this.centerX - HexComponent.RADIUS
-						/ 2 - this.colonyDiameter / 2, this.centerY
-						- HexComponent.RADIUS * HexComponent.Y_SCALAR - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
+				shapeToAdd = new Rectangle2D.Double(this.centerX
+						- HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
+						this.centerY - HexComponent.RADIUS
+								* HexComponent.Y_SCALAR - this.colonyDiameter
+								/ 2, this.colonyDiameter, this.colonyDiameter);
 				break;
 			case 3:
-				shapeToAdd = new Rectangle2D.Double(this.centerX + HexComponent.RADIUS
-						/ 2 - this.colonyDiameter / 2, this.centerY
-						- HexComponent.RADIUS * HexComponent.Y_SCALAR - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
+				shapeToAdd = new Rectangle2D.Double(this.centerX
+						+ HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
+						this.centerY - HexComponent.RADIUS
+								* HexComponent.Y_SCALAR - this.colonyDiameter
+								/ 2, this.colonyDiameter, this.colonyDiameter);
 				break;
 			case -1:
-				shapeToAdd = new Rectangle2D.Double(this.centerX + HexComponent.RADIUS
-						- this.colonyDiameter / 2, this.centerY
-						- this.colonyDiameter / 2, this.colonyDiameter,
-						this.colonyDiameter);
+				shapeToAdd = new Rectangle2D.Double(this.centerX
+						+ HexComponent.RADIUS - this.colonyDiameter / 2,
+						this.centerY - this.colonyDiameter / 2,
+						this.colonyDiameter, this.colonyDiameter);
 				break;
 			case -3:
-				shapeToAdd = new Rectangle2D.Double(this.centerX - HexComponent.RADIUS
-						/ 2 - this.colonyDiameter / 2, this.centerY
-						+ HexComponent.RADIUS * HexComponent.Y_SCALAR - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
+				shapeToAdd = new Rectangle2D.Double(this.centerX
+						- HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
+						this.centerY + HexComponent.RADIUS
+								* HexComponent.Y_SCALAR - this.colonyDiameter
+								/ 2, this.colonyDiameter, this.colonyDiameter);
 				break;
 			case -2:
-				shapeToAdd = new Rectangle2D.Double(this.centerX + HexComponent.RADIUS
-						/ 2 - this.colonyDiameter / 2, this.centerY
-						+ HexComponent.RADIUS * HexComponent.Y_SCALAR - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
+				shapeToAdd = new Rectangle2D.Double(this.centerX
+						+ HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
+						this.centerY + HexComponent.RADIUS
+								* HexComponent.Y_SCALAR - this.colonyDiameter
+								/ 2, this.colonyDiameter, this.colonyDiameter);
 				break;
 
 			}
@@ -211,91 +250,96 @@ public class HexComponent {
 		switch (pos) {
 		case 1:
 			road = new Path2D.Double();
-			road.moveTo(this.centerX - HexComponent.RADIUS + 5, this.centerY - 3);
+			road.moveTo(this.centerX - HexComponent.RADIUS + 5,
+					this.centerY - 3);
 			road.lineTo(this.centerX - HexComponent.RADIUS / 2, this.centerY
 					- HexComponent.RADIUS * HexComponent.Y_SCALAR + 5);
-			road.lineTo(this.centerX - HexComponent.RADIUS / 2 - 3, this.centerY
-					- HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			road.lineTo(this.centerX - HexComponent.RADIUS / 2 - 3,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR);
 			road.lineTo(this.centerX - HexComponent.RADIUS, this.centerY - 5);
-			road.lineTo(this.centerX - HexComponent.RADIUS + 5, this.centerY - 3);
+			road.lineTo(this.centerX - HexComponent.RADIUS + 5,
+					this.centerY - 3);
 			break;
 		case 2:
 			road = new Path2D.Double();
-			road.moveTo(this.centerX - HexComponent.RADIUS / 2 + 3, this.centerY
-					- HexComponent.RADIUS * HexComponent.Y_SCALAR + 3);
-			road.lineTo(this.centerX + HexComponent.RADIUS / 2 - 3, this.centerY
-					- HexComponent.RADIUS * HexComponent.Y_SCALAR + 3);
-			road.lineTo(this.centerX + HexComponent.RADIUS / 2 - 3, this.centerY
-					- HexComponent.RADIUS * HexComponent.Y_SCALAR - 3);
-			road.lineTo(this.centerX - HexComponent.RADIUS / 2 + 3, this.centerY
-					- HexComponent.RADIUS * HexComponent.Y_SCALAR - 3);
-			road.lineTo(this.centerX - HexComponent.RADIUS / 2 + 3, this.centerY
-					- HexComponent.RADIUS * HexComponent.Y_SCALAR + 3);
+			road.moveTo(this.centerX - HexComponent.RADIUS / 2 + 3,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
+							+ 3);
+			road.lineTo(this.centerX + HexComponent.RADIUS / 2 - 3,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
+							+ 3);
+			road.lineTo(this.centerX + HexComponent.RADIUS / 2 - 3,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
+							- 3);
+			road.lineTo(this.centerX - HexComponent.RADIUS / 2 + 3,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
+							- 3);
+			road.lineTo(this.centerX - HexComponent.RADIUS / 2 + 3,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
+							+ 3);
 			break;
 		case 3:
 			road = new Path2D.Double();
-			road.moveTo(this.centerX + HexComponent.RADIUS - 5, this.centerY - 3);
+			road.moveTo(this.centerX + HexComponent.RADIUS - 5,
+					this.centerY - 3);
 			road.lineTo(this.centerX + HexComponent.RADIUS / 2, this.centerY
 					- HexComponent.RADIUS * HexComponent.Y_SCALAR + 5);
-			road.lineTo(this.centerX + HexComponent.RADIUS / 2 + 3, this.centerY
-					- HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			road.lineTo(this.centerX + HexComponent.RADIUS / 2 + 3,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR);
 			road.lineTo(this.centerX + HexComponent.RADIUS, this.centerY - 5);
-			road.lineTo(this.centerX + HexComponent.RADIUS - 5, this.centerY - 3);
+			road.lineTo(this.centerX + HexComponent.RADIUS - 5,
+					this.centerY - 3);
 			break;
 		case -1:
 			road = new Path2D.Double();
-			road.moveTo(this.centerX + HexComponent.RADIUS - 5, this.centerY + 3);
+			road.moveTo(this.centerX + HexComponent.RADIUS - 5,
+					this.centerY + 3);
 			road.lineTo(this.centerX + HexComponent.RADIUS / 2, this.centerY
 					+ HexComponent.RADIUS * HexComponent.Y_SCALAR - 5);
-			road.lineTo(this.centerX + HexComponent.RADIUS / 2 + 3, this.centerY
-					+ HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			road.lineTo(this.centerX + HexComponent.RADIUS / 2 + 3,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR);
 			road.lineTo(this.centerX + HexComponent.RADIUS, this.centerY + 5);
-			road.lineTo(this.centerX + HexComponent.RADIUS - 5, this.centerY + 3);
+			road.lineTo(this.centerX + HexComponent.RADIUS - 5,
+					this.centerY + 3);
 			break;
 		case -2:
 			road = new Path2D.Double();
-			road.moveTo(this.centerX - HexComponent.RADIUS / 2 + 3, this.centerY
-					+ HexComponent.RADIUS * HexComponent.Y_SCALAR + 3);
-			road.lineTo(this.centerX + HexComponent.RADIUS / 2 - 3, this.centerY
-					+ HexComponent.RADIUS * HexComponent.Y_SCALAR + 3);
-			road.lineTo(this.centerX + HexComponent.RADIUS / 2 - 3, this.centerY
-					+ HexComponent.RADIUS * HexComponent.Y_SCALAR - 3);
-			road.lineTo(this.centerX - HexComponent.RADIUS / 2 + 3, this.centerY
-					+ HexComponent.RADIUS * HexComponent.Y_SCALAR - 3);
-			road.lineTo(this.centerX - HexComponent.RADIUS / 2 + 3, this.centerY
-					+ HexComponent.RADIUS * HexComponent.Y_SCALAR + 3);
+			road.moveTo(this.centerX - HexComponent.RADIUS / 2 + 3,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
+							+ 3);
+			road.lineTo(this.centerX + HexComponent.RADIUS / 2 - 3,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
+							+ 3);
+			road.lineTo(this.centerX + HexComponent.RADIUS / 2 - 3,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
+							- 3);
+			road.lineTo(this.centerX - HexComponent.RADIUS / 2 + 3,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
+							- 3);
+			road.lineTo(this.centerX - HexComponent.RADIUS / 2 + 3,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
+							+ 3);
 			break;
 		case -3:
 			road = new Path2D.Double();
-			road.moveTo(this.centerX - HexComponent.RADIUS + 5, this.centerY + 3);
+			road.moveTo(this.centerX - HexComponent.RADIUS + 5,
+					this.centerY + 3);
 			road.lineTo(this.centerX - HexComponent.RADIUS / 2, this.centerY
 					+ HexComponent.RADIUS * HexComponent.Y_SCALAR - 5);
-			road.lineTo(this.centerX - HexComponent.RADIUS / 2 - 3, this.centerY
-					+ HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			road.lineTo(this.centerX - HexComponent.RADIUS / 2 - 3,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR);
 			road.lineTo(this.centerX - HexComponent.RADIUS, this.centerY + 5);
-			road.lineTo(this.centerX - HexComponent.RADIUS + 5, this.centerY + 3);
+			road.lineTo(this.centerX - HexComponent.RADIUS + 5,
+					this.centerY + 3);
 			break;
 		}
 		return road;
 
 	}
 
-	/**
-	 * returns the y-value of the center.
-	 * 
-	 * @return centerY
-	 */
-	public double getY() {
-		return this.centerY;
-	}
+	public void drawRobber(Graphics2D g2) {
+		// TODO Auto-generated method stub
 
-	/**
-	 * returns the x-value of the center.
-	 * 
-	 * @return centerX
-	 */
-	public double getX() {
-		return this.centerX;
 	}
 
 }

@@ -2,12 +2,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-
 import javax.swing.JComponent;
 
 /**
@@ -18,12 +18,15 @@ import javax.swing.JComponent;
 public class BoardRenderer extends JComponent implements MouseListener {
 	private int startingX = 380;
 	private int startingY = 640;
-	private HexComponent[] boardArray = new HexComponent[Main.boardSize];
-	private int[] colorNumberArray;
+	private HexComponent[] boardArray = new HexComponent[Game.boardSize];
+	private Game.Resource[] colorNumberArray;
 	private int[] rollNumberArray;
-	private Point2D.Double[] pointArray = new Point2D.Double[Main.boardSize];
-	private ArrayList<Structure> structureArray = new ArrayList<Structure>();
-	private UserPanel userPanel;
+	private Point2D.Double[] pointArray = new Point2D.Double[Game.boardSize];
+	private ArrayList<Structure> cityArray = new ArrayList<Structure>();
+	private ArrayList<Structure> settlementArray = new ArrayList<Structure>();
+	private ArrayList<Structure> roadArray = new ArrayList<Structure>();
+	private int robberIndex;
+	private Game game;
 
 	/**
 	 * constructs an empty, randomized board.
@@ -32,13 +35,17 @@ public class BoardRenderer extends JComponent implements MouseListener {
 	 * @param randomNumberArray
 	 * @param myPanel
 	 */
-	public BoardRenderer(int[] randomColorArray, int[] randomNumberArray,
-			UserPanel myPanel) {
+	public BoardRenderer(Game game) {
+
 		this.setPreferredSize(new Dimension(800, 800));
+		this.game = game;
+		this.game.setBoardRenderer(this);
+		this.addMouseListener(this);
+	}
+
+	public void setBoard(Game.Resource[] randomColorArray, int[] randomNumberArray) {
 		this.colorNumberArray = randomColorArray;
 		this.rollNumberArray = randomNumberArray;
-		this.userPanel = myPanel;
-		this.addMouseListener(this);
 	}
 
 	@Override
@@ -47,10 +54,16 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(new Color(0, 0, 100));
 		g2.fill(new Rectangle2D.Double(0, 0, 900, 800));
-		for (int i = 0; i < Main.boardSize; i++)
+		for (int i = 0; i < Game.boardSize; i++)
 			this.boardArray[i].drawHexComponent(g2);
-		for (Structure structure : this.structureArray)
+		for (Structure structure : this.roadArray)
 			this.boardArray[structure.getHex()].drawStructures(g2, structure);
+		for (Structure structure : this.settlementArray)
+			this.boardArray[structure.getHex()].drawStructures(g2, structure);
+		for (Structure structure : this.cityArray)
+			this.boardArray[structure.getHex()].drawStructures(g2, structure);
+		
+		this.boardArray[this.robberIndex].drawRobber(g2);
 	}
 
 	/**
@@ -73,12 +86,12 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < diagonalSquares; j++) {
 
-				this.boardArray[j + startIndex] = new HexComponent(this.startingX
-						+ rightCoeff * rightShift - j * leftShift,
-						this.startingY - diagCoeff * diagonalUpShift - j
-								* eachUpShift, this.colorNumberArray[j
-								+ startIndex], this.rollNumberArray[j
-								+ startIndex]);
+				this.boardArray[j + startIndex] = new HexComponent(
+						this.startingX + rightCoeff * rightShift - j
+								* leftShift, this.startingY - diagCoeff
+								* diagonalUpShift - j * eachUpShift,
+						this.colorNumberArray[j + startIndex],
+						this.rollNumberArray[j + startIndex]);
 
 			}
 			rightCoeff++;
@@ -92,7 +105,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 			startIndex += diagonalSquares;
 			diagonalSquares += switcher;
 		}
-		for (int i = 0; i < Main.boardSize; i++) {
+		for (int i = 0; i < Game.boardSize; i++) {
 			this.pointArray[i] = new Point2D.Double(this.boardArray[i].getX(),
 					this.boardArray[i].getY());
 		}
@@ -103,23 +116,10 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		int[] nearArray = findNearestHexes(arg0.getX(), arg0.getY());
 		int pos = 0;
 		if (nearArray[1] != -1) {
-			int build = this.userPanel.getBuildType();
-			if (build > 0) {
-				if (build < 3)
-					pos = this.determineSettlePosition(nearArray);
-				else
-					pos = this.determineRoadPosition(nearArray);
-				System.out.println(pos);
-				Structure structure = new Structure(this.userPanel
-						.getCurrentPlayer(), pos, build, nearArray[0],
-						nearArray[1], nearArray[2], this.userPanel
-								.getPlayerColor());
-				// if(this.isNotOccupied(pos, nearArray, structure))
-				this.structureArray.add(structure);
-			}
-			this.repaint();
-		}
+			this.game.processClick(this.determineSettlePosition(nearArray),
+					this.determineRoadPosition(nearArray));
 
+		}
 	}
 
 	/**
@@ -350,7 +350,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		double distanceRecordB = 10 * HexComponent.RADIUS;
 		double distanceRecordA = 10 * HexComponent.RADIUS;
 		double distanceRecordC = 10 * HexComponent.RADIUS;
-		for (int i = 0; i < Main.boardSize; i++) {
+		for (int i = 0; i < Game.boardSize; i++) {
 			double deltaX = xCoord - this.pointArray[i].getX();
 			double deltaY = yCoord - this.pointArray[i].getY();
 			double distanceCurrent = Math.sqrt(deltaX * deltaX + deltaY
@@ -601,4 +601,28 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		}
 		return pos;
 	}
+
+	public void addRoad(int hexIndex, int position, int playerIndex) {
+
+//		Structure structure = new Structure(playerIndex, position, TODO,
+//				nearArray[0], nearArray[1], nearArray[2],
+//				this.userPanel.getPlayerColor());
+//		this.structureArray.add(structure);
+		this.repaint();
+	}
+
+	public void addCity(int hexIndex, int position, int playerIndex) {
+
+		this.repaint();
+	}
+
+	public void addSettlement(int hexIndex, int position, int playerIndex) {
+
+		this.repaint();
+	}
+
+	public void moveRobber(int hexIndex) {
+
+	}
+
 }
