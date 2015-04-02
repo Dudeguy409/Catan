@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
@@ -12,12 +11,22 @@ import java.awt.geom.Rectangle2D;
  */
 public class HexComponent {
 
+	public static enum RoadPosition {
+		north, northeast, southeast, south, southwest, northwest
+	}
+
+	public static enum StructurePosition {
+		west, northeast, southeast, east, southwest, northwest
+	}
+
 	private double centerX;
 	private double centerY;
 	private Color resourceColor = new Color(0, 0, 0);
 	private Shape hexagon;
 	private int rollNumber;
 	private int colonyDiameter = 30;
+	private Shape rollNumberShape;
+	private int rollNumberDiameter = 50;
 	/**
 	 * (3^.5)/2, or sin of 60 degrees. this multiplied by the diameter gives the
 	 * length from top to bottom, used for scaling height multipliers.
@@ -47,6 +56,11 @@ public class HexComponent {
 		setColor(colorSelector);
 
 		createShape();
+
+		this.rollNumberShape = new Ellipse2D.Double(this.centerX
+				- rollNumberDiameter / 2,
+				this.centerY - rollNumberDiameter / 2, rollNumberDiameter,
+				rollNumberDiameter);
 
 	}
 
@@ -92,28 +106,6 @@ public class HexComponent {
 	}
 
 	/**
-	 * This method draws the hexagon on the board with its roll number on top.
-	 * 
-	 * @param g2
-	 */
-	public void drawHexComponent(Graphics2D g2) {
-		g2.setColor(this.resourceColor);
-		g2.fill(this.hexagon);
-		g2.setColor(Color.black);
-		g2.draw(this.hexagon);
-		if (this.rollNumber > 0) {
-			g2.setColor(Color.white);
-			g2.fill(new Ellipse2D.Double(this.centerX - 15, this.centerY - 15,
-					30, 30));
-			g2.setColor(Color.black);
-			String rollString = Integer.toString(this.rollNumber);
-			g2.drawString(rollString, (int) this.centerX - 3,
-					(int) this.centerY + 3);
-
-		}
-	}
-	
-	/**
 	 * returns the y-value of the center.
 	 * 
 	 * @return centerY
@@ -131,110 +123,58 @@ public class HexComponent {
 		return this.centerX;
 	}
 
-	/**
-	 * this method is called numerously to draw each individual structure AFTER
-	 * all of the hexes have been drawn.
-	 * 
-	 * @param g2
-	 * @param structure
-	 * 
-	 */
-	public void drawStructures(Graphics2D g2, Structure structure) {
+	public Shape makeStructure(StructurePosition position, Game.BuildType structureType) {
 		Shape shapeToAdd = null;
-		if (structure.getType() == 1)
-			switch (structure.getPos()) {
-			case 1:
-				shapeToAdd = new Ellipse2D.Double(this.centerX
-						- HexComponent.RADIUS - this.colonyDiameter / 2,
-						this.centerY - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
-				break;
-			case 2:
-				shapeToAdd = new Ellipse2D.Double(this.centerX
-						- HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
-						this.centerY - HexComponent.RADIUS
-								* HexComponent.Y_SCALAR - this.colonyDiameter
-								/ 2, this.colonyDiameter, this.colonyDiameter);
-				break;
-			case 3:
-				shapeToAdd = new Ellipse2D.Double(this.centerX
-						+ HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
-						this.centerY - HexComponent.RADIUS
-								* HexComponent.Y_SCALAR - this.colonyDiameter
-								/ 2, this.colonyDiameter, this.colonyDiameter);
-				break;
-			case -1:
-				shapeToAdd = new Ellipse2D.Double(this.centerX
-						+ HexComponent.RADIUS - this.colonyDiameter / 2,
-						this.centerY - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
-				break;
-			case -2:
-				shapeToAdd = new Ellipse2D.Double(this.centerX
-						+ HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
-						this.centerY + HexComponent.RADIUS
-								* HexComponent.Y_SCALAR - this.colonyDiameter
-								/ 2, this.colonyDiameter, this.colonyDiameter);
-				break;
-			case -3:
-				shapeToAdd = new Ellipse2D.Double(this.centerX
-						- HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
-						this.centerY + HexComponent.RADIUS
-								* HexComponent.Y_SCALAR - this.colonyDiameter
-								/ 2, this.colonyDiameter, this.colonyDiameter);
-				break;
+		double xCoord = 0;
+		double yCoord = 0;
+		switch (position) {
+		case west:
+			xCoord = this.centerX - HexComponent.RADIUS - this.colonyDiameter
+					/ 2;
+			yCoord = this.centerY - this.colonyDiameter / 2;
+			break;
+		case northwest:
+			xCoord = this.centerX - HexComponent.RADIUS / 2
+					- this.colonyDiameter / 2;
+			yCoord = this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
+					- this.colonyDiameter / 2;
+			break;
+		case northeast:
+			xCoord = this.centerX + HexComponent.RADIUS / 2
+					- this.colonyDiameter / 2;
+			yCoord = this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
+					- this.colonyDiameter / 2;
+			break;
+		case east:
+			xCoord = this.centerX + HexComponent.RADIUS - this.colonyDiameter
+					/ 2;
+			yCoord = this.centerY - this.colonyDiameter / 2;
+			break;
+		case southeast:
+			xCoord = this.centerX + HexComponent.RADIUS / 2
+					- this.colonyDiameter / 2;
+			yCoord = this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
+					- this.colonyDiameter / 2;
+			break;
+		case southwest:
+			xCoord = this.centerX - HexComponent.RADIUS / 2
+					- this.colonyDiameter / 2;
+			yCoord = this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
+					- this.colonyDiameter / 2;
+			break;
+		}
 
-			}
-		else if (structure.getType() == 2)
-			switch (structure.getPos()) {
-			case 1:
-				shapeToAdd = new Rectangle2D.Double(this.centerX
-						- HexComponent.RADIUS - this.colonyDiameter / 2,
-						this.centerY - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
-				break;
-			case 2:
-				shapeToAdd = new Rectangle2D.Double(this.centerX
-						- HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
-						this.centerY - HexComponent.RADIUS
-								* HexComponent.Y_SCALAR - this.colonyDiameter
-								/ 2, this.colonyDiameter, this.colonyDiameter);
-				break;
-			case 3:
-				shapeToAdd = new Rectangle2D.Double(this.centerX
-						+ HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
-						this.centerY - HexComponent.RADIUS
-								* HexComponent.Y_SCALAR - this.colonyDiameter
-								/ 2, this.colonyDiameter, this.colonyDiameter);
-				break;
-			case -1:
-				shapeToAdd = new Rectangle2D.Double(this.centerX
-						+ HexComponent.RADIUS - this.colonyDiameter / 2,
-						this.centerY - this.colonyDiameter / 2,
-						this.colonyDiameter, this.colonyDiameter);
-				break;
-			case -3:
-				shapeToAdd = new Rectangle2D.Double(this.centerX
-						- HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
-						this.centerY + HexComponent.RADIUS
-								* HexComponent.Y_SCALAR - this.colonyDiameter
-								/ 2, this.colonyDiameter, this.colonyDiameter);
-				break;
-			case -2:
-				shapeToAdd = new Rectangle2D.Double(this.centerX
-						+ HexComponent.RADIUS / 2 - this.colonyDiameter / 2,
-						this.centerY + HexComponent.RADIUS
-								* HexComponent.Y_SCALAR - this.colonyDiameter
-								/ 2, this.colonyDiameter, this.colonyDiameter);
-				break;
+		if (structureType == Game.BuildType.settlement) {
+			shapeToAdd = new Ellipse2D.Double(xCoord, yCoord,
+					this.colonyDiameter, this.colonyDiameter);
+		} else if (structureType == Game.BuildType.city) {
+			shapeToAdd = new Rectangle2D.Double(xCoord, yCoord,
+					this.colonyDiameter, this.colonyDiameter);
+		} else {
+			// BAD PARAMS!!!
+		}
 
-			}
-		else if (structure.getType() == 3)
-			shapeToAdd = this.makeRoad(structure.getPos());
-		g2.setColor(structure.getPlayerColor());
-		g2.fill(shapeToAdd);
-		g2.setColor(Color.black);
-		g2.draw(shapeToAdd);
+		return shapeToAdd;
 
 	}
 
@@ -245,10 +185,10 @@ public class HexComponent {
 	 * @param pos
 	 * 
 	 */
-	private Shape makeRoad(int pos) {
+	public Shape makeRoad(RoadPosition pos) {
 		Path2D road = null;
 		switch (pos) {
-		case 1:
+		case northwest:
 			road = new Path2D.Double();
 			road.moveTo(this.centerX - HexComponent.RADIUS + 5,
 					this.centerY - 3);
@@ -260,7 +200,7 @@ public class HexComponent {
 			road.lineTo(this.centerX - HexComponent.RADIUS + 5,
 					this.centerY - 3);
 			break;
-		case 2:
+		case north:
 			road = new Path2D.Double();
 			road.moveTo(this.centerX - HexComponent.RADIUS / 2 + 3,
 					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
@@ -278,7 +218,7 @@ public class HexComponent {
 					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR
 							+ 3);
 			break;
-		case 3:
+		case northeast:
 			road = new Path2D.Double();
 			road.moveTo(this.centerX + HexComponent.RADIUS - 5,
 					this.centerY - 3);
@@ -290,7 +230,7 @@ public class HexComponent {
 			road.lineTo(this.centerX + HexComponent.RADIUS - 5,
 					this.centerY - 3);
 			break;
-		case -1:
+		case southeast:
 			road = new Path2D.Double();
 			road.moveTo(this.centerX + HexComponent.RADIUS - 5,
 					this.centerY + 3);
@@ -302,7 +242,7 @@ public class HexComponent {
 			road.lineTo(this.centerX + HexComponent.RADIUS - 5,
 					this.centerY + 3);
 			break;
-		case -2:
+		case south:
 			road = new Path2D.Double();
 			road.moveTo(this.centerX - HexComponent.RADIUS / 2 + 3,
 					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
@@ -320,7 +260,7 @@ public class HexComponent {
 					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR
 							+ 3);
 			break;
-		case -3:
+		case southwest:
 			road = new Path2D.Double();
 			road.moveTo(this.centerX - HexComponent.RADIUS + 5,
 					this.centerY + 3);
@@ -337,9 +277,20 @@ public class HexComponent {
 
 	}
 
-	public void drawRobber(Graphics2D g2) {
-		// TODO Auto-generated method stub
+	public Color getResourceColor() {
+		return resourceColor;
+	}
 
+	public Shape getHexShape() {
+		return hexagon;
+	}
+
+	public int getRollNumber() {
+		return rollNumber;
+	}
+
+	public Shape getRollNumberShape() {
+		return rollNumberShape;
 	}
 
 }

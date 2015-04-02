@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -22,11 +23,23 @@ public class BoardRenderer extends JComponent implements MouseListener {
 	private Game.Resource[] colorNumberArray;
 	private int[] rollNumberArray;
 	private Point2D.Double[] pointArray = new Point2D.Double[Game.boardSize];
-	private ArrayList<Structure> cityArray = new ArrayList<Structure>();
-	private ArrayList<Structure> settlementArray = new ArrayList<Structure>();
-	private ArrayList<Structure> roadArray = new ArrayList<Structure>();
-	private int robberIndex;
+	private ArrayList<StructureComponent> cityArray = new ArrayList<StructureComponent>();
+	private ArrayList<StructureComponent> settlementArray = new ArrayList<StructureComponent>();
+	private ArrayList<StructureComponent> roadArray = new ArrayList<StructureComponent>();
+	private int robberIndex = 4;
 	private Game game;
+	private Color backgroundColor = new Color(0, 0, 100);
+	private Shape background = new Rectangle2D.Double(0, 0, 900, 800);
+
+	// each element's index represents its position in the board's hexArray, and
+	// its value represents the hex's index in the Game class
+	private int[] hexIndexToGUITranslator = { 0, 11, 10, 1, 12, 17, 9, 2, 13,
+			18, 16, 8, 3, 14, 15, 7, 4, 5, 6 };
+
+	// The opposite map: each element's index represents the hex's index in the
+	// Game class, and its value represents its position in the board's hexArray
+	private int[] hexIndexToGameTranslator = { 0, 3, 7, 12, 16, 17, 18, 15, 11,
+			6, 2, 1, 4, 8, 13, 14, 10, 5, 9 };
 
 	/**
 	 * constructs an empty, randomized board.
@@ -43,27 +56,157 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		this.addMouseListener(this);
 	}
 
-	public void setBoard(Game.Resource[] randomColorArray, int[] randomNumberArray) {
+	public void setBoard(Game.Resource[] randomColorArray,
+			int[] randomNumberArray) {
 		this.colorNumberArray = randomColorArray;
 		this.rollNumberArray = randomNumberArray;
+
+		// initializes the robber to the desert hex.
+		for (int i = 0; i < this.rollNumberArray.length; i++) {
+			if (this.rollNumberArray[i] < 0) {
+				this.robberIndex = this.hexIndexToGameTranslator[i];
+				break;
+			}
+		}
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(new Color(0, 0, 100));
-		g2.fill(new Rectangle2D.Double(0, 0, 900, 800));
-		for (int i = 0; i < Game.boardSize; i++)
-			this.boardArray[i].drawHexComponent(g2);
-		for (Structure structure : this.roadArray)
-			this.boardArray[structure.getHex()].drawStructures(g2, structure);
-		for (Structure structure : this.settlementArray)
-			this.boardArray[structure.getHex()].drawStructures(g2, structure);
-		for (Structure structure : this.cityArray)
-			this.boardArray[structure.getHex()].drawStructures(g2, structure);
-		
-		this.boardArray[this.robberIndex].drawRobber(g2);
+
+		g2.setColor(this.backgroundColor);
+		g2.fill(this.background);
+
+		for (int i = 0; i < this.boardArray.length; i++) {
+			HexComponent hex = this.boardArray[i];
+			g2.setColor(hex.getResourceColor());
+			g2.fill(hex.getHexShape());
+			g2.setColor(Color.black);
+			g2.draw(hex.getHexShape());
+			int rollNumber = hex.getRollNumber();
+
+			if (rollNumber > 0 || i == this.robberIndex) {
+				if (i == this.robberIndex) {
+					g2.setColor(Color.cyan);
+				} else {
+					g2.setColor(Color.white);
+				}
+
+				g2.fill(hex.getRollNumberShape());
+			}
+
+			if (rollNumber > 0) {
+				if (rollNumber == 8 || rollNumber == 6) {
+					g2.setColor(Color.red);
+				} else {
+					g2.setColor(Color.black);
+				}
+
+				String rollString = Integer.toString(rollNumber);
+				g2.setFont(new Font("TimesRoman", Font.BOLD, 16));
+				g2.drawString(rollString, (int) hex.getX() - 5,
+						(int) hex.getY() + 5);
+			}
+
+		}
+
+		for (StructureComponent structure : this.roadArray) {
+			g2.setColor(structure.getPlayerColor());
+			g2.fill(structure.getShape());
+			g2.setColor(Color.black);
+			g2.draw(structure.getShape());
+		}
+
+		for (StructureComponent structure : this.settlementArray) {
+			g2.setColor(structure.getPlayerColor());
+			g2.fill(structure.getShape());
+			g2.setColor(Color.black);
+			g2.draw(structure.getShape());
+		}
+
+		for (StructureComponent structure : this.cityArray) {
+			g2.setColor(structure.getPlayerColor());
+			g2.fill(structure.getShape());
+			g2.setColor(Color.black);
+			g2.draw(structure.getShape());
+		}
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// does nothing
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// does nothing.
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// does nothing.
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		int[] nearArray = findNearestHexes(arg0.getX(), arg0.getY());
+		if (nearArray[1] != -1) {
+			Game.BuildType buildType = this.game.getBuildType();
+			int hexId = nearArray[0];
+			if (buildType != Game.BuildType.none) {
+				if (buildType != Game.BuildType.road) {
+					HexComponent.StructurePosition pos = this
+							.determineStructurePosition(nearArray);
+					this.game.addBuilding(this.game.getCurrentPlayer(),
+							this.hexIndexToGUITranslator[hexId], pos);
+				} else {
+					HexComponent.RoadPosition pos = this
+							.determineRoadPosition(nearArray);
+					this.game.addRoad(this.game.getCurrentPlayer(),
+							this.hexIndexToGUITranslator[hexId], pos);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// does nothing.
+
+	}
+
+	public void addBuilding(int hexIdx,
+			HexComponent.StructurePosition position, Color playerColor,
+			Game.BuildType buildType) {
+		int hexIndex = this.hexIndexToGameTranslator[hexIdx];
+		Shape s = this.boardArray[hexIndex].makeStructure(position, buildType);
+		StructureComponent structure = new StructureComponent(s, playerColor);
+
+		if (buildType == Game.BuildType.city) {
+			this.cityArray.add(structure);
+		} else {
+			this.settlementArray.add(structure);
+		}
+
+		this.repaint();
+	}
+
+	public void addRoad(int hexIdx, HexComponent.RoadPosition position,
+			Color playerColor, Game.BuildType buildType) {
+		int hexIndex = this.hexIndexToGameTranslator[hexIdx];
+		Shape s = this.boardArray[hexIndex].makeRoad(position);
+
+		StructureComponent structure = new StructureComponent(s, playerColor);
+		this.roadArray.add(structure);
+
+		this.repaint();
+	}
+
+	public void moveRobber(int hexIndex) {
+		this.robberIndex = this.hexIndexToGUITranslator[hexIndex];
 	}
 
 	/**
@@ -90,8 +233,10 @@ public class BoardRenderer extends JComponent implements MouseListener {
 						this.startingX + rightCoeff * rightShift - j
 								* leftShift, this.startingY - diagCoeff
 								* diagonalUpShift - j * eachUpShift,
-						this.colorNumberArray[j + startIndex],
-						this.rollNumberArray[j + startIndex]);
+						this.colorNumberArray[hexIndexToGUITranslator[j
+								+ startIndex]],
+						this.rollNumberArray[hexIndexToGUITranslator[j
+								+ startIndex]]);
 
 			}
 			rightCoeff++;
@@ -109,234 +254,6 @@ public class BoardRenderer extends JComponent implements MouseListener {
 			this.pointArray[i] = new Point2D.Double(this.boardArray[i].getX(),
 					this.boardArray[i].getY());
 		}
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		int[] nearArray = findNearestHexes(arg0.getX(), arg0.getY());
-		int pos = 0;
-		if (nearArray[1] != -1) {
-			this.game.processClick(this.determineSettlePosition(nearArray),
-					this.determineRoadPosition(nearArray));
-
-		}
-	}
-
-	/**
-	 * determines which position in a hex a settlement should be built at.
-	 * 
-	 * @param findNearestHexes
-	 * @return position to place structure
-	 */
-	private int determineSettlePosition(int[] nearHex) {
-		int pos = 0;
-
-		if (nearHex[0] == nearHex[1] - 1 && nearHex[0] > nearHex[2]
-				|| nearHex[0] == nearHex[2] - 1 && nearHex[0] > nearHex[1])
-			pos = 1;
-		if (nearHex[0] == nearHex[1] - 1 && nearHex[0] < nearHex[2]
-				|| nearHex[0] == nearHex[2] - 1 && nearHex[0] < nearHex[1])
-			pos = 2;
-		if (nearHex[0] == nearHex[1] + 1 && nearHex[0] > nearHex[2]
-				|| nearHex[0] == nearHex[2] + 1 && nearHex[0] > nearHex[1])
-			pos = -2;
-		if (nearHex[0] == nearHex[1] + 1 && nearHex[0] < nearHex[2]
-				|| nearHex[0] == nearHex[2] + 1 && nearHex[0] < nearHex[1])
-			pos = -1;
-		if (nearHex[0] < nearHex[1] - 1 && nearHex[0] < nearHex[2] - 1)
-			pos = 3;
-		if (nearHex[0] > nearHex[1] + 1 && nearHex[0] > nearHex[2] + 1)
-			pos = -3;
-		// deals with border hexes/positions
-		if (nearHex[4] > HexComponent.RADIUS * 1.5) {
-
-			if (nearHex[3] < HexComponent.RADIUS * 1.5) {
-				// deals with the settlements on the coast that border two
-				// hexes.
-				switch (nearHex[0]) {
-				case 1:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -2;
-						break;
-					} else
-						pos = 1;
-					break;
-				case 3:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -3;
-						break;
-					} else
-						pos = -1;
-					break;
-				case 6:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -3;
-						break;
-					} else
-						pos = 2;
-					break;
-				case 12:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -2;
-						break;
-					} else
-						pos = 3;
-					break;
-				case 15:
-					if (nearHex[0] > nearHex[1]) {
-						pos = 1;
-						break;
-					} else
-						pos = 3;
-					break;
-				case 17:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -1;
-						break;
-					} else
-						pos = 2;
-					break;
-				case 0:
-					if (nearHex[0] > nearHex[1] - 2) {
-						pos = 1;
-						break;
-					} else
-						pos = -1;
-					break;
-				case 2:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -2;
-						break;
-					} else
-						pos = 2;
-					break;
-				case 7:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -3;
-						break;
-					} else
-						pos = 3;
-					break;
-				case 11:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -3;
-						break;
-					} else
-						pos = 3;
-					break;
-				case 16:
-					if (nearHex[0] > nearHex[1]) {
-						pos = -2;
-						break;
-					} else
-						pos = 2;
-					break;
-				case 18:
-					if (nearHex[0] > nearHex[1] + 2) {
-						pos = 1;
-						break;
-					} else
-						pos = -1;
-					break;
-				}
-			} else {
-				// deals with positions that only border the hex and the ocean.
-				switch (nearHex[0]) {
-				case 1:
-					pos = -3;
-					break;
-				case 3:
-					pos = -2;
-					break;
-				case 6:
-					pos = 1;
-					break;
-				case 12:
-					pos = -1;
-					break;
-				case 15:
-					pos = 2;
-					break;
-				case 17:
-					pos = 3;
-					break;
-				}
-				// deals with hexes that have two positions that only border the
-				// ocean and the main hex.
-				if (nearHex[4] > HexComponent.RADIUS * 2.25) {
-					switch (nearHex[0]) {
-					case 0:
-						if (nearHex[0] > nearHex[1] - 2) {
-							pos = -3;
-							break;
-						} else
-							pos = -2;
-						break;
-					case 2:
-						if (nearHex[0] > nearHex[1]) {
-							pos = -3;
-							break;
-						} else
-							pos = 1;
-						break;
-					case 7:
-						if (nearHex[0] > nearHex[1]) {
-							pos = -2;
-							break;
-						} else
-							pos = -1;
-						break;
-					case 11:
-						if (nearHex[0] > nearHex[1]) {
-							pos = 1;
-							break;
-						} else
-							pos = 2;
-						break;
-					case 16:
-						if (nearHex[0] > nearHex[1]) {
-							pos = -1;
-							break;
-						} else
-							pos = 3;
-						break;
-					case 18:
-						if (nearHex[0] > nearHex[1] + 2) {
-							pos = 2;
-							break;
-						} else
-							pos = 3;
-						break;
-					}
-				}
-
-			}
-
-		}
-		return pos;
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// does nothing.
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// does nothing.
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// does nothing.
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// does nothing.
-
 	}
 
 	// returns an array of: the hex clicked, the second nearest hex, the third
@@ -380,14 +297,13 @@ public class BoardRenderer extends JComponent implements MouseListener {
 				}
 			}
 		}
-		System.out.println(recordA);
-		System.out.println(recordB);
-		System.out.println(recordC);
+
 		nearArray[0] = recordA;
 		nearArray[1] = recordB;
 		nearArray[2] = recordC;
 		nearArray[3] = (int) distanceRecordB;
 		nearArray[4] = (int) distanceRecordC;
+
 		// if the mouse click was in the center of the hex, the neighbor is set
 		// to -1 to signal that the mouse click was not valid.
 		if (distanceRecordA < HexComponent.RADIUS / 2)
@@ -395,37 +311,204 @@ public class BoardRenderer extends JComponent implements MouseListener {
 		return nearArray;
 	}
 
-	// does not work yet.
-	@SuppressWarnings("unused")
-	private boolean isNotOccupied(int pos, int[] nearArray, Structure structure) {
-		// for (Structure structure : this.structureArray) {
-		if (structure.getPos() == pos && structure.getHex() == nearArray[0]) {
-			System.out.println("Cliffs of dover");
-			return false;
-		}
-		for (int i = 0; i < 3; i++) {
-			if (structure.getHex() == nearArray[i]
-					&& structure.getNeighborA() == nearArray[(i + 1)]
-					&& structure.getNeighborB() == nearArray[(i + 2)]) {
-				System.out.println("Cliffs of dover");
-				return false;
-			}
-			if (structure.getHex() == nearArray[i]
-					&& structure.getNeighborA() == nearArray[(i + 2) % 3]
-					&& structure.getNeighborB() == nearArray[(1 + i) % 3]) {
-				System.out.println("Cliffs of dover");
-				return false;
+	/**
+	 * determines which position in a hex a settlement should be built at.
+	 * 
+	 * @param findNearestHexes
+	 * @return position to place structure
+	 */
+	private HexComponent.StructurePosition determineStructurePosition(
+			int[] nearHex) {
+		HexComponent.StructurePosition pos = null;
+
+		if (nearHex[0] == nearHex[1] - 1 && nearHex[0] > nearHex[2]
+				|| nearHex[0] == nearHex[2] - 1 && nearHex[0] > nearHex[1])
+			pos = HexComponent.StructurePosition.west;
+		if (nearHex[0] == nearHex[1] - 1 && nearHex[0] < nearHex[2]
+				|| nearHex[0] == nearHex[2] - 1 && nearHex[0] < nearHex[1])
+			pos = HexComponent.StructurePosition.northwest;
+		if (nearHex[0] == nearHex[1] + 1 && nearHex[0] > nearHex[2]
+				|| nearHex[0] == nearHex[2] + 1 && nearHex[0] > nearHex[1])
+			pos = HexComponent.StructurePosition.southeast;
+		if (nearHex[0] == nearHex[1] + 1 && nearHex[0] < nearHex[2]
+				|| nearHex[0] == nearHex[2] + 1 && nearHex[0] < nearHex[1])
+			pos = HexComponent.StructurePosition.east;
+		if (nearHex[0] < nearHex[1] - 1 && nearHex[0] < nearHex[2] - 1)
+			pos = HexComponent.StructurePosition.northeast;
+		if (nearHex[0] > nearHex[1] + 1 && nearHex[0] > nearHex[2] + 1)
+			pos = HexComponent.StructurePosition.southwest;
+		// deals with border hexes/positions
+		if (nearHex[4] > HexComponent.RADIUS * 1.5) {
+
+			if (nearHex[3] < HexComponent.RADIUS * 1.5) {
+				// deals with the settlements on the coast that border two
+				// hexes.
+				switch (nearHex[0]) {
+				case 1:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.southeast;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.west;
+					break;
+				case 3:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.southwest;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.east;
+					break;
+				case 6:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.southwest;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.northwest;
+					break;
+				case 12:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.southeast;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.northeast;
+					break;
+				case 15:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.west;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.northeast;
+					break;
+				case 17:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.east;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.northwest;
+					break;
+				case 0:
+					if (nearHex[0] > nearHex[1] - 2) {
+						pos = HexComponent.StructurePosition.west;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.east;
+					break;
+				case 2:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.southeast;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.northwest;
+					break;
+				case 7:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.southwest;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.northeast;
+					break;
+				case 11:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.southwest;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.northeast;
+					break;
+				case 16:
+					if (nearHex[0] > nearHex[1]) {
+						pos = HexComponent.StructurePosition.southeast;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.northwest;
+					break;
+				case 18:
+					if (nearHex[0] > nearHex[1] + 2) {
+						pos = HexComponent.StructurePosition.west;
+						break;
+					} else
+						pos = HexComponent.StructurePosition.east;
+					break;
+				}
+			} else {
+				// deals with positions that only border the hex and the ocean.
+				switch (nearHex[0]) {
+				case 1:
+					pos = HexComponent.StructurePosition.southwest;
+					break;
+				case 3:
+					pos = HexComponent.StructurePosition.southeast;
+					break;
+				case 6:
+					pos = HexComponent.StructurePosition.west;
+					break;
+				case 12:
+					pos = HexComponent.StructurePosition.east;
+					break;
+				case 15:
+					pos = HexComponent.StructurePosition.northwest;
+					break;
+				case 17:
+					pos = HexComponent.StructurePosition.northeast;
+					break;
+				}
+				// deals with hexes that have two positions that only border the
+				// ocean and the main hex.
+				if (nearHex[4] > HexComponent.RADIUS * 2.25) {
+					switch (nearHex[0]) {
+					case 0:
+						if (nearHex[0] > nearHex[1] - 2) {
+							pos = HexComponent.StructurePosition.southwest;
+							break;
+						} else
+							pos = HexComponent.StructurePosition.southeast;
+						break;
+					case 2:
+						if (nearHex[0] > nearHex[1]) {
+							pos = HexComponent.StructurePosition.southwest;
+							break;
+						} else
+							pos = HexComponent.StructurePosition.west;
+						break;
+					case 7:
+						if (nearHex[0] > nearHex[1]) {
+							pos = HexComponent.StructurePosition.southeast;
+							break;
+						} else
+							pos = HexComponent.StructurePosition.east;
+						break;
+					case 11:
+						if (nearHex[0] > nearHex[1]) {
+							pos = HexComponent.StructurePosition.west;
+							break;
+						} else
+							pos = HexComponent.StructurePosition.northwest;
+						break;
+					case 16:
+						if (nearHex[0] > nearHex[1]) {
+							pos = HexComponent.StructurePosition.east;
+							break;
+						} else
+							pos = HexComponent.StructurePosition.northeast;
+						break;
+					case 18:
+						if (nearHex[0] > nearHex[1] + 2) {
+							pos = HexComponent.StructurePosition.northwest;
+							break;
+						} else
+							pos = HexComponent.StructurePosition.northeast;
+						break;
+					}
+				}
 
 			}
-			// }
-		}
 
-		return true;
+		}
+		return pos;
 	}
 
 	// determines the position for the road to be built on the clicked hex.
-	private int determineRoadPosition(int[] nearHex) {
-		int pos = 0;
+	private HexComponent.RoadPosition determineRoadPosition(int[] nearHex) {
+		HexComponent.RoadPosition pos = null;
 		int[] rowArray = new int[5];
 		rowArray[0] = 3;
 		rowArray[1] = 4;
@@ -445,43 +528,44 @@ public class BoardRenderer extends JComponent implements MouseListener {
 			row = 4;
 
 		if (nearHex[1] == nearHex[0] + 1)
-			pos = 1;
+			pos = HexComponent.RoadPosition.northwest;
 		if (nearHex[1] == nearHex[0] - 1)
-			pos = -1;
+			pos = HexComponent.RoadPosition.southeast;
 		if (row > 2) {
 
 			if (nearHex[0] == nearHex[1] + rowArray[row])
-				pos = -3;
+				pos = HexComponent.RoadPosition.southwest;
 			if (nearHex[0] == nearHex[1] - rowArray[4])
-				pos = 3;
+				pos = HexComponent.RoadPosition.northeast;
 			if (nearHex[0] == nearHex[1] + rowArray[row - 1])
-				pos = -2;
+				pos = HexComponent.RoadPosition.south;
 			if (nearHex[0] == nearHex[1] - rowArray[row])
-				pos = 2;
-			if (nearHex[3] > HexComponent.RADIUS * HexComponent.Y_SCALAR)
-				System.out.println(nearHex[3]);
+				pos = HexComponent.RoadPosition.north;
+			if (nearHex[3] > HexComponent.RADIUS * HexComponent.Y_SCALAR) {
+				// System.out.println(nearHex[3]);
+			}
 
 		} else if (row == 2) {
 
 			if (nearHex[0] == nearHex[1] + rowArray[row])
-				pos = -2;
+				pos = HexComponent.RoadPosition.south;
 			if (nearHex[0] == nearHex[1] - rowArray[row])
-				pos = 2;
+				pos = HexComponent.RoadPosition.north;
 			if (nearHex[0] == nearHex[1] + rowArray[row - 1])
-				pos = -3;
+				pos = HexComponent.RoadPosition.southwest;
 			if (nearHex[0] == nearHex[1] - rowArray[3])
-				pos = 3;
+				pos = HexComponent.RoadPosition.northeast;
 
 		} else if (row < 2) {
 
 			if (nearHex[0] == nearHex[1] - rowArray[row + 1])
-				pos = 2;
+				pos = HexComponent.RoadPosition.north;
 			if (nearHex[0] == nearHex[1] + rowArray[row])
-				pos = -2;
+				pos = HexComponent.RoadPosition.south;
 			if (nearHex[0] == nearHex[1] - rowArray[row])
-				pos = 3;
+				pos = HexComponent.RoadPosition.northeast;
 			if (nearHex[0] == nearHex[1] + rowArray[0])
-				pos = -3;
+				pos = HexComponent.RoadPosition.southwest;
 		}
 		// catches the exception cases where the road is along the coast.
 
@@ -489,87 +573,87 @@ public class BoardRenderer extends JComponent implements MouseListener {
 			switch (nearHex[0]) {
 			case 1:
 				if (nearHex[0] > nearHex[1]) {
-					pos = -2;
+					pos = HexComponent.RoadPosition.south;
 					break;
 				} else
-					pos = -3;
+					pos = HexComponent.RoadPosition.southwest;
 				break;
 			case 3:
 				if (nearHex[0] > nearHex[1]) {
-					pos = -2;
+					pos = HexComponent.RoadPosition.south;
 					break;
 				} else
-					pos = -1;
+					pos = HexComponent.RoadPosition.southeast;
 				break;
 			case 6:
 				if (nearHex[0] > nearHex[1]) {
-					pos = -3;
+					pos = HexComponent.RoadPosition.southwest;
 					break;
 				} else
-					pos = 1;
+					pos = HexComponent.RoadPosition.northwest;
 				break;
 			case 12:
 				if (nearHex[0] > nearHex[1]) {
-					pos = -1;
+					pos = HexComponent.RoadPosition.southeast;
 					break;
 				} else
-					pos = 3;
+					pos = HexComponent.RoadPosition.northeast;
 				break;
 			case 15:
 				if (nearHex[0] > nearHex[1]) {
-					pos = 1;
+					pos = HexComponent.RoadPosition.northwest;
 					break;
 				} else
-					pos = 2;
+					pos = HexComponent.RoadPosition.north;
 				break;
 			case 17:
 				if (nearHex[0] > nearHex[1]) {
-					pos = 3;
+					pos = HexComponent.RoadPosition.northeast;
 					break;
 				} else
-					pos = 2;
+					pos = HexComponent.RoadPosition.north;
 				break;
 			case 0:
 				if (nearHex[0] > nearHex[1] - 2) {
-					pos = -3;
+					pos = HexComponent.RoadPosition.southwest;
 					break;
 				} else
-					pos = -1;
+					pos = HexComponent.RoadPosition.southeast;
 				break;
 			case 2:
 				if (nearHex[0] > nearHex[1]) {
-					pos = -2;
+					pos = HexComponent.RoadPosition.south;
 					break;
 				} else
-					pos = 1;
+					pos = HexComponent.RoadPosition.northwest;
 				break;
 			case 7:
 				if (nearHex[0] > nearHex[1]) {
-					pos = -2;
+					pos = HexComponent.RoadPosition.south;
 					break;
 				} else
-					pos = 3;
+					pos = HexComponent.RoadPosition.northeast;
 				break;
 			case 11:
 				if (nearHex[0] > nearHex[1]) {
-					pos = -3;
+					pos = HexComponent.RoadPosition.southwest;
 					break;
 				} else
-					pos = 2;
+					pos = HexComponent.RoadPosition.north;
 				break;
 			case 16:
 				if (nearHex[0] > nearHex[1]) {
-					pos = -1;
+					pos = HexComponent.RoadPosition.southeast;
 					break;
 				} else
-					pos = 2;
+					pos = HexComponent.RoadPosition.north;
 				break;
 			case 18:
 				if (nearHex[0] > nearHex[1] + 2) {
-					pos = 1;
+					pos = HexComponent.RoadPosition.northwest;
 					break;
 				} else
-					pos = 3;
+					pos = HexComponent.RoadPosition.northeast;
 				break;
 			}
 
@@ -578,51 +662,28 @@ public class BoardRenderer extends JComponent implements MouseListener {
 			if (nearHex[3] > HexComponent.RADIUS * 2 - 5) {
 				switch (nearHex[0]) {
 				case 0:
-					pos = -2;
+					pos = HexComponent.RoadPosition.south;
 					break;
 				case 2:
-					pos = -3;
+					pos = HexComponent.RoadPosition.southwest;
 					break;
 				case 7:
-					pos = -1;
+					pos = HexComponent.RoadPosition.southeast;
 					break;
 				case 11:
-					pos = 1;
+					pos = HexComponent.RoadPosition.northwest;
 					break;
 				case 16:
-					pos = 3;
+					pos = HexComponent.RoadPosition.northeast;
 					break;
 				case 18:
-					pos = 2;
+					pos = HexComponent.RoadPosition.north;
 					break;
 
 				}
 			}
 		}
 		return pos;
-	}
-
-	public void addRoad(int hexIndex, int position, int playerIndex) {
-
-//		Structure structure = new Structure(playerIndex, position, TODO,
-//				nearArray[0], nearArray[1], nearArray[2],
-//				this.userPanel.getPlayerColor());
-//		this.structureArray.add(structure);
-		this.repaint();
-	}
-
-	public void addCity(int hexIndex, int position, int playerIndex) {
-
-		this.repaint();
-	}
-
-	public void addSettlement(int hexIndex, int position, int playerIndex) {
-
-		this.repaint();
-	}
-
-	public void moveRobber(int hexIndex) {
-
 	}
 
 }

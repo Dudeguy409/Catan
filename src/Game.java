@@ -25,8 +25,21 @@ public class Game {
 		}
 	}
 
+	public static enum TurnPhase {
+		preroll, pretrade, trade, prebuild, build, end
+	}
+
+	// development cards aren't built, they are drawn, so they aren't included
+	// in this.
+	public static enum BuildType {
+		road, settlement, city, none
+	}
+
 	private BoardRenderer board;
 	private UserPanel userPanel;
+	private TurnPhase currentTurnPhase = TurnPhase.build;
+	private BuildType currentBuildType = BuildType.city;
+	private int currentPlayer;
 
 	/**
 	 * The number of hexes on the field.
@@ -37,11 +50,17 @@ public class Game {
 
 	public Game() {
 
-		int[] rollNumberArray = { 2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10,
-				10, 11, 11, 12 };
-		
-//		int[] rollNumberArray = { 5, 2, 3, 4, 5, 6, 7, 8,  9, 10,
-//				 11,  12, 13, 14, 15, 16, 17, 18 };
+		// int[] rollNumberArray = { 2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10,
+		// 10, 11, 11, 12 };
+
+		// int[] rollNumberArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+		// 11, 12, 13, 14, 15, 16, 17, 18 };
+
+		// This array contains all of the roll numbers in the order that they
+		// are always supposed to appear. These are placed in a clockwise inward
+		// spiral starting at the bottom hex.
+		int[] rollNumberArray = { 5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4,
+				5, 6, 3, 11 };
 
 		// makes an array of the different resources for the hexes.
 		ArrayList<Resource> colorNumberArray = new ArrayList<Game.Resource>();
@@ -86,28 +105,7 @@ public class Game {
 					randomNumberArray[i] = rollNumberArray[i - 1];
 				}
 			}
-
-			// if(i<boardSize-1){
-			// if(desertColorIndex<0){
-			// randomNumberArray[i]= rollNumberArray[i];
-			// }else{
-			// randomNumberArray[i+1]= rollNumberArray[i];
-			// }
-			// }
-
-			// while (randomNumberArray[i] == 0) {
-			// readValue = generator.nextInt(boardSize);
-			// randomNumberArray[i] = rollNumberArray[readValue];
-			// if (randomNumberArray[i] == -1)
-			// desertRollIndex = i;
-			// rollNumberArray[readValue] = 0;
-			// }
 		}
-		// makes sure that the desert doesn't have a roll number.
-		// randomNumberArray[desertRollIndex] =
-		// randomNumberArray[desertColorIndex];
-		// randomNumberArray[desertColorIndex] = -1;
-
 	}
 
 	public void setUserPanel(UserPanel panel) {
@@ -120,10 +118,34 @@ public class Game {
 		this.board.setBoard();
 	}
 
-	public void processClick(int determineSettlePosition,
-			int determineRoadPosition) {
-		// TODO Auto-generated method stub
-
+	public TurnPhase getCurrentTurnPhase() {
+		return this.currentTurnPhase;
 	}
 
+	public BuildType getBuildType() {
+		return this.currentBuildType;
+	}
+
+	public int getCurrentPlayer() {
+		return this.currentPlayer;
+	}
+
+	public void addRoad(int currentPlayer2, int hexId,
+			HexComponent.RoadPosition pos) {
+		// TODO do stuff
+		// TODO throw exceptions
+		this.board.addRoad(hexId, pos, Color.blue, BuildType.road);
+	}
+
+	public void addBuilding(int currentPlayer2, int hexId,
+			HexComponent.StructurePosition pos) {
+		// TODO do stuff
+		// TODO throw exceptions
+		if (this.currentBuildType == BuildType.settlement) {
+			this.board
+					.addBuilding(hexId, pos, Color.blue, BuildType.settlement);
+		} else {
+			this.board.addBuilding(hexId, pos, Color.blue, BuildType.city);
+		}
+	}
 }
