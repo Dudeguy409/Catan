@@ -2,3 +2,4 @@
 bin/Player.class
 *.class
 bin/DiceRenderer.class
+/bin

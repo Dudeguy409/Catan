@@ -9,8 +9,8 @@ import client.Model.RoadPiece;
 
 public class RoadManager {
 
-	private ArrayList<HashMap<Integer, RoadPiece>> roadPieceDependencyMaps;
-	private HashMap<Integer, Road> roadDependencyMap;
+	public ArrayList<HashMap<Integer, RoadPiece>> roadPieceDependencyMaps;
+	public HashMap<Integer, Road> roadDependencyMap;
 
 	public RoadManager(int playerCount) {
 
@@ -156,7 +156,7 @@ public class RoadManager {
 		// for each player, make sure that the piece doesn't already exist.
 		// Then, check to make sure one of its adjoining roads exists. Then link
 		// it to any roadpiece it may be touching and vice versa
-
+		
 	}
 
 	public void addRoadPieceAtBeginning(int playerIndex, int roadIndex) {
