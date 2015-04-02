@@ -1,5 +1,10 @@
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
+import client.Controller.Dice;
+import client.Controller.Die;
+import client.Model.Road;
 
 public class test {
 	
@@ -53,7 +58,9 @@ public class test {
 
 	@Test
 	public void testStructureGetPlayer() {
-		Structure struct = new Structure(1, 0, 0, 0, 0, 0, null);
-		assertEquals(1, struct.getPlayer());
+		//TODO fix
+//		Structure struct = new Structure(1, 0, 0, 0, 0, 0, null);
+//		assertEquals(1, struct.getPlayer());
+		fail();
 	}
 }

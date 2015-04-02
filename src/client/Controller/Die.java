@@ -1,3 +1,4 @@
+package client.Controller;
 import java.util.Random;
 
 public class Die {

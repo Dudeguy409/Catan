@@ -1,3 +1,4 @@
+package client.GUI;
 import java.awt.Color;
 import java.awt.Shape;
 

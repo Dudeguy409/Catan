@@ -1,3 +1,4 @@
+package client.GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,7 +10,10 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+
 import javax.swing.JComponent;
+
+import client.Controller.Game;
 
 /**
  * This class creates the GUI for the board

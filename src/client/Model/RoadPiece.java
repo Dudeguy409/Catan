@@ -1,3 +1,4 @@
+package client.Model;
 public class RoadPiece {
 
 	private int key;

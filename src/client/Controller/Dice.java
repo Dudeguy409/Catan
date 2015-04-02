@@ -1,3 +1,5 @@
+package client.Controller;
+
 
 public class Dice {
 

@@ -1,3 +1,4 @@
+package client.Model;
 import java.awt.Color;
 
 /**

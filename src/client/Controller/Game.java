@@ -1,6 +1,11 @@
+package client.Controller;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
+
+import client.GUI.BoardRenderer;
+import client.GUI.HexComponent;
+import client.GUI.UserPanel;
 
 public class Game {
 
@@ -44,7 +49,7 @@ public class Game {
 	/**
 	 * The number of hexes on the field.
 	 */
-	protected static final int boardSize = 19;
+	public static final int boardSize = 19;
 	private static int[] randomNumberArray = new int[boardSize];
 	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 

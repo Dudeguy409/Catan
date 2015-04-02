@@ -1,3 +1,4 @@
+package client.Model;
 public class Road {
 	private int key;
 	private int[] adjacentRoadsA;
