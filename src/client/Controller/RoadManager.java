@@ -156,6 +156,11 @@ public class RoadManager {
 		// for each player, make sure that the piece doesn't already exist.
 		// Then, check to make sure one of its adjoining roads exists. Then link
 		// it to any roadpiece it may be touching and vice versa
+		for (HashMap<Integer, RoadPiece> hash : roadPieceDependencyMaps ) {
+			if (hash.containsKey(roadIndex))
+				return;
+		}
+		
 		
 	}
 
