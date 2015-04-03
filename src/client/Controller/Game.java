@@ -53,6 +53,8 @@ public class Game {
 	private Player[] players;
 	private Color[] colorArray;
 	private int numberOfPlayers;
+	private RoadManager roadMgr;
+	private HexManager hexMgr;
 
 	/**
 	 * The number of hexes on the field.
@@ -116,6 +118,8 @@ public class Game {
 
 		configureNumberOfPlayers();
 		configurePlayerColors();
+		this.roadMgr = new RoadManager(this.numberOfPlayers);
+		this.hexMgr = new HexManager();
 
 	}
 
@@ -209,8 +213,17 @@ public class Game {
 			HexComponent.RoadPosition pos) {
 		// TODO do stuff
 		// TODO throw exceptions
-		this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
-				BuildType.road);
+		int roadId = this.hexMgr.getRoadId(hexId, pos);
+		int currentRoadCount = this.roadMgr.getRoadCountForPlayer(playerIndex);
+		if (currentRoadCount == 0) {
+			this.roadMgr.addRoadPieceAtBeginning(playerIndex, roadId);
+		} else {
+			this.roadMgr.addRoadPiece(playerIndex, roadId);
+		}
+		if (this.roadMgr.getRoadCountForPlayer(playerIndex) > currentRoadCount) {
+			this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
+					BuildType.road);
+		}
 	}
 
 	public void addBuilding(int playerIndex, int hexId,

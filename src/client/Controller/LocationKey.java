@@ -34,4 +34,9 @@ public class LocationKey {
 	private RoadPosition getRoadPosition() {
 		return this.pos;
 	}
+
+	@Override
+	public int hashCode() {
+		return this.hexIndex * 40 + this.pos.hashCode();
+	}
 }
