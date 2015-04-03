@@ -35,7 +35,7 @@ public class LongestRoadTest {
 	@Test
 	public void testRoadMapAddsRoadToCorrectPlayer() {
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(1, 5);
+		rm.addRoadPieceAtBeginning(1, 5);
 		assertEquals(1, rm.getRoadCountForPlayer(1));
 	}
 	
@@ -92,19 +92,19 @@ public class LongestRoadTest {
 		rslt = rm.findLongestRoadForPlayer(0);
 		assertEquals(0, rslt);
 
-		rm.addRoadPieceAtBeginning(0, 18);
+		rm.addRoadPieceAtBeginning(0, 14);
 		rm.addRoadPiece(0, 19);
 
 		rslt = rm.findLongestRoadForPlayer(0);
-		assertEquals(1, rslt);
+		assertEquals(2, rslt);
 	}
 
 	@Test
 	public void testAddTwoSeparate() {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(0, 19);
-		rm.addRoadPiece(0, 51);
+		rm.addRoadPieceAtBeginning(0, 19);
+		rm.addRoadPieceAtBeginning(0, 51);
 
 		rslt = rm.findLongestRoadForPlayer(0);
 		assertEquals(1, rslt);
@@ -114,7 +114,7 @@ public class LongestRoadTest {
 	public void testAddTwoAdjacent() {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(0, 19);
+		rm.addRoadPieceAtBeginning(0, 19);
 		rm.addRoadPiece(0, 22);
 
 		rslt = rm.findLongestRoadForPlayer(0);
@@ -125,7 +125,7 @@ public class LongestRoadTest {
 	public void testLoop() {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(0, 19);
+		rm.addRoadPieceAtBeginning(0, 19);
 		rm.addRoadPiece(0, 22);
 		rm.addRoadPiece(0, 31);
 		rm.addRoadPiece(0, 36);
@@ -140,7 +140,7 @@ public class LongestRoadTest {
 	public void testSnakeChain() {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(0, 15);
+		rm.addRoadPieceAtBeginning(0, 15);
 		rm.addRoadPiece(0, 23);
 		rm.addRoadPiece(0, 32);
 		rm.addRoadPiece(0, 40);
@@ -156,7 +156,7 @@ public class LongestRoadTest {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
 		// add chain
-		rm.addRoadPiece(0, 15);
+		rm.addRoadPieceAtBeginning(0, 15);
 		rm.addRoadPiece(0, 23);
 		rm.addRoadPiece(0, 32);
 		rm.addRoadPiece(0, 40);
@@ -164,7 +164,7 @@ public class LongestRoadTest {
 		rm.addRoadPiece(0, 57);
 
 		// connect loop
-		rm.addRoadPiece(0, 62);
+		rm.addRoadPieceAtBeginning(0, 62);
 		rm.addRoadPiece(0, 58);
 		rm.addRoadPiece(0, 50);
 		rm.addRoadPiece(0, 45);
@@ -179,7 +179,7 @@ public class LongestRoadTest {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
 		// add chain
-		rm.addRoadPiece(0, 1);
+		rm.addRoadPieceAtBeginning(0, 1);
 		rm.addRoadPiece(0, 2);
 		rm.addRoadPiece(0, 7);
 		rm.addRoadPiece(0, 15);
@@ -190,13 +190,13 @@ public class LongestRoadTest {
 		rm.addRoadPiece(0, 57);
 
 		// connect end loop
-		rm.addRoadPiece(0, 62);
+		rm.addRoadPieceAtBeginning(0, 62);
 		rm.addRoadPiece(0, 58);
 		rm.addRoadPiece(0, 50);
 		rm.addRoadPiece(0, 45);
 
 		// add second loop in middle
-		rm.addRoadPiece(0, 11);
+		rm.addRoadPieceAtBeginning(0, 11);
 		rm.addRoadPiece(0, 16);
 		rm.addRoadPiece(0, 28);
 		rm.addRoadPiece(0, 24);
@@ -223,7 +223,7 @@ public class LongestRoadTest {
 	public void testOpponentAddingSeparateRoads() {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(0, 15);
+		rm.addRoadPieceAtBeginning(0, 15);
 		rm.addRoadPiece(0, 23);
 		rm.addRoadPiece(0, 32);
 		rm.addRoadPiece(0, 40);
@@ -233,7 +233,7 @@ public class LongestRoadTest {
 		rslt = rm.findLongestRoadForPlayer(0);
 		assertEquals(6, rslt);
 
-		rm.addRoadPiece(1, 25);
+		rm.addRoadPieceAtBeginning(1, 25);
 		rm.addRoadPiece(1, 34);
 		rm.addRoadPiece(1, 42);
 		rm.addRoadPiece(1, 51);
@@ -255,7 +255,7 @@ public class LongestRoadTest {
 	public void testOpponentAddingAdjacentRoads() {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(0, 15);
+		rm.addRoadPieceAtBeginning(0, 15);
 		rm.addRoadPiece(0, 23);
 		rm.addRoadPiece(0, 32);
 		rm.addRoadPiece(0, 40);
@@ -265,7 +265,7 @@ public class LongestRoadTest {
 		rslt = rm.findLongestRoadForPlayer(0);
 		assertEquals(6, rslt);
 
-		rm.addRoadPiece(1, 25);
+		rm.addRoadPieceAtBeginning(1, 25);
 		rm.addRoadPiece(1, 34);
 		rm.addRoadPiece(1, 42);
 		rm.addRoadPiece(1, 51);
@@ -285,8 +285,8 @@ public class LongestRoadTest {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
 		// first add two unconnected roads
-		rm.addRoadPiece(0, 19);
-		rm.addRoadPiece(0, 31);
+		rm.addRoadPieceAtBeginning(0, 19);
+		rm.addRoadPieceAtBeginning(0, 31);
 
 		// then build a road connecting the two
 		rm.addRoadPiece(0, 22);
@@ -299,7 +299,7 @@ public class LongestRoadTest {
 	public void testConnectedRoadsOnOcean() {
 		int rslt;
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(0, 1);
+		rm.addRoadPieceAtBeginning(0, 1);
 		rm.addRoadPiece(0, 2);
 		rm.addRoadPiece(0, 3);
 

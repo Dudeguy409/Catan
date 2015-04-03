@@ -153,11 +153,16 @@ public class RoadManager {
 
 	public static void main(String[] args) {
 		RoadManager rm = new RoadManager(3);
-		// rm.addRoadPiece(0, 1);
-		// rm.addRoadPiece(0, 4);
 		rm.addRoadPieceAtBeginning(0, 1);
 		rm.addRoadPieceAtBeginning(0, 2);
+		rm.addRoadPieceAtBeginning(0, 3);
+		rm.addRoadPieceAtBeginning(0, 7);
+		rm.addRoadPieceAtBeginning(0, 11);
+		rm.addRoadPieceAtBeginning(0, 8);
 		rm.addRoadPieceAtBeginning(0, 4);
+		
+		//rm.addRoadPieceAtBeginning(0, 18);
+		//rm.addRoadPieceAtBeginning(0, 12);
 
 	}
 
@@ -229,30 +234,58 @@ public class RoadManager {
 					if (a[i] == roadIndex) {
 						int[] adjacentA = roadPieceDependencyMaps
 								.get(playerIndex).get(key).getAdjacentRoadsA();
-						int[] temp = new int[adjacentA.length + 1];
+						int[] tempA = new int[adjacentA.length + 1];
 						for (int j = 0; j < adjacentA.length; j++) {
-							temp[j] = adjacentA[j];
+							tempA[j] = adjacentA[j];
 						}
-						temp[temp.length - 1] = roadIndex;
+						tempA[tempA.length - 1] = roadIndex;
 						roadPieceDependencyMaps.get(playerIndex).get(key)
-								.setAdjacentRoadsA(temp);
+								.setAdjacentRoadsA(tempA);
 					}
 				}
-			}
-			for (int key : adjacentRoadPiecesB) {
-				System.out.println("key: " + key);
 				int[] b = roadDependencyMap.get(key).getAdjacentRoadsB();
 				for (int i = 0; i < b.length; i++) {
 					if (b[i] == roadIndex) {
 						int[] adjacentB = roadPieceDependencyMaps
 								.get(playerIndex).get(key).getAdjacentRoadsB();
-						int[] temp = new int[adjacentB.length + 1];
+						int[] tempB = new int[adjacentB.length + 1];
 						for (int j = 0; j < adjacentB.length; j++) {
-							temp[j] = adjacentB[j];
+							tempB[j] = adjacentB[j];
 						}
-						temp[temp.length - 1] = roadIndex;
+						tempB[tempB.length - 1] = roadIndex;
 						roadPieceDependencyMaps.get(playerIndex).get(key)
-								.setAdjacentRoadsB(temp);
+								.setAdjacentRoadsB(tempB);
+					}
+				}
+			}
+			for (int key : adjacentRoadPiecesB) {
+				System.out.println("key: " + key);
+				int[] a = roadDependencyMap.get(key).getAdjacentRoadsA();
+				for (int i = 0; i < a.length; i++) {
+					if (a[i] == roadIndex) {
+						int[] adjacentA = roadPieceDependencyMaps
+								.get(playerIndex).get(key).getAdjacentRoadsA();
+						int[] tempA = new int[adjacentA.length + 1];
+						for (int j = 0; j < adjacentA.length; j++) {
+							tempA[j] = adjacentA[j];
+						}
+						tempA[tempA.length - 1] = roadIndex;
+						roadPieceDependencyMaps.get(playerIndex).get(key)
+								.setAdjacentRoadsA(tempA);
+					}
+				}
+				int[] b = roadDependencyMap.get(key).getAdjacentRoadsB();
+				for (int i = 0; i < b.length; i++) {
+					if (b[i] == roadIndex) {
+						int[] adjacentB = roadPieceDependencyMaps
+								.get(playerIndex).get(key).getAdjacentRoadsB();
+						int[] tempB = new int[adjacentB.length + 1];
+						for (int j = 0; j < adjacentB.length; j++) {
+							tempB[j] = adjacentB[j];
+						}
+						tempB[tempB.length - 1] = roadIndex;
+						roadPieceDependencyMaps.get(playerIndex).get(key)
+								.setAdjacentRoadsB(tempB);
 					}
 				}
 			}
@@ -319,30 +352,58 @@ public class RoadManager {
 				if (a[i] == roadIndex) {
 					int[] adjacentA = roadPieceDependencyMaps.get(playerIndex)
 							.get(key).getAdjacentRoadsA();
-					int[] temp = new int[adjacentA.length + 1];
+					int[] tempA = new int[adjacentA.length + 1];
 					for (int j = 0; j < adjacentA.length; j++) {
-						temp[j] = adjacentA[j];
+						tempA[j] = adjacentA[j];
 					}
-					temp[temp.length - 1] = roadIndex;
+					tempA[tempA.length - 1] = roadIndex;
 					roadPieceDependencyMaps.get(playerIndex).get(key)
-							.setAdjacentRoadsA(temp);
+							.setAdjacentRoadsA(tempA);
 				}
 			}
-		}
-		for (int key : adjacentRoadPiecesB) {
-			System.out.println("key: " + key);
 			int[] b = roadDependencyMap.get(key).getAdjacentRoadsB();
 			for (int i = 0; i < b.length; i++) {
 				if (b[i] == roadIndex) {
 					int[] adjacentB = roadPieceDependencyMaps.get(playerIndex)
 							.get(key).getAdjacentRoadsB();
-					int[] temp = new int[adjacentB.length + 1];
+					int[] tempB = new int[adjacentB.length + 1];
 					for (int j = 0; j < adjacentB.length; j++) {
-						temp[j] = adjacentB[j];
+						tempB[j] = adjacentB[j];
 					}
-					temp[temp.length - 1] = roadIndex;
+					tempB[tempB.length - 1] = roadIndex;
 					roadPieceDependencyMaps.get(playerIndex).get(key)
-							.setAdjacentRoadsB(temp);
+							.setAdjacentRoadsB(tempB);
+				}
+			}
+		}
+		for (int key : adjacentRoadPiecesB) {
+			System.out.println("key: " + key);
+			int[] a = roadDependencyMap.get(key).getAdjacentRoadsA();
+			for (int i = 0; i < a.length; i++) {
+				if (a[i] == roadIndex) {
+					int[] adjacentA = roadPieceDependencyMaps.get(playerIndex)
+							.get(key).getAdjacentRoadsA();
+					int[] tempA = new int[adjacentA.length + 1];
+					for (int j = 0; j < adjacentA.length; j++) {
+						tempA[j] = adjacentA[j];
+					}
+					tempA[tempA.length - 1] = roadIndex;
+					roadPieceDependencyMaps.get(playerIndex).get(key)
+							.setAdjacentRoadsA(tempA);
+				}
+			}
+			int[] b = roadDependencyMap.get(key).getAdjacentRoadsB();
+			for (int i = 0; i < b.length; i++) {
+				if (b[i] == roadIndex) {
+					int[] adjacentB = roadPieceDependencyMaps.get(playerIndex)
+							.get(key).getAdjacentRoadsB();
+					int[] tempB = new int[adjacentB.length + 1];
+					for (int j = 0; j < adjacentB.length; j++) {
+						tempB[j] = adjacentB[j];
+					}
+					tempB[tempB.length - 1] = roadIndex;
+					roadPieceDependencyMaps.get(playerIndex).get(key)
+							.setAdjacentRoadsB(tempB);
 				}
 			}
 		}
