@@ -92,6 +92,7 @@ public class LongestRoadTest {
 		rslt = rm.findLongestRoadForPlayer(0);
 		assertEquals(0, rslt);
 
+		rm.addRoadPieceAtBeginning(0, 18);
 		rm.addRoadPiece(0, 19);
 
 		rslt = rm.findLongestRoadForPlayer(0);
