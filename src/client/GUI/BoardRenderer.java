@@ -1,4 +1,5 @@
 package client.GUI;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -98,6 +99,8 @@ public class BoardRenderer extends JComponent implements MouseListener {
 				}
 
 				g2.fill(hex.getRollNumberShape());
+				g2.setColor(Color.black);
+				g2.draw(hex.getRollNumberShape());
 			}
 
 			if (rollNumber > 0) {
@@ -211,6 +214,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 
 	public void moveRobber(int hexIndex) {
 		this.robberIndex = this.hexIndexToGUITranslator[hexIndex];
+		this.repaint();
 	}
 
 	/**

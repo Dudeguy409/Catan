@@ -36,14 +36,22 @@ public class HexManagerTest {
 				71, 72 };
 		int[] roadOccurences = new int[72];
 		for (Entry<LocationKey, Integer> e : hm.roadMap.entrySet()) {
-			roadOccurences[e.getValue()]++;
+			roadOccurences[e.getValue() - 1]++;
 		}
 
 		for (int i = 0; i < roadOccurences.length; i++) {
-			if (Arrays.asList(roadsOnOnlyOneHex).contains(i)) {
-				assertTrue(roadOccurences[i] == 1);
+			boolean isOnOnlyOneHex=false;
+			for(int j = 0; j < roadsOnOnlyOneHex.length;j++){
+				if(roadsOnOnlyOneHex[j]==i+1){
+					isOnOnlyOneHex=true;
+					break;
+				}
+			}
+			
+			if (isOnOnlyOneHex) {
+				assertEquals(roadOccurences[i], 1);
 			} else {
-				assertTrue(roadOccurences[i] == 2);
+				assertEquals(roadOccurences[i], 2);
 			}
 
 		}

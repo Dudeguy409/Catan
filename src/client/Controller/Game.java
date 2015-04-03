@@ -1,11 +1,16 @@
 package client.Controller;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
+import client.Controller.Game.BuildType;
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.UserPanel;
+import client.Model.Player;
 
 public class Game {
 
@@ -45,6 +50,9 @@ public class Game {
 	private TurnPhase currentTurnPhase = TurnPhase.build;
 	private BuildType currentBuildType = BuildType.city;
 	private int currentPlayer;
+	private Player[] players;
+	private Color[] colorArray;
+	private int numberOfPlayers;
 
 	/**
 	 * The number of hexes on the field.
@@ -54,12 +62,6 @@ public class Game {
 	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 
 	public Game() {
-
-		// int[] rollNumberArray = { 2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10,
-		// 10, 11, 11, 12 };
-
-		// int[] rollNumberArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-		// 11, 12, 13, 14, 15, 16, 17, 18 };
 
 		// This array contains all of the roll numbers in the order that they
 		// are always supposed to appear. These are placed in a clockwise inward
@@ -111,10 +113,78 @@ public class Game {
 				}
 			}
 		}
+
+		configureNumberOfPlayers();
+		configurePlayerColors();
+
+	}
+
+	private void configureNumberOfPlayers() {
+		// TODO exitOnClose with warning window
+		Object[] options1 = { "2", "3", "4" };
+		this.numberOfPlayers = JOptionPane.showOptionDialog(null,
+				"How many players are there?", "Setup",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+				options1, options1[1]) + 2;
+	}
+
+	private void configurePlayerColors() {
+		// TODO exitOnClose with warningWindow
+		Object[] options2 = { "Red", "Blue", "White", "Magenta", "Orange",
+				"Cyan" };
+		this.players = new Player[this.numberOfPlayers];
+		this.colorArray = new Color[this.numberOfPlayers];
+		for (int i = 0; i < this.numberOfPlayers; i++) {
+			boolean diffColor = true;
+			while (diffColor) {
+				int color = JOptionPane.showOptionDialog(null,
+						"What color would you like, Player " + (i + 1) + "?",
+						"Setup", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, options2, null);
+				diffColor = false;
+				switch (color) {
+				case 0:
+					this.colorArray[i] = Color.red;
+					break;
+				case 1:
+					this.colorArray[i] = Color.blue;
+					break;
+				case 2:
+					this.colorArray[i] = Color.white;
+					break;
+				case 3:
+					this.colorArray[i] = Color.magenta;
+					break;
+				case 4:
+					this.colorArray[i] = Color.orange;
+					break;
+				case 5:
+					this.colorArray[i] = Color.cyan;
+					break;
+				case 6:
+					this.colorArray[i] = Color.black;
+					break;
+				case 7:
+					this.colorArray[i] = Color.red;
+					break;
+				}
+				for (int j = 0; j < i; j++) {
+					if (this.colorArray[i] == this.colorArray[j])
+						diffColor = true;
+					// verifies that the user selects a color that hasn't
+					// already been chosen.
+				}
+
+			}
+
+			this.players[i] = new Player();
+		}
+
 	}
 
 	public void setUserPanel(UserPanel panel) {
 		this.userPanel = panel;
+		this.userPanel.setCurrentPlayer(this.currentPlayer);
 	}
 
 	public void setBoardRenderer(BoardRenderer board) {
@@ -135,22 +205,54 @@ public class Game {
 		return this.currentPlayer;
 	}
 
-	public void addRoad(int currentPlayer2, int hexId,
+	public void addRoad(int playerIndex, int hexId,
 			HexComponent.RoadPosition pos) {
 		// TODO do stuff
 		// TODO throw exceptions
-		this.board.addRoad(hexId, pos, Color.blue, BuildType.road);
+		this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
+				BuildType.road);
 	}
 
-	public void addBuilding(int currentPlayer2, int hexId,
+	public void addBuilding(int playerIndex, int hexId,
 			HexComponent.StructurePosition pos) {
 		// TODO do stuff
 		// TODO throw exceptions
 		if (this.currentBuildType == BuildType.settlement) {
-			this.board
-					.addBuilding(hexId, pos, Color.blue, BuildType.settlement);
+			this.board.addBuilding(hexId, pos, this.colorArray[playerIndex],
+					BuildType.settlement);
 		} else {
-			this.board.addBuilding(hexId, pos, Color.blue, BuildType.city);
+			this.board.addBuilding(hexId, pos, this.colorArray[playerIndex],
+					BuildType.city);
 		}
+	}
+
+	public void roll() {
+		int[] rolls = new Dice().rollDice();
+		this.userPanel.setRolls(rolls);
+
+	}
+
+	public void drawDevCard() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setBuildType(BuildType type) {
+		this.currentBuildType = type;
+	}
+
+	public void endTurn() {
+		this.currentPlayer = (this.currentPlayer + 1) % this.numberOfPlayers;
+		this.userPanel.setCurrentPlayer(this.currentPlayer);
+		this.userPanel.setTurnPhase(TurnPhase.preroll);
+
+	}
+
+	public Color[] getPlayerColors() {
+		return this.colorArray;
+	}
+
+	public int getNumberOfPlayers() {
+		return this.numberOfPlayers;
 	}
 }

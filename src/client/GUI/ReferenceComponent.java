@@ -19,7 +19,7 @@ public class ReferenceComponent extends JComponent {
 	 * 
 	 */
 	public ReferenceComponent() {
-		this.setPreferredSize(new Dimension(300, 300));
+		this.setPreferredSize(new Dimension(330, 250));
 	}
 
 	@Override
