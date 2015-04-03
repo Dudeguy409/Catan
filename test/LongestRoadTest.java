@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import client.Controller.RoadManager;
+import client.Model.Road;
+import client.Model.RoadPiece;
 
 public class LongestRoadTest {
 
@@ -68,6 +70,19 @@ public class LongestRoadTest {
 
 		rslt = rm.getRoadCountForPlayer(0);
 		assertEquals(5, rslt);
+	}
+	
+	@Test
+	public void testAddOneRoadAtBeginning() {
+		int rslt;
+		RoadManager rm = new RoadManager(3);
+		rslt = rm.findLongestRoadForPlayer(0);
+		assertEquals(0, rslt);
+
+		rm.addRoadPieceAtBeginning(0, 19);
+
+		rslt = rm.findLongestRoadForPlayer(0);
+		assertEquals(1, rslt);
 	}
 
 	@Test
@@ -291,4 +306,69 @@ public class LongestRoadTest {
 		assertEquals(3, rslt);
 	}
 
+	@Test
+	public void testRoadGetConnectedRoadsA() {
+		int key = 0;
+		int[] adjacentRoadsA = {1};
+		int[] adjacentRoadsB = {2};
+		Road road = new Road(key, adjacentRoadsA, adjacentRoadsB);
+		
+		assertTrue(road.getAdjacentRoadsA() == adjacentRoadsA);
+	}
+	
+	@Test
+	public void testRoadGetConnectedRoadsB() {
+		int key = 0;
+		int[] adjacentRoadsA = {1};
+		int[] adjacentRoadsB = {2};
+		Road road = new Road(key, adjacentRoadsA, adjacentRoadsB);
+		
+		assertTrue(road.getAdjacentRoadsB() == adjacentRoadsB);
+	}
+	
+	@Test
+	public void testRoadPieceGetConnectedRoadsA() {
+		int key = 0;
+		int[] adjacentRoadsA = {1};
+		int[] adjacentRoadsB = {2};
+		RoadPiece road = new RoadPiece(key, adjacentRoadsA, adjacentRoadsB);
+		
+		assertTrue(road.getAdjacentRoadsA() == adjacentRoadsA);
+	}
+	
+	@Test
+	public void testRoadPieceGetConnectedRoadsB() {
+		int key = 0;
+		int[] adjacentRoadsA = {1};
+		int[] adjacentRoadsB = {2};
+		RoadPiece road = new RoadPiece(key, adjacentRoadsA, adjacentRoadsB);
+		
+		assertTrue(road.getAdjacentRoadsB() == adjacentRoadsB);
+	}
+	
+	@Test
+	public void testRoadPieceSetConnectedRoadsA() {
+		int key = 0;
+		int[] adjacentRoadsA = {};
+		int[] adjacentRoadsB = {2};
+		RoadPiece road = new RoadPiece(key, adjacentRoadsA, adjacentRoadsB);
+		adjacentRoadsA = new int[1];
+		adjacentRoadsA[0] = 1;
+		road.setAdjacentRoadsA(adjacentRoadsA);
+		
+		assertTrue(road.getAdjacentRoadsA() == adjacentRoadsA);
+	}
+	
+	@Test
+	public void testRoadPieceSetConnectedRoadsB() {
+		int key = 0;
+		int[] adjacentRoadsA = {1};
+		int[] adjacentRoadsB = {};
+		RoadPiece road = new RoadPiece(key, adjacentRoadsA, adjacentRoadsB);
+		adjacentRoadsB = new int[1];
+		adjacentRoadsB[0] = 2;
+		road.setAdjacentRoadsB(adjacentRoadsB);
+		
+		assertTrue(road.getAdjacentRoadsB() == adjacentRoadsB);
+	}
 }

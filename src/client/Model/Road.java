@@ -9,6 +9,14 @@ public class Road {
 		this.adjacentRoadsA = adjacentRoadsA;
 		this.adjacentRoadsB = adjacentRoadsB;
 	}
+	
+	public int[] getAdjacentRoadsA() {
+		return this.adjacentRoadsA;
+	}
+	
+	public int[] getAdjacentRoadsB() {
+		return this.adjacentRoadsB;
+	}
 
 	@Override
 	public String toString() {

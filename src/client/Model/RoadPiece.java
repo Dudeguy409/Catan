@@ -71,6 +71,22 @@ public class RoadPiece {
 		return this.toString().equals(((RoadPiece) o).toString());
 	}
 
+	public int[] getAdjacentRoadsA() {
+		return adjacentRoadsA;
+	}
+
+	public int[] getAdjacentRoadsB() {
+		return adjacentRoadsB;
+	}
+	
+	public void setAdjacentRoadsA(int[] adjacentRoadsA) {
+		this.adjacentRoadsA = adjacentRoadsA;	
+	}
+
+	public void setAdjacentRoadsB(int[] adjacentRoadsB) {
+		this.adjacentRoadsB = adjacentRoadsB;	
+	}
+
 	//TODO remove?
 	// public int getRoadValue() {
 	// return this.key;

@@ -1,4 +1,5 @@
 package client.Controller;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -150,24 +151,152 @@ public class RoadManager {
 		return false;
 	}
 
+	public static void main(String[] args) {
+		RoadManager rm = new RoadManager(3);
+		// rm.addRoadPiece(0, 1);
+		// rm.addRoadPiece(0, 4);
+		rm.addRoadPieceAtBeginning(0, 1);
+		rm.addRoadPieceAtBeginning(0, 2);
+		rm.addRoadPieceAtBeginning(0, 4);
+
+	}
+
 	// TODO sever the connection in the dependency map if a player builds a
 	// settlement in between two of their opponents roads.
+	// public void addRoadPiece(int playerIndex, int roadIndex) throws Exception
+	// {
 	public void addRoadPiece(int playerIndex, int roadIndex) {
 		// for each player, make sure that the piece doesn't already exist.
 		// Then, check to make sure one of its adjoining roads exists. Then link
 		// it to any roadpiece it may be touching and vice versa
-		for (HashMap<Integer, RoadPiece> hash : roadPieceDependencyMaps ) {
-			if (hash.containsKey(roadIndex))
-				return;
+
+		for (HashMap<Integer, RoadPiece> hash : roadPieceDependencyMaps) {
+			if (hash.containsKey(roadIndex)) {// check if road exists
+				// throw new Exception("Road already exists");
+			}
 		}
-		
-		
+		// check to see if there is a valid adjacent road piece
+
+		// get adjacent roads to the piece we want to add,
+		// then check to see if the player owns one of them
+		int[] a = { 4, 7 };
+		int[] b = { 1 };
+		roadPieceDependencyMaps.get(0).put(2, new RoadPiece(2, a, b));
+		// System.out.println(roadPieceDependencyMaps.get(playerIndex));
+
+		boolean containsAdjacent = false;
+
+		int[] adjacentRoadsA = roadDependencyMap.get(roadIndex)
+				.getAdjacentRoadsA();
+		for (int key : adjacentRoadsA) {
+			if (roadPieceDependencyMaps.get(playerIndex).containsKey(key)) {
+				containsAdjacent = true;
+			}
+		}
+
+		int[] adjacentRoadsB = roadDependencyMap.get(roadIndex)
+				.getAdjacentRoadsB();
+		for (int key : adjacentRoadsB) {
+			if (roadPieceDependencyMaps.get(playerIndex).containsKey(key)) {
+				containsAdjacent = true;
+			}
+		}
+		// System.out.println("containsAdjacent: " + containsAdjacent);
+
+		if (containsAdjacent) { // add roadPiece if player owns adjacent road.
+			roadPieceDependencyMaps.get(playerIndex).put(
+					roadIndex,
+					new RoadPiece(roadIndex, roadDependencyMap.get(roadIndex)
+							.getAdjacentRoadsA(), roadDependencyMap.get(
+							roadIndex).getAdjacentRoadsB()));
+
+		}
+		System.out.println(roadPieceDependencyMaps.get(playerIndex));
 	}
 
 	public void addRoadPieceAtBeginning(int playerIndex, int roadIndex) {
 		// for each player, make sure that the piece doesn't already exist.
 		// Then, don't check to make sure one of its adjoining roads exists.
 		// Then, link it to any road that it may be touching and vice versa.
+
+		for (HashMap<Integer, RoadPiece> hash : roadPieceDependencyMaps) {
+			if (hash.containsKey(roadIndex)) {// check if road exists
+				// throw new Exception("Road already exists");
+			}
+		}
+
+		// check to see if there are adjacent roadPieces owned by the player
+		// and then add them in the dependency map
+		ArrayList<Integer> adjacentRoadPiecesListA = new ArrayList<Integer>();
+		ArrayList<Integer> adjacentRoadPiecesListB = new ArrayList<Integer>();
+
+		int[] adjacentRoadsA = roadDependencyMap.get(roadIndex)
+				.getAdjacentRoadsA();
+		for (int key : adjacentRoadsA) {
+			if (roadPieceDependencyMaps.get(playerIndex).containsKey(key)) {
+				adjacentRoadPiecesListA.add(key);
+			}
+		}
+
+		int[] adjacentRoadsB = roadDependencyMap.get(roadIndex)
+				.getAdjacentRoadsB();
+		for (int key : adjacentRoadsB) {
+			if (roadPieceDependencyMaps.get(playerIndex).containsKey(key)) {
+				adjacentRoadPiecesListB.add(key);
+			}
+		}
+
+		// convert the adjacentRoadPieces ArrayLists into arrays
+		int[] adjacentRoadPiecesA = new int[adjacentRoadPiecesListA.size()];
+		for (int i = 0; i < adjacentRoadPiecesListA.size(); i++) {
+			adjacentRoadPiecesA[i] = adjacentRoadPiecesListA.get(i);
+		}
+
+		int[] adjacentRoadPiecesB = new int[adjacentRoadPiecesListB.size()];
+		for (int i = 0; i < adjacentRoadPiecesListB.size(); i++) {
+			adjacentRoadPiecesB[i] = adjacentRoadPiecesListB.get(i);
+		}
+
+		roadPieceDependencyMaps.get(playerIndex).put(
+				roadIndex,
+				new RoadPiece(roadIndex, adjacentRoadPiecesA,
+						adjacentRoadPiecesB));
+
+		// Connect the new roadPiece to existing adjacent roadPieces
+		// For each of the new pieces adjacent roads, check whether it should be
+		// added to the A or B array, then add it to the appropriate array
+		for(int key : adjacentRoadPiecesA) {
+			System.out.println("key: "+key);
+			int[] a = roadDependencyMap.get(key).getAdjacentRoadsA();
+			for(int i = 0; i<a.length; i++) {
+				if(a[i] == roadIndex) {
+					int[] adjacentA = roadPieceDependencyMaps.get(playerIndex).get(key).getAdjacentRoadsA();
+					int[] temp = new int[adjacentA.length+1];
+					for(int j = 0; j<adjacentA.length; j++){
+						temp[j] = adjacentA[j];
+					}
+					temp[temp.length-1] = roadIndex; 
+					roadPieceDependencyMaps.get(playerIndex).get(key).setAdjacentRoadsA(temp);
+				}
+			}
+		}
+		for(int key : adjacentRoadPiecesB) {
+			System.out.println("key: "+key);
+			int[] b = roadDependencyMap.get(key).getAdjacentRoadsB();
+			for(int i = 0; i<b.length; i++) {
+				if(b[i] == roadIndex) {
+					int[] adjacentB = roadPieceDependencyMaps.get(playerIndex).get(key).getAdjacentRoadsB();
+					int[] temp = new int[adjacentB.length+1];
+					for(int j = 0; j<adjacentB.length; j++){
+						temp[j] = adjacentB[j];
+					}
+					temp[temp.length-1] = roadIndex; 
+					roadPieceDependencyMaps.get(playerIndex).get(key).setAdjacentRoadsB(temp);
+				}
+			}
+		}
+		
+		System.out.println(roadPieceDependencyMaps.get(playerIndex));
 
 	}
 
