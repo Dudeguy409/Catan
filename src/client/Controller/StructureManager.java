@@ -19,7 +19,7 @@ public class StructureManager {
 		}
 	}
 	
-	public void addStructure(int playerNumber, int structureId) throws Exception {
+	public void addStructure(int playerNumber, int structureId) throws IndexOutOfBoundsException {
 		//check to make sure playerNumber and structureId are valid
 		if(playerNumber<0) {
 			throw new IndexOutOfBoundsException("Player Number "+playerNumber+" not valid.");
