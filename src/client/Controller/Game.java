@@ -3,9 +3,12 @@ package client.Controller;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
+
 import javax.swing.JOptionPane;
+
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
+import client.GUI.HexComponent.StructurePosition;
 import client.GUI.UserPanel;
 import client.Model.Player;
 
@@ -265,8 +268,14 @@ public class Game {
 	public int getNumberOfPlayers() {
 		return this.numberOfPlayers;
 	}
-	
+
 	public boolean hasAdjacentRoad(int structureId) {
 		return false;
+	}
+
+	public HexComponent.RoadPosition[] getAdjacentRoadPositionsForStructure(
+			StructurePosition pos) {
+		return null;
+
 	}
 }
