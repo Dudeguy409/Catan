@@ -1,18 +1,20 @@
 package client.Model;
 
-public class Structure{
-	
-	
-	public Structure(int key, int[] adjacentSettlements) {
-		
+public class Structure {
+
+	private int[] adjacentStructures;
+	private int id;
+
+	public Structure(int key, int[] adjacentStructures) {
+		this.id = key;
+		this.adjacentStructures = adjacentStructures;
 	}
-	
-	public int[] getAdjacentSettlements(){
-		return null;
+
+	public int[] getAdjacentSettlements() {
+		return this.adjacentStructures;
 	}
 
 	public Object getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.id;
 	}
 }
