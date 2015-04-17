@@ -208,7 +208,7 @@ public class LongestRoadTest {
 		rm.addRoadPiece(0, 24);
 
 		rslt = rm.findLongestRoadForPlayer(0);
-		assertEquals(10, rslt);
+		assertEquals(15, rslt);
 
 	}
 
