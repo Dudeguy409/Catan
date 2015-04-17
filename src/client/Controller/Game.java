@@ -268,4 +268,8 @@ public class Game {
 	public int getNumberOfPlayers() {
 		return this.numberOfPlayers;
 	}
+	
+	public boolean hasAdjacentRoad(int structureId) {
+		return false;
+	}
 }

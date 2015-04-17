@@ -38,8 +38,10 @@ public class StructureManager {
 		}
 		
 		//check to make sure there is no adjacent structure
+			//uses structureDependencyMap
 		
 		//check to make sure there is an adjacent road
+		//hasAdjacentRoad(int structureId)
 		
 		//actually add the structure
 	}
