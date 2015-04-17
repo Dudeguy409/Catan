@@ -31,23 +31,23 @@ public class StructurePieceTest {
 	}
 
 	@Test
-	public void testStructureMapDoesntAddsStructure() {
+	public void testStructureMapDoesntAddsStructure() throws Exception {
 		StructureManager sm = new StructureManager(3);
 		sm.addStructure(1, 5);
-		assertEquals(0, sm.getStructureCountForPlayer(1));
+		assertEquals(0, sm.getSettlementCountForPlayer(1));
 	}
 
 	@Test
-	public void testStructureMapAddsStructureToCorrectPlayer() {
+	public void testStructureMapAddsStructureToCorrectPlayer() throws Exception {
 		StructureManager sm = new StructureManager(3);
 		RoadManager rm = new RoadManager(3);
 		rm.addRoadPieceAtBeginning(1, 5);
 		sm.addStructure(1, 5);
-		assertEquals(1, sm.getStructureCountForPlayer(1));
+		assertEquals(1, sm.getSettlementCountForPlayer(1));
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
-	public void testStructureMapThrowsExceptionWhenNonPlayerReferenced() {
+	public void testStructureMapThrowsExceptionWhenNonPlayerReferenced() throws Exception {
 		StructureManager sm = new StructureManager(3);
 		RoadManager rm = new RoadManager(3);
 		rm.addRoadPieceAtBeginning(1, 5);
@@ -55,7 +55,7 @@ public class StructurePieceTest {
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
-	public void testStructureMapThrowsExceptionWhenNonLocationReferenced() {
+	public void testStructureMapThrowsExceptionWhenNonLocationReferenced() throws Exception {
 		StructureManager sm = new StructureManager(3);
 		RoadManager rm = new RoadManager(3);
 		rm.addRoadPieceAtBeginning(1, 5);
@@ -63,22 +63,22 @@ public class StructurePieceTest {
 	}
 
 	@Test
-	public void testAddOneStructureAtBeginning() {
+	public void testAddOneStructureAtBeginning() throws Exception {
 		int rslt;
 		StructureManager sm = new StructureManager(3);
-		rslt = sm.getStructureCountForPlayer(0);
+		rslt = sm.getSettlementCountForPlayer(0);
 		assertEquals(0, rslt);
 
 		RoadManager rm = new RoadManager(3);
 		rm.addRoadPieceAtBeginning(0, 27);
 		sm.addStructure(0, 19);
 
-		rslt = sm.getStructureCountForPlayer(0);
+		rslt = sm.getSettlementCountForPlayer(0);
 		assertEquals(1, rslt);
 	}
 
 	@Test
-	public void testAddTwoSeparate() {
+	public void testAddTwoSeparate() throws Exception {
 		int rslt;
 		StructureManager sm = new StructureManager(3);
 
@@ -89,12 +89,12 @@ public class StructurePieceTest {
 		rm.addRoadPieceAtBeginning(0, 66);
 		sm.addStructure(0, 51);
 
-		rslt = sm.getStructureCountForPlayer(0);
+		rslt = sm.getSettlementCountForPlayer(0);
 		assertEquals(2, rslt);
 	}
 
 	@Test
-	public void testAddTwoAdjacent() {
+	public void testAddTwoAdjacent() throws Exception {
 		int rslt;
 		StructureManager sm = new StructureManager(3);
 		RoadManager rm = new RoadManager(3);
@@ -102,12 +102,12 @@ public class StructurePieceTest {
 		sm.addStructure(0, 19);
 		sm.addStructure(0, 20);
 
-		rslt = sm.getStructureCountForPlayer(0);
+		rslt = sm.getSettlementCountForPlayer(0);
 		assertEquals(1, rslt);
 	}
 
 	@Test
-	public void testOpponentAddAdjacent() {
+	public void testOpponentAddAdjacent() throws Exception {
 		int rslt;
 		StructureManager sm = new StructureManager(3);
 		RoadManager rm = new RoadManager(3);
@@ -117,7 +117,7 @@ public class StructurePieceTest {
 		rm.addRoadPieceAtBeginning(1, 31);
 		sm.addStructure(1, 20);
 
-		rslt = sm.getStructureCountForPlayer(1);
+		rslt = sm.getSettlementCountForPlayer(1);
 		assertEquals(0, rslt);
 	}
 

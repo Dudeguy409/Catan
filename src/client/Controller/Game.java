@@ -13,7 +13,6 @@ import client.GUI.HexComponent.StructurePosition;
 import client.GUI.UserPanel;
 import client.Model.Player;
 import client.Model.RoadPiece;
-import client.Model.Structure;
 
 public class Game {
 
@@ -238,7 +237,7 @@ public class Game {
 		// Check for adjacent road not returned by
 		// getAdjacentRoadPositionsForStructure
 
-		int structId = this.hexMgr.getStructureId(hexId, pos);
+		int structureId = this.hexMgr.getStructureId(hexId, pos);
 
 		boolean isAdjacent = false;
 
@@ -280,22 +279,32 @@ public class Game {
 			}
 		}
 
-		for (HashMap<Integer, RoadPiece> roadPieceMap : this.roadMgr.roadPieceDependencyMaps) {
-			for (int roadPos : possibleRoads) {
-				if (roadPieceMap.containsKey(roadPos)) {
-					isAdjacent = true;
-				}
+		HashMap<Integer, RoadPiece> roadPieceMap = this.roadMgr.roadPieceDependencyMaps
+				.get(playerIndex);
+		for (int roadPos : possibleRoads) {
+			if (roadPieceMap.containsKey(roadPos)) {
+				isAdjacent = true;
 			}
 		}
 
 		if (isAdjacent) {
-			if (this.currentBuildType == BuildType.settlement) {
-				this.board.addBuilding(hexId, pos,
-						this.colorArray[playerIndex], BuildType.settlement);
-			} else {
-				this.board.addBuilding(hexId, pos,
-						this.colorArray[playerIndex], BuildType.city);
+
+			try {
+
+				if (this.currentBuildType == BuildType.settlement) {
+					this.structMgr.addStructure(playerIndex, structureId);
+					this.board.addBuilding(hexId, pos,
+							this.colorArray[playerIndex], BuildType.settlement);
+				} else {
+					this.structMgr.updateStructure(playerIndex, structureId);
+					this.board.addBuilding(hexId, pos,
+							this.colorArray[playerIndex], BuildType.city);
+				}
+
+			} catch (Exception e) {
+				System.out.println(e);
 			}
+
 		}
 	}
 

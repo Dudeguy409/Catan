@@ -5,9 +5,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.sun.xml.internal.ws.policy.spi.AssertionCreationException;
-
 import client.Controller.Game;
 import client.GUI.HexComponent;
 

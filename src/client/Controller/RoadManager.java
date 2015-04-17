@@ -28,9 +28,9 @@ public class RoadManager {
 		int max = 0;
 		for (Entry<Integer, RoadPiece> e : roadPieceDependencyMaps.get(
 				playerIndex).entrySet()) {
-			RoadPiece road = e.getValue();
+			// RoadPiece road = e.getValue();
 			int rslt = findLongestRoadForRoadPiece(e.getKey(), playerIndex);
-			System.out.println(road.toString() + ":        " + rslt);
+			// System.out.println(road.toString() + ":        " + rslt);
 			if (rslt > max) {
 				max = rslt;
 			}
@@ -113,9 +113,10 @@ public class RoadManager {
 		// for each player, make sure that the piece doesn't already exist.
 		// Then, check to make sure one of its adjoining roads exists. Then link
 		// it to any roadpiece it may be touching and vice versa
-		
-		if(roadIndex<1 || roadIndex>72)
-			throw new IndexOutOfBoundsException("roadIndex "+roadIndex+" out of bounds!");
+
+		if (roadIndex < 1 || roadIndex > 72)
+			throw new IndexOutOfBoundsException("roadIndex " + roadIndex
+					+ " out of bounds!");
 
 		boolean noOverlap = true;
 		for (HashMap<Integer, RoadPiece> hash : roadPieceDependencyMaps) {
@@ -177,7 +178,7 @@ public class RoadManager {
 				// added to the A or B array, then add it to the appropriate
 				// array
 				for (int key : adjacentRoadPiecesA) {
-					System.out.println("key: " + key);
+					// System.out.println("key: " + key);
 					int[] a = roadDependencyMap.get(key).getAdjacentRoadsA();
 					for (int i = 0; i < a.length; i++) {
 						if (a[i] == roadIndex) {
@@ -210,7 +211,7 @@ public class RoadManager {
 					}
 				}
 				for (int key : adjacentRoadPiecesB) {
-					System.out.println("key: " + key);
+					// System.out.println("key: " + key);
 					int[] a = roadDependencyMap.get(key).getAdjacentRoadsA();
 					for (int i = 0; i < a.length; i++) {
 						if (a[i] == roadIndex) {
@@ -244,7 +245,7 @@ public class RoadManager {
 				}
 			}
 
-			System.out.println(roadPieceDependencyMaps.get(playerIndex));
+			// System.out.println(roadPieceDependencyMaps.get(playerIndex));
 		}
 	}
 
@@ -305,7 +306,7 @@ public class RoadManager {
 			// should be
 			// added to the A or B array, then add it to the appropriate array
 			for (int key : adjacentRoadPiecesA) {
-				System.out.println("key: " + key);
+				// System.out.println("key: " + key);
 				int[] a = roadDependencyMap.get(key).getAdjacentRoadsA();
 				for (int i = 0; i < a.length; i++) {
 					if (a[i] == roadIndex) {
@@ -336,7 +337,7 @@ public class RoadManager {
 				}
 			}
 			for (int key : adjacentRoadPiecesB) {
-				System.out.println("key: " + key);
+				// System.out.println("key: " + key);
 				int[] a = roadDependencyMap.get(key).getAdjacentRoadsA();
 				for (int i = 0; i < a.length; i++) {
 					if (a[i] == roadIndex) {
@@ -367,7 +368,7 @@ public class RoadManager {
 				}
 			}
 
-			System.out.println(roadPieceDependencyMaps.get(playerIndex));
+			// System.out.println(roadPieceDependencyMaps.get(playerIndex));
 		}
 
 	}
