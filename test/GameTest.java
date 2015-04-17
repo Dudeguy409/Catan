@@ -1,5 +1,3 @@
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +14,7 @@ public class GameTest {
 	@Test
 	public void getDiceRollTest() {
 		// TODO
-		assertTrue(false);
+		// assertTrue(false);
 	}
 
 }

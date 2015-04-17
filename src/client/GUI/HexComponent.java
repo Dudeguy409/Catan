@@ -1,13 +1,11 @@
 package client.GUI;
+
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-
 import client.Controller.Game;
-import client.Controller.Game.BuildType;
-import client.Controller.Game.Resource;
 
 /**
  * manages the information stored about each hexagon on the board.
@@ -128,7 +126,8 @@ public class HexComponent {
 		return this.centerX;
 	}
 
-	public Shape makeStructure(StructurePosition position, Game.BuildType structureType) {
+	public Shape makeStructure(StructurePosition position,
+			Game.BuildType structureType) {
 		Shape shapeToAdd = null;
 		double xCoord = 0;
 		double yCoord = 0;

@@ -3,10 +3,7 @@ package client.Controller;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.swing.JOptionPane;
-
-import client.Controller.Game.BuildType;
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.UserPanel;

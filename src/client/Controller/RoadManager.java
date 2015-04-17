@@ -22,50 +22,6 @@ public class RoadManager {
 
 		initializeRoadGraph();
 
-		// roadDependencyMap.put(1,
-		// new RoadPiece(1, new int[] { 2 }, new int[] {}));
-		// roadDependencyMap.put(2, new RoadPiece(2, new int[] { 1 },
-		// new int[] { 7 }));
-		// roadDependencyMap.put(7, new RoadPiece(7, new int[] { 2 }, new int[]
-		// {
-		// 15, 11 }));
-		// roadDependencyMap.put(11, new RoadPiece(11, new int[] { 16 },
-		// new int[] { 15, 7 }));
-		// roadDependencyMap.put(15, new RoadPiece(15, new int[] { 23 },
-		// new int[] { 7, 11 }));
-		// roadDependencyMap.put(16, new RoadPiece(16, new int[] { 24 },
-		// new int[] { 11 }));
-		// roadDependencyMap.put(23, new RoadPiece(23, new int[] { 28, 32 },
-		// new int[] { 15 }));
-		// roadDependencyMap.put(24, new RoadPiece(24, new int[] { 16 },
-		// new int[] { 28 }));
-		// roadDependencyMap.put(28, new RoadPiece(28, new int[] { 24 },
-		// new int[] { 32, 23 }));
-		// roadDependencyMap.put(32, new RoadPiece(32, new int[] { 40 },
-		// new int[] { 23, 28 }));
-		// roadDependencyMap.put(40, new RoadPiece(40, new int[] { 49, 45 },
-		// new int[] { 32 }));
-		// roadDependencyMap.put(45, new RoadPiece(45, new int[] { 40, 49 },
-		// new int[] { 50 }));
-		// roadDependencyMap.put(49, new RoadPiece(49, new int[] { 57 },
-		// new int[] { 45 }));
-		// roadDependencyMap.put(50, new RoadPiece(50, new int[] { 58 },
-		// new int[] { 45 }));
-		// roadDependencyMap.put(57, new RoadPiece(57, new int[] { 62 },
-		// new int[] { 49 }));
-		// roadDependencyMap.put(58, new RoadPiece(58, new int[] { 62 },
-		// new int[] { 50 }));
-		// roadDependencyMap.put(62, new RoadPiece(62, new int[] { 57 },
-		// new int[] { 58 }));
-
-		// for (Entry<Integer, RoadPiece> e : roadDependencyMap.entrySet()) {
-		// RoadPiece road = e.getValue();
-		// System.out.println(road.toString());
-		// System.out.println(Arrays.toString(road.getAllAdjacentRoads()));
-		// }
-
-		// System.out.println(findLongestRoad());
-
 	}
 
 	public int findLongestRoadForPlayer(int playerIndex) {
@@ -151,25 +107,8 @@ public class RoadManager {
 		return false;
 	}
 
-	public static void main(String[] args) {
-		RoadManager rm = new RoadManager(3);
-		rm.addRoadPieceAtBeginning(0, 1);
-		rm.addRoadPieceAtBeginning(0, 2);
-		rm.addRoadPieceAtBeginning(0, 3);
-		rm.addRoadPieceAtBeginning(0, 7);
-		rm.addRoadPieceAtBeginning(0, 11);
-		rm.addRoadPieceAtBeginning(0, 8);
-		rm.addRoadPieceAtBeginning(0, 4);
-
-		// rm.addRoadPieceAtBeginning(0, 18);
-		// rm.addRoadPieceAtBeginning(0, 12);
-
-	}
-
 	// TODO sever the connection in the dependency map if a player builds a
 	// settlement in between two of their opponents roads.
-	// public void addRoadPiece(int playerIndex, int roadIndex) throws Exception
-	// {
 	public void addRoadPiece(int playerIndex, int roadIndex) {
 		// for each player, make sure that the piece doesn't already exist.
 		// Then, check to make sure one of its adjoining roads exists. Then link

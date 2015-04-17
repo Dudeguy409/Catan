@@ -1,10 +1,8 @@
 package client.Controller;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.Random;
-
 import javax.swing.JFrame;
-
 import client.GUI.BoardRenderer;
 import client.GUI.UserPanel;
 

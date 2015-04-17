@@ -1,57 +1,49 @@
 import static org.junit.Assert.*;
-
-import org.junit.Before;
 import org.junit.Test;
-
 import client.Controller.RoadManager;
 import client.Model.Road;
 import client.Model.RoadPiece;
 
 public class LongestRoadTest {
 
-//	@Before
-//	public void setUp() throws Exception {
-//		RoadManager rm = new RoadManager(3);
-//	}
-	
 	@Test
 	public void testRoadManagerInitializes() {
 		RoadManager rm = new RoadManager(3);
 		assertNotNull(rm);
 	}
-	
+
 	@Test
 	public void testRoadMapInitializes() {
 		RoadManager rm = new RoadManager(3);
 		assertNotNull(rm.roadDependencyMap);
 	}
-	
+
 	@Test
 	public void testRoadMapCorrectSize() {
 		RoadManager rm = new RoadManager(3);
 		assertEquals(3, rm.roadPieceDependencyMaps.size());
 	}
-	
+
 	@Test
 	public void testRoadMapAddsRoadToCorrectPlayer() {
 		RoadManager rm = new RoadManager(3);
 		rm.addRoadPieceAtBeginning(1, 5);
 		assertEquals(1, rm.getRoadCountForPlayer(1));
 	}
-	
-	@Test(expected=IndexOutOfBoundsException.class)
+
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRoadMapThrowsExceptionWhenNonPlayerReferenced() {
 		RoadManager rm = new RoadManager(3);
 		rm.addRoadPiece(3, 5);
 	}
-	
-	@Test(expected=IndexOutOfBoundsException.class)
+
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRoadMapThrowsExceptionWhenNonLocationReferencedA() {
 		RoadManager rm = new RoadManager(3);
 		rm.addRoadPiece(2, 0);
 	}
-	
-	@Test(expected=IndexOutOfBoundsException.class)
+
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testRoadMapThrowsExceptionWhenNonLocationReferencedB() {
 		RoadManager rm = new RoadManager(4);
 		rm.addRoadPiece(73, 0);
@@ -77,7 +69,7 @@ public class LongestRoadTest {
 		rslt = rm.getRoadCountForPlayer(0);
 		assertEquals(5, rslt);
 	}
-	
+
 	@Test
 	public void testAddOneRoadAtBeginning() {
 		int rslt;
@@ -316,69 +308,69 @@ public class LongestRoadTest {
 	@Test
 	public void testRoadGetConnectedRoadsA() {
 		int key = 0;
-		int[] adjacentRoadsA = {1};
-		int[] adjacentRoadsB = {2};
+		int[] adjacentRoadsA = { 1 };
+		int[] adjacentRoadsB = { 2 };
 		Road road = new Road(key, adjacentRoadsA, adjacentRoadsB);
-		
+
 		assertTrue(road.getAdjacentRoadsA() == adjacentRoadsA);
 	}
-	
+
 	@Test
 	public void testRoadGetConnectedRoadsB() {
 		int key = 0;
-		int[] adjacentRoadsA = {1};
-		int[] adjacentRoadsB = {2};
+		int[] adjacentRoadsA = { 1 };
+		int[] adjacentRoadsB = { 2 };
 		Road road = new Road(key, adjacentRoadsA, adjacentRoadsB);
-		
+
 		assertTrue(road.getAdjacentRoadsB() == adjacentRoadsB);
 	}
-	
+
 	@Test
 	public void testRoadPieceGetConnectedRoadsA() {
 		int key = 0;
-		int[] adjacentRoadsA = {1};
-		int[] adjacentRoadsB = {2};
+		int[] adjacentRoadsA = { 1 };
+		int[] adjacentRoadsB = { 2 };
 		RoadPiece road = new RoadPiece(key, adjacentRoadsA, adjacentRoadsB);
-		
+
 		assertTrue(road.getAdjacentRoadsA() == adjacentRoadsA);
 	}
-	
+
 	@Test
 	public void testRoadPieceGetConnectedRoadsB() {
 		int key = 0;
-		int[] adjacentRoadsA = {1};
-		int[] adjacentRoadsB = {2};
+		int[] adjacentRoadsA = { 1 };
+		int[] adjacentRoadsB = { 2 };
 		RoadPiece road = new RoadPiece(key, adjacentRoadsA, adjacentRoadsB);
-		
+
 		assertTrue(road.getAdjacentRoadsB() == adjacentRoadsB);
 	}
-	
+
 	@Test
 	public void testRoadPieceSetConnectedRoadsA() {
 		int key = 0;
 		int[] adjacentRoadsA = {};
-		int[] adjacentRoadsB = {2};
+		int[] adjacentRoadsB = { 2 };
 		RoadPiece road = new RoadPiece(key, adjacentRoadsA, adjacentRoadsB);
 		adjacentRoadsA = new int[1];
 		adjacentRoadsA[0] = 1;
 		road.setAdjacentRoadsA(adjacentRoadsA);
-		
+
 		assertTrue(road.getAdjacentRoadsA() == adjacentRoadsA);
 	}
-	
+
 	@Test
 	public void testRoadPieceSetConnectedRoadsB() {
 		int key = 0;
-		int[] adjacentRoadsA = {1};
+		int[] adjacentRoadsA = { 1 };
 		int[] adjacentRoadsB = {};
 		RoadPiece road = new RoadPiece(key, adjacentRoadsA, adjacentRoadsB);
 		adjacentRoadsB = new int[1];
 		adjacentRoadsB[0] = 2;
 		road.setAdjacentRoadsB(adjacentRoadsB);
-		
+
 		assertTrue(road.getAdjacentRoadsB() == adjacentRoadsB);
 	}
-	
+
 	@Test
 	public void testTwoPlayersAddingSameRoad() {
 		int rslt;
@@ -389,11 +381,11 @@ public class LongestRoadTest {
 
 		rslt = rm.findLongestRoadForPlayer(0);
 		assertEquals(2, rslt);
-		
+
 		rslt = rm.findLongestRoadForPlayer(1);
 		assertEquals(0, rslt);
 	}
-	
+
 	@Test
 	public void testTwoPlayersAddingSameRoadAtBeginning() {
 		int rslt;
@@ -403,7 +395,7 @@ public class LongestRoadTest {
 
 		rslt = rm.findLongestRoadForPlayer(0);
 		assertEquals(1, rslt);
-		
+
 		rslt = rm.findLongestRoadForPlayer(1);
 		assertEquals(0, rslt);
 	}

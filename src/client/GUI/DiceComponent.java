@@ -1,13 +1,10 @@
 package client.GUI;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Ellipse2D.Double;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-
 import javax.swing.JComponent;
 
 public class DiceComponent extends JComponent {
@@ -37,27 +34,27 @@ public class DiceComponent extends JComponent {
 		squareArray.add(new Rectangle2D.Double(horizontalOffset,
 				verticalOffset, diceWidth, diceWidth));
 
-		this.middleDot = new Ellipse2D.Double(horizontalOffset + middleDotOffset
-				- dotCenterShift, verticalOffset + middleDotOffset - dotCenterShift,
-				dotWidth, dotWidth);
-		this.upperLeftDot = new Ellipse2D.Double(horizontalOffset + upperOrLeftDotOffset
-				- dotCenterShift, verticalOffset + upperOrLeftDotOffset - dotCenterShift,
-				dotWidth, dotWidth);
-		this.middleLeftDot = new Ellipse2D.Double(horizontalOffset + upperOrLeftDotOffset
-				- dotCenterShift, verticalOffset + middleDotOffset - dotCenterShift,
-				dotWidth, dotWidth);
-		this.lowerLeftDot = new Ellipse2D.Double(horizontalOffset + upperOrLeftDotOffset
-				- dotCenterShift, verticalOffset + lowOrRightDotOffset - dotCenterShift,
-				dotWidth, dotWidth);
-		this.upperRightDot = new Ellipse2D.Double(horizontalOffset + lowOrRightDotOffset
-				- dotCenterShift, verticalOffset + upperOrLeftDotOffset - dotCenterShift,
-				dotWidth, dotWidth);
-		this.middleRightDot = new Ellipse2D.Double(horizontalOffset + lowOrRightDotOffset
-				- dotCenterShift, verticalOffset + middleDotOffset - dotCenterShift,
-				dotWidth, dotWidth);
-		this.lowerRightDot = new Ellipse2D.Double(horizontalOffset + lowOrRightDotOffset
-				- dotCenterShift, verticalOffset + lowOrRightDotOffset - dotCenterShift,
-				dotWidth, dotWidth);
+		this.middleDot = new Ellipse2D.Double(horizontalOffset
+				+ middleDotOffset - dotCenterShift, verticalOffset
+				+ middleDotOffset - dotCenterShift, dotWidth, dotWidth);
+		this.upperLeftDot = new Ellipse2D.Double(horizontalOffset
+				+ upperOrLeftDotOffset - dotCenterShift, verticalOffset
+				+ upperOrLeftDotOffset - dotCenterShift, dotWidth, dotWidth);
+		this.middleLeftDot = new Ellipse2D.Double(horizontalOffset
+				+ upperOrLeftDotOffset - dotCenterShift, verticalOffset
+				+ middleDotOffset - dotCenterShift, dotWidth, dotWidth);
+		this.lowerLeftDot = new Ellipse2D.Double(horizontalOffset
+				+ upperOrLeftDotOffset - dotCenterShift, verticalOffset
+				+ lowOrRightDotOffset - dotCenterShift, dotWidth, dotWidth);
+		this.upperRightDot = new Ellipse2D.Double(horizontalOffset
+				+ lowOrRightDotOffset - dotCenterShift, verticalOffset
+				+ upperOrLeftDotOffset - dotCenterShift, dotWidth, dotWidth);
+		this.middleRightDot = new Ellipse2D.Double(horizontalOffset
+				+ lowOrRightDotOffset - dotCenterShift, verticalOffset
+				+ middleDotOffset - dotCenterShift, dotWidth, dotWidth);
+		this.lowerRightDot = new Ellipse2D.Double(horizontalOffset
+				+ lowOrRightDotOffset - dotCenterShift, verticalOffset
+				+ lowOrRightDotOffset - dotCenterShift, dotWidth, dotWidth);
 
 	}
 

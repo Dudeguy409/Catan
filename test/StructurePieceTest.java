@@ -1,11 +1,7 @@
 import static org.junit.Assert.*;
-
-import org.junit.Before;
 import org.junit.Test;
-
 import client.Controller.RoadManager;
 import client.Controller.StructureManager;
-import client.Model.Structure;
 
 public class StructurePieceTest {
 	@Test

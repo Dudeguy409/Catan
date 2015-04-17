@@ -27,12 +27,12 @@ public class StructureManager {
 		
 		
 		//check if structure already exists
-		for (HashMap<Integer, RoadPiece> hash : structurePieceMaps) {
-			if (hash.containsKey(roadIndex)) {// check if road exists
-				// throw new Exception("Road already exists");
-				noOverlap = false;
-			}
-		}
+//		for (HashMap<Integer, RoadPiece> hash : structurePieceMaps) {
+//			if (hash.containsKey(roadIndex)) {// check if road exists
+//				// throw new Exception("Road already exists");
+//				noOverlap = false;
+//			}
+//		}
 		
 		//check to make sure there is no adjacent structure
 			//uses structureDependencyMap
@@ -47,7 +47,7 @@ public class StructureManager {
 		
 	}
 	
-	public int getStructurePointCount(int playerNumber){
+	public int getStructureCountForPlayer(int playerNumber){
 		return -1;
 	}
 

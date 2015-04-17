@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="UTF-8"?><TestSessionContainer xmlns="http://www.codecover.org/xml/testsession-container" Date="1429250746362" TestSessionContainerId="d389e725-6cd2-4a8c-8194-99c9a4323371" version="1.0">
+<SrcFileList>
+<SrcFile Content="package client.Model;&#13;&#10;&#13;&#10;public class Structure{&#13;&#10;&#9;&#13;&#10;&#9;&#13;&#10;&#9;public Structure(int key, int[] adjacentSettlements) {&#13;&#10;&#9;&#9;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;public int[] getAdjacentSettlements(){&#13;&#10;&#9;&#9;return null;&#13;&#10;&#9;}&#13;&#10;}&#13;&#10;" Filename="Structure.java" Intrnl_Id="1"/>
+<SrcFile Content="package client.Model;&#13;&#10;&#13;&#10;public class Robber {&#13;&#10;&#13;&#10;}&#13;&#10;" Filename="Robber.java" Intrnl_Id="2"/>
+<SrcFile Content="package client.Model;&#13;&#10;public class RoadPiece {&#13;&#10;&#13;&#10;&#9;private int key;&#13;&#10;&#9;private int[] adjacentRoadsA;&#13;&#10;&#9;private int[] adjacentRoadsB;&#13;&#10;&#13;&#10;&#9;public RoadPiece(int key, int[] adjacentRoadsA, int[] adjacentRoadsB) {&#13;&#10;&#9;&#9;this.key = key;&#13;&#10;&#9;&#9;this.adjacentRoadsA = adjacentRoadsA;&#13;&#10;&#9;&#9;this.adjacentRoadsB = adjacentRoadsB;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public int[] getOppositeDirectionRoads(int roadKey) {&#13;&#10;&#9;&#9;if (roadKey &lt; 0) {&#13;&#10;&#9;&#9;&#9;return getAllAdjacentRoads();&#13;&#10;&#9;&#9;}&#13;&#10;&#13;&#10;&#9;&#9;for (int i = 0; i &lt; this.adjacentRoadsA.length; i++) {&#13;&#10;&#9;&#9;&#9;if (this.adjacentRoadsA[i] == roadKey) {&#13;&#10;&#9;&#9;&#9;&#9;return this.adjacentRoadsB;&#13;&#10;&#9;&#9;&#9;}&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return this.adjacentRoadsA;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public int[] getAllAdjacentRoads() {&#13;&#10;&#9;&#9;int[] allAdjacentRoads = new int[adjacentRoadsA.length&#13;&#10;&#9;&#9;&#9;&#9;+ adjacentRoadsB.length];&#13;&#10;&#9;&#9;int index = 0;&#13;&#10;&#13;&#10;&#9;&#9;for (int i = 0; i &lt; this.adjacentRoadsA.length; i++) {&#13;&#10;&#9;&#9;&#9;allAdjacentRoads[index] = this.adjacentRoadsA[i];&#13;&#10;&#9;&#9;&#9;index++;&#13;&#10;&#9;&#9;}&#13;&#10;&#13;&#10;&#9;&#9;for (int i = 0; i &lt; this.adjacentRoadsB.length; i++) {&#13;&#10;&#9;&#9;&#9;allAdjacentRoads[index] = this.adjacentRoadsB[i];&#13;&#10;&#9;&#9;&#9;index++;&#13;&#10;&#9;&#9;}&#13;&#10;&#13;&#10;&#9;&#9;return allAdjacentRoads;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;@Override&#13;&#10;&#9;public String toString() {&#13;&#10;&#9;&#9;StringBuilder sb = new StringBuilder(&quot;&quot;);&#13;&#10;&#9;&#9;sb.append(&quot;( &quot;);&#13;&#10;&#9;&#9;sb.append(key);&#13;&#10;&#9;&#9;sb.append(&quot; ( &quot;);&#13;&#10;&#9;&#9;for (int i = 0; i &lt; this.adjacentRoadsA.length; i++) {&#13;&#10;&#9;&#9;&#9;sb.append(this.adjacentRoadsA[i]);&#13;&#10;&#9;&#9;&#9;sb.append(&quot; &quot;);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;sb.append(&quot;) &quot;);&#13;&#10;&#9;&#9;sb.append(&quot; ( &quot;);&#13;&#10;&#9;&#9;for (int i = 0; i &lt; this.adjacentRoadsB.length; i++) {&#13;&#10;&#9;&#9;&#9;sb.append(this.adjacentRoadsB[i]);&#13;&#10;&#9;&#9;&#9;sb.append(&quot; &quot;);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;sb.append(&quot;) &quot;);&#13;&#10;&#9;&#9;sb.append(&quot; ) &quot;);&#13;&#10;&#9;&#9;return sb.toString();&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;@Override&#13;&#10;&#9;public boolean equals(Object o) {&#13;&#10;&#9;&#9;if (this.getClass() != o.getClass()) {&#13;&#10;&#9;&#9;&#9;return false;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return this.toString().equals(((RoadPiece) o).toString());&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public int[] getAdjacentRoadsA() {&#13;&#10;&#9;&#9;return adjacentRoadsA;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public int[] getAdjacentRoadsB() {&#13;&#10;&#9;&#9;return adjacentRoadsB;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;public void setAdjacentRoadsA(int[] adjacentRoadsA) {&#13;&#10;&#9;&#9;this.adjacentRoadsA = adjacentRoadsA;&#9;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;public void setAdjacentRoadsB(int[] adjacentRoadsB) {&#13;&#10;&#9;&#9;this.adjacentRoadsB = adjacentRoadsB;&#9;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;//TODO remove?&#13;&#10;&#9;// public int getRoadValue() {&#13;&#10;&#9;// return this.key;&#13;&#10;&#9;// }&#13;&#10;&#13;&#10;}&#13;&#10;" Filename="RoadPiece.java" Intrnl_Id="3"/>
+<SrcFile Content="package client.Model;&#13;&#10;public class Road {&#13;&#10;&#9;private int key;&#13;&#10;&#9;private int[] adjacentRoadsA;&#13;&#10;&#9;private int[] adjacentRoadsB;&#13;&#10;&#13;&#10;&#9;public Road(int key, int[] adjacentRoadsA, int[] adjacentRoadsB) {&#13;&#10;&#9;&#9;this.key = key;&#13;&#10;&#9;&#9;this.adjacentRoadsA = adjacentRoadsA;&#13;&#10;&#9;&#9;this.adjacentRoadsB = adjacentRoadsB;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;public int[] getAdjacentRoadsA() {&#13;&#10;&#9;&#9;return this.adjacentRoadsA;&#13;&#10;&#9;}&#13;&#10;&#9;&#13;&#10;&#9;public int[] getAdjacentRoadsB() {&#13;&#10;&#9;&#9;return this.adjacentRoadsB;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;@Override&#13;&#10;&#9;public String toString() {&#13;&#10;&#9;&#9;StringBuilder sb = new StringBuilder(&quot;&quot;);&#13;&#10;&#9;&#9;sb.append(&quot;( &quot;);&#13;&#10;&#9;&#9;sb.append(key);&#13;&#10;&#9;&#9;sb.append(&quot; ( &quot;);&#13;&#10;&#9;&#9;for (int i = 0; i &lt; this.adjacentRoadsA.length; i++) {&#13;&#10;&#9;&#9;&#9;sb.append(this.adjacentRoadsA[i]);&#13;&#10;&#9;&#9;&#9;sb.append(&quot; &quot;);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;sb.append(&quot;) &quot;);&#13;&#10;&#9;&#9;sb.append(&quot; ( &quot;);&#13;&#10;&#9;&#9;for (int i = 0; i &lt; this.adjacentRoadsB.length; i++) {&#13;&#10;&#9;&#9;&#9;sb.append(this.adjacentRoadsB[i]);&#13;&#10;&#9;&#9;&#9;sb.append(&quot; &quot;);&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;sb.append(&quot;) &quot;);&#13;&#10;&#9;&#9;sb.append(&quot; ) &quot;);&#13;&#10;&#9;&#9;return sb.toString();&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;@Override&#13;&#10;&#9;public boolean equals(Object o) {&#13;&#10;&#9;&#9;if (this.getClass() != o.getClass()) {&#13;&#10;&#9;&#9;&#9;return false;&#13;&#10;&#9;&#9;}&#13;&#10;&#9;&#9;return this.toString().equals(((Road) o).toString());&#13;&#10;&#9;}&#13;&#10;&#13;&#10;}&#13;&#10;" Filename="Road.java" Intrnl_Id="4"/>
+<SrcFile Content="package client.Model;&#13;&#10;&#13;&#10;public class Port {&#13;&#10;&#13;&#10;}&#13;&#10;" Filename="Port.java" Intrnl_Id="5"/>
+<SrcFile Content="package client.Model;&#13;&#10;&#13;&#10;/**&#13;&#10; * this class manages all of the individual player's data.&#13;&#10; * &#13;&#10; * @author Andrew Davidson. Created May 28, 2010.&#13;&#10; */&#13;&#10;public class Player {&#13;&#10;&#9;// TODO implement an enumeration for resource cards&#13;&#10;&#9;// TODO add port and bank trade rates&#13;&#10;&#9;private int wheatCount;&#13;&#10;&#9;private int woodCount;&#13;&#10;&#9;private int woolCount;&#13;&#10;&#9;private int brickCount;&#13;&#10;&#9;private int oreCount;&#13;&#10;&#9;private int playedSoldierCount;&#13;&#10;&#9;private int victoryPoints;&#13;&#10;&#9;private int totalResourceCards;&#13;&#10;&#9;//TODO remove or implement&#13;&#10;//&#9;private int playerIndex;&#13;&#10;//&#9;private int[] unplayedDevCardCount;&#13;&#10;//&#9;private Color color;&#13;&#10;&#13;&#10;&#9;/**&#13;&#10;&#9; * returns all of the player's cards in a convenient array.&#13;&#10;&#9; * &#13;&#10;&#9; * @return array of player's cards&#13;&#10;&#9; */&#13;&#10;&#9;public int[] getCards() {&#13;&#10;&#9;&#9;int[] cards = { this.wheatCount, this.woodCount, this.woolCount,&#13;&#10;&#9;&#9;&#9;&#9;this.brickCount, this.oreCount, this.playedSoldierCount,&#13;&#10;&#9;&#9;&#9;&#9;this.totalResourceCards };&#13;&#10;&#9;&#9;return cards;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;/**&#13;&#10;&#9; * adjusts, but does NOT replace the old number of cards the player holds.&#13;&#10;&#9; * &#13;&#10;&#9; * @param delta&#13;&#10;&#9; *            - the number of cards to add or remove from the player's hand&#13;&#10;&#9; */&#13;&#10;&#9;public void adjustCards(int[] delta) {&#13;&#10;&#9;&#9;this.wheatCount += delta[0];&#13;&#10;&#9;&#9;this.woodCount += delta[1];&#13;&#10;&#9;&#9;this.woolCount += delta[2];&#13;&#10;&#9;&#9;this.brickCount += delta[3];&#13;&#10;&#9;&#9;this.oreCount += delta[4];&#13;&#10;&#9;&#9;this.playedSoldierCount += delta[5];&#13;&#10;&#9;&#9;this.updateTotal();&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;/**&#13;&#10;&#9; * calculates the total number of cards that the player holds, primarily to&#13;&#10;&#9; * determine how many cards will be lost if a seven is rolled.&#13;&#10;&#9; * &#13;&#10;&#9; */&#13;&#10;&#9;private void updateTotal() {&#13;&#10;&#9;&#9;this.totalResourceCards = this.wheatCount + this.woodCount + this.woolCount&#13;&#10;&#9;&#9;&#9;&#9;+ this.brickCount + this.oreCount;&#13;&#10;&#9;}&#13;&#10;&#13;&#10;&#9;/**&#13;&#10;&#9; * tells panel how many victory points the player has. The player wins at&#13;&#10;&#9; * 10.&#13;&#10;&#9; * &#13;&#10;&#9; * @return number of victory points&#13;&#10;&#9; */&#13;&#10;&#9;public int getVPs() {&#13;&#10;&#9;&#9;return this.victoryPoints;&#13;&#10;&#9;}&#13;&#10;}&#13;&#10;" Filename="Player.java" Intrnl_Id="6"/>
+<SrcFile Content="package client.Model;&#13;&#10;&#13;&#10;public class Hex {&#13;&#10;&#13;&#10;}&#13;&#10;" Filename="Hex.java" Intrnl_Id="7"/>
+</SrcFileList>
+<CritList>
+<CritListEntry Name="org.codecover.model.utils.criteria.LoopCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.QMOCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.ConditionCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.BranchCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.SynchronizedStatementCoverage" PluginName="org.codecover"/>
+<CritListEntry Name="org.codecover.model.utils.criteria.StatementCoverage" PluginName="org.codecover"/>
+</CritList>
+<BoolOpList/>
+<HierarchyLvlTypeList>
+<HierarchyLvlType EnglishName="package" IntrnlName="package" Intrnl_Id="8"/>
+<HierarchyLvlType EnglishName="method" IntrnlName="method" Intrnl_Id="9"/>
+<HierarchyLvlType EnglishName="class" IntrnlName="class" Intrnl_Id="10"/>
+<HierarchyLvlType EnglishName="default package" IntrnlName="default package" Intrnl_Id="11"/>
+</HierarchyLvlTypeList>
+<MASTRoot>
+<HierarchyLvl HierarchyLvlId="95" HierarchyLvlTypeId="11" Intrnl_Id="12" Name="default package">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="94" HierarchyLvlTypeId="8" Intrnl_Id="13" Name="client">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="93" HierarchyLvlTypeId="8" Intrnl_Id="14" Name="Model">
+<Header/>
+<LocList/>
+<HierarchyLvl HierarchyLvlId="68" HierarchyLvlTypeId="10" Intrnl_Id="15" Name="Structure">
+<Header>
+<Loc EndOffset="47" SrcFileId="1" StartOffset="25"/>
+</Header>
+<LocList>
+<Loc EndOffset="186" SrcFileId="1" StartOffset="25"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="66" HierarchyLvlTypeId="9" Intrnl_Id="16" Name="Structure">
+<Header>
+<Loc EndOffset="109" SrcFileId="1" StartOffset="57"/>
+</Header>
+<LocList>
+<Loc EndOffset="119" SrcFileId="1" StartOffset="57"/>
+</LocList>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="67" HierarchyLvlTypeId="9" Intrnl_Id="17" Name="getAdjacentSettlements">
+<Header>
+<Loc EndOffset="162" SrcFileId="1" StartOffset="125"/>
+</Header>
+<LocList>
+<Loc EndOffset="183" SrcFileId="1" StartOffset="125"/>
+</LocList>
+<StmntSeq Intrnl_Id="18">
+<LocList>
+<Loc EndOffset="179" SrcFileId="1" StartOffset="167"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="client.Model.Structure.java" Intrnl_Id="19">
+<LocList>
+<Loc EndOffset="179" SrcFileId="1" StartOffset="167"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="69" HierarchyLvlTypeId="10" Intrnl_Id="20" Name="Robber">
+<Header>
+<Loc EndOffset="44" SrcFileId="2" StartOffset="25"/>
+</Header>
+<LocList>
+<Loc EndOffset="51" SrcFileId="2" StartOffset="25"/>
+</LocList>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="79" HierarchyLvlTypeId="10" Intrnl_Id="21" Name="RoadPiece">
+<Header>
+<Loc EndOffset="45" SrcFileId="3" StartOffset="23"/>
+</Header>
+<LocList>
+<Loc EndOffset="2179" SrcFileId="3" StartOffset="23"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="70" HierarchyLvlTypeId="9" Intrnl_Id="22" Name="RoadPiece">
+<Header>
+<Loc EndOffset="206" SrcFileId="3" StartOffset="137"/>
+</Header>
+<LocList>
+<Loc EndOffset="313" SrcFileId="3" StartOffset="137"/>
+</LocList>
+<StmntSeq Intrnl_Id="23">
+<LocList>
+<Loc EndOffset="227" SrcFileId="3" StartOffset="212"/>
+<Loc EndOffset="268" SrcFileId="3" StartOffset="231"/>
+<Loc EndOffset="309" SrcFileId="3" StartOffset="272"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="24">
+<LocList>
+<Loc EndOffset="227" SrcFileId="3" StartOffset="212"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="25">
+<LocList>
+<Loc EndOffset="268" SrcFileId="3" StartOffset="231"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="26">
+<LocList>
+<Loc EndOffset="309" SrcFileId="3" StartOffset="272"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="71" HierarchyLvlTypeId="9" Intrnl_Id="27" Name="getOppositeDirectionRoads">
+<Header>
+<Loc EndOffset="369" SrcFileId="3" StartOffset="318"/>
+</Header>
+<LocList>
+<Loc EndOffset="616" SrcFileId="3" StartOffset="318"/>
+</LocList>
+<StmntSeq Intrnl_Id="28">
+<LocList>
+<Loc EndOffset="432" SrcFileId="3" StartOffset="375"/>
+<Loc EndOffset="581" SrcFileId="3" StartOffset="438"/>
+<Loc EndOffset="612" SrcFileId="3" StartOffset="585"/>
+</LocList>
+<CondStmnt CovItemId="S4" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="29">
+<Branch CovItemId="B1" CovItemPrefix="client.Model.RoadPiece.java" Implct="false" Intrnl_Id="30">
+<Cond/>
+<LocList>
+<Loc EndOffset="432" SrcFileId="3" StartOffset="392"/>
+</LocList>
+<StmntSeq Intrnl_Id="31">
+<LocList>
+<Loc EndOffset="427" SrcFileId="3" StartOffset="398"/>
+</LocList>
+<BasicStmnt CovItemId="S5" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="32">
+<LocList>
+<Loc EndOffset="427" SrcFileId="3" StartOffset="398"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B2" CovItemPrefix="client.Model.RoadPiece.java" Implct="true" Intrnl_Id="33">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="34">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="377" SrcFileId="3" StartOffset="375"/>
+<LocList>
+<Loc EndOffset="432" SrcFileId="3" StartOffset="375"/>
+</LocList>
+<RootTerm CovItemId="C1" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="35">
+<BasicBoolTerm Intrnl_Id="36">
+<LocList>
+<Loc EndOffset="390" SrcFileId="3" StartOffset="379"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<LoopStmnt CovItemId="S6" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="37" MltplExecId="L1-2" MltplExecPrefix="client.Model.RoadPiece.java" NvrExecId="L1-0" NvrExecPrefix="client.Model.RoadPiece.java" OnceExecutedId="L1-1" OnceExecutedPrefix="client.Model.RoadPiece.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="38">
+<LocList>
+<Loc EndOffset="576" SrcFileId="3" StartOffset="497"/>
+</LocList>
+<CondStmnt CovItemId="S7" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="39">
+<Branch CovItemId="B3" CovItemPrefix="client.Model.RoadPiece.java" Implct="false" Intrnl_Id="40">
+<Cond/>
+<LocList>
+<Loc EndOffset="576" SrcFileId="3" StartOffset="536"/>
+</LocList>
+<StmntSeq Intrnl_Id="41">
+<LocList>
+<Loc EndOffset="570" SrcFileId="3" StartOffset="543"/>
+</LocList>
+<BasicStmnt CovItemId="S8" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="42">
+<LocList>
+<Loc EndOffset="570" SrcFileId="3" StartOffset="543"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B4" CovItemPrefix="client.Model.RoadPiece.java" Implct="true" Intrnl_Id="43">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="44">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="499" SrcFileId="3" StartOffset="497"/>
+<LocList>
+<Loc EndOffset="576" SrcFileId="3" StartOffset="497"/>
+</LocList>
+<RootTerm CovItemId="C3" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="45">
+<BasicBoolTerm Intrnl_Id="46">
+<LocList>
+<Loc EndOffset="534" SrcFileId="3" StartOffset="501"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+</StmntSeq>
+<Keyword EndOffset="441" SrcFileId="3" StartOffset="438"/>
+<LocList>
+<Loc EndOffset="581" SrcFileId="3" StartOffset="438"/>
+</LocList>
+<RootTerm CovItemId="C2" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="47">
+<BasicBoolTerm Intrnl_Id="48">
+<LocList>
+<Loc EndOffset="484" SrcFileId="3" StartOffset="454"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="49">
+<LocList>
+<Loc EndOffset="612" SrcFileId="3" StartOffset="585"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="72" HierarchyLvlTypeId="9" Intrnl_Id="50" Name="getAllAdjacentRoads">
+<Header>
+<Loc EndOffset="655" SrcFileId="3" StartOffset="621"/>
+</Header>
+<LocList>
+<Loc EndOffset="1062" SrcFileId="3" StartOffset="621"/>
+</LocList>
+<StmntSeq Intrnl_Id="51">
+<LocList>
+<Loc EndOffset="746" SrcFileId="3" StartOffset="661"/>
+<Loc EndOffset="764" SrcFileId="3" StartOffset="750"/>
+<Loc EndOffset="896" SrcFileId="3" StartOffset="770"/>
+<Loc EndOffset="1028" SrcFileId="3" StartOffset="902"/>
+<Loc EndOffset="1058" SrcFileId="3" StartOffset="1034"/>
+</LocList>
+<BasicStmnt CovItemId="S10" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="52">
+<LocList>
+<Loc EndOffset="746" SrcFileId="3" StartOffset="661"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S11" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="53">
+<LocList>
+<Loc EndOffset="764" SrcFileId="3" StartOffset="750"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S12" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="54" MltplExecId="L2-2" MltplExecPrefix="client.Model.RoadPiece.java" NvrExecId="L2-0" NvrExecPrefix="client.Model.RoadPiece.java" OnceExecutedId="L2-1" OnceExecutedPrefix="client.Model.RoadPiece.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="55">
+<LocList>
+<Loc EndOffset="878" SrcFileId="3" StartOffset="829"/>
+<Loc EndOffset="891" SrcFileId="3" StartOffset="883"/>
+</LocList>
+<BasicStmnt CovItemId="S13" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="56">
+<LocList>
+<Loc EndOffset="878" SrcFileId="3" StartOffset="829"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S14" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="57">
+<LocList>
+<Loc EndOffset="891" SrcFileId="3" StartOffset="883"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="773" SrcFileId="3" StartOffset="770"/>
+<LocList>
+<Loc EndOffset="896" SrcFileId="3" StartOffset="770"/>
+</LocList>
+<RootTerm CovItemId="C4" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="58">
+<BasicBoolTerm Intrnl_Id="59">
+<LocList>
+<Loc EndOffset="816" SrcFileId="3" StartOffset="786"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<LoopStmnt CovItemId="S15" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="60" MltplExecId="L3-2" MltplExecPrefix="client.Model.RoadPiece.java" NvrExecId="L3-0" NvrExecPrefix="client.Model.RoadPiece.java" OnceExecutedId="L3-1" OnceExecutedPrefix="client.Model.RoadPiece.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="61">
+<LocList>
+<Loc EndOffset="1010" SrcFileId="3" StartOffset="961"/>
+<Loc EndOffset="1023" SrcFileId="3" StartOffset="1015"/>
+</LocList>
+<BasicStmnt CovItemId="S16" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="62">
+<LocList>
+<Loc EndOffset="1010" SrcFileId="3" StartOffset="961"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S17" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="63">
+<LocList>
+<Loc EndOffset="1023" SrcFileId="3" StartOffset="1015"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="905" SrcFileId="3" StartOffset="902"/>
+<LocList>
+<Loc EndOffset="1028" SrcFileId="3" StartOffset="902"/>
+</LocList>
+<RootTerm CovItemId="C5" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="64">
+<BasicBoolTerm Intrnl_Id="65">
+<LocList>
+<Loc EndOffset="948" SrcFileId="3" StartOffset="918"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S18" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="66">
+<LocList>
+<Loc EndOffset="1058" SrcFileId="3" StartOffset="1034"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="73" HierarchyLvlTypeId="9" Intrnl_Id="67" Name="toString">
+<Header>
+<Loc EndOffset="1103" SrcFileId="3" StartOffset="1067"/>
+</Header>
+<LocList>
+<Loc EndOffset="1565" SrcFileId="3" StartOffset="1067"/>
+</LocList>
+<StmntSeq Intrnl_Id="68">
+<LocList>
+<Loc EndOffset="1150" SrcFileId="3" StartOffset="1109"/>
+<Loc EndOffset="1170" SrcFileId="3" StartOffset="1154"/>
+<Loc EndOffset="1189" SrcFileId="3" StartOffset="1174"/>
+<Loc EndOffset="1210" SrcFileId="3" StartOffset="1193"/>
+<Loc EndOffset="1332" SrcFileId="3" StartOffset="1214"/>
+<Loc EndOffset="1352" SrcFileId="3" StartOffset="1336"/>
+<Loc EndOffset="1373" SrcFileId="3" StartOffset="1356"/>
+<Loc EndOffset="1495" SrcFileId="3" StartOffset="1377"/>
+<Loc EndOffset="1515" SrcFileId="3" StartOffset="1499"/>
+<Loc EndOffset="1536" SrcFileId="3" StartOffset="1519"/>
+<Loc EndOffset="1561" SrcFileId="3" StartOffset="1540"/>
+</LocList>
+<BasicStmnt CovItemId="S19" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="69">
+<LocList>
+<Loc EndOffset="1150" SrcFileId="3" StartOffset="1109"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S20" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="70">
+<LocList>
+<Loc EndOffset="1170" SrcFileId="3" StartOffset="1154"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S21" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="71">
+<LocList>
+<Loc EndOffset="1189" SrcFileId="3" StartOffset="1174"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S22" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="72">
+<LocList>
+<Loc EndOffset="1210" SrcFileId="3" StartOffset="1193"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S23" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="73" MltplExecId="L4-2" MltplExecPrefix="client.Model.RoadPiece.java" NvrExecId="L4-0" NvrExecPrefix="client.Model.RoadPiece.java" OnceExecutedId="L4-1" OnceExecutedPrefix="client.Model.RoadPiece.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="74">
+<LocList>
+<Loc EndOffset="1307" SrcFileId="3" StartOffset="1273"/>
+<Loc EndOffset="1327" SrcFileId="3" StartOffset="1312"/>
+</LocList>
+<BasicStmnt CovItemId="S24" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="75">
+<LocList>
+<Loc EndOffset="1307" SrcFileId="3" StartOffset="1273"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S25" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="76">
+<LocList>
+<Loc EndOffset="1327" SrcFileId="3" StartOffset="1312"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1217" SrcFileId="3" StartOffset="1214"/>
+<LocList>
+<Loc EndOffset="1332" SrcFileId="3" StartOffset="1214"/>
+</LocList>
+<RootTerm CovItemId="C6" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="77">
+<BasicBoolTerm Intrnl_Id="78">
+<LocList>
+<Loc EndOffset="1260" SrcFileId="3" StartOffset="1230"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S26" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="79">
+<LocList>
+<Loc EndOffset="1352" SrcFileId="3" StartOffset="1336"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S27" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="80">
+<LocList>
+<Loc EndOffset="1373" SrcFileId="3" StartOffset="1356"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S28" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="81" MltplExecId="L5-2" MltplExecPrefix="client.Model.RoadPiece.java" NvrExecId="L5-0" NvrExecPrefix="client.Model.RoadPiece.java" OnceExecutedId="L5-1" OnceExecutedPrefix="client.Model.RoadPiece.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="82">
+<LocList>
+<Loc EndOffset="1470" SrcFileId="3" StartOffset="1436"/>
+<Loc EndOffset="1490" SrcFileId="3" StartOffset="1475"/>
+</LocList>
+<BasicStmnt CovItemId="S29" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="83">
+<LocList>
+<Loc EndOffset="1470" SrcFileId="3" StartOffset="1436"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S30" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="84">
+<LocList>
+<Loc EndOffset="1490" SrcFileId="3" StartOffset="1475"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="1380" SrcFileId="3" StartOffset="1377"/>
+<LocList>
+<Loc EndOffset="1495" SrcFileId="3" StartOffset="1377"/>
+</LocList>
+<RootTerm CovItemId="C7" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="85">
+<BasicBoolTerm Intrnl_Id="86">
+<LocList>
+<Loc EndOffset="1423" SrcFileId="3" StartOffset="1393"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S31" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="87">
+<LocList>
+<Loc EndOffset="1515" SrcFileId="3" StartOffset="1499"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S32" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="88">
+<LocList>
+<Loc EndOffset="1536" SrcFileId="3" StartOffset="1519"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S33" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="89">
+<LocList>
+<Loc EndOffset="1561" SrcFileId="3" StartOffset="1540"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="74" HierarchyLvlTypeId="9" Intrnl_Id="90" Name="equals">
+<Header>
+<Loc EndOffset="1613" SrcFileId="3" StartOffset="1570"/>
+</Header>
+<LocList>
+<Loc EndOffset="1746" SrcFileId="3" StartOffset="1570"/>
+</LocList>
+<StmntSeq Intrnl_Id="91">
+<LocList>
+<Loc EndOffset="1680" SrcFileId="3" StartOffset="1619"/>
+<Loc EndOffset="1742" SrcFileId="3" StartOffset="1684"/>
+</LocList>
+<CondStmnt CovItemId="S34" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="92">
+<Branch CovItemId="B5" CovItemPrefix="client.Model.RoadPiece.java" Implct="false" Intrnl_Id="93">
+<Cond/>
+<LocList>
+<Loc EndOffset="1680" SrcFileId="3" StartOffset="1656"/>
+</LocList>
+<StmntSeq Intrnl_Id="94">
+<LocList>
+<Loc EndOffset="1675" SrcFileId="3" StartOffset="1662"/>
+</LocList>
+<BasicStmnt CovItemId="S35" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="95">
+<LocList>
+<Loc EndOffset="1675" SrcFileId="3" StartOffset="1662"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B6" CovItemPrefix="client.Model.RoadPiece.java" Implct="true" Intrnl_Id="96">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="97">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="1621" SrcFileId="3" StartOffset="1619"/>
+<LocList>
+<Loc EndOffset="1680" SrcFileId="3" StartOffset="1619"/>
+</LocList>
+<RootTerm CovItemId="C8" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="98">
+<BasicBoolTerm Intrnl_Id="99">
+<LocList>
+<Loc EndOffset="1654" SrcFileId="3" StartOffset="1623"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S36" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="100">
+<LocList>
+<Loc EndOffset="1742" SrcFileId="3" StartOffset="1684"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="75" HierarchyLvlTypeId="9" Intrnl_Id="101" Name="getAdjacentRoadsA">
+<Header>
+<Loc EndOffset="1783" SrcFileId="3" StartOffset="1751"/>
+</Header>
+<LocList>
+<Loc EndOffset="1815" SrcFileId="3" StartOffset="1751"/>
+</LocList>
+<StmntSeq Intrnl_Id="102">
+<LocList>
+<Loc EndOffset="1811" SrcFileId="3" StartOffset="1789"/>
+</LocList>
+<BasicStmnt CovItemId="S37" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="103">
+<LocList>
+<Loc EndOffset="1811" SrcFileId="3" StartOffset="1789"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="76" HierarchyLvlTypeId="9" Intrnl_Id="104" Name="getAdjacentRoadsB">
+<Header>
+<Loc EndOffset="1852" SrcFileId="3" StartOffset="1820"/>
+</Header>
+<LocList>
+<Loc EndOffset="1884" SrcFileId="3" StartOffset="1820"/>
+</LocList>
+<StmntSeq Intrnl_Id="105">
+<LocList>
+<Loc EndOffset="1880" SrcFileId="3" StartOffset="1858"/>
+</LocList>
+<BasicStmnt CovItemId="S38" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="106">
+<LocList>
+<Loc EndOffset="1880" SrcFileId="3" StartOffset="1858"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="77" HierarchyLvlTypeId="9" Intrnl_Id="107" Name="setAdjacentRoadsA">
+<Header>
+<Loc EndOffset="1941" SrcFileId="3" StartOffset="1890"/>
+</Header>
+<LocList>
+<Loc EndOffset="1989" SrcFileId="3" StartOffset="1890"/>
+</LocList>
+<StmntSeq Intrnl_Id="108">
+<LocList>
+<Loc EndOffset="1984" SrcFileId="3" StartOffset="1947"/>
+</LocList>
+<BasicStmnt CovItemId="S39" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="109">
+<LocList>
+<Loc EndOffset="1984" SrcFileId="3" StartOffset="1947"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="78" HierarchyLvlTypeId="9" Intrnl_Id="110" Name="setAdjacentRoadsB">
+<Header>
+<Loc EndOffset="2045" SrcFileId="3" StartOffset="1994"/>
+</Header>
+<LocList>
+<Loc EndOffset="2093" SrcFileId="3" StartOffset="1994"/>
+</LocList>
+<StmntSeq Intrnl_Id="111">
+<LocList>
+<Loc EndOffset="2088" SrcFileId="3" StartOffset="2051"/>
+</LocList>
+<BasicStmnt CovItemId="S40" CovItemPrefix="client.Model.RoadPiece.java" Intrnl_Id="112">
+<LocList>
+<Loc EndOffset="2088" SrcFileId="3" StartOffset="2051"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="85" HierarchyLvlTypeId="10" Intrnl_Id="113" Name="Road">
+<Header>
+<Loc EndOffset="40" SrcFileId="4" StartOffset="23"/>
+</Header>
+<LocList>
+<Loc EndOffset="1135" SrcFileId="4" StartOffset="23"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="80" HierarchyLvlTypeId="9" Intrnl_Id="114" Name="Road">
+<Header>
+<Loc EndOffset="194" SrcFileId="4" StartOffset="130"/>
+</Header>
+<LocList>
+<Loc EndOffset="301" SrcFileId="4" StartOffset="130"/>
+</LocList>
+<StmntSeq Intrnl_Id="115">
+<LocList>
+<Loc EndOffset="215" SrcFileId="4" StartOffset="200"/>
+<Loc EndOffset="256" SrcFileId="4" StartOffset="219"/>
+<Loc EndOffset="297" SrcFileId="4" StartOffset="260"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="client.Model.Road.java" Intrnl_Id="116">
+<LocList>
+<Loc EndOffset="215" SrcFileId="4" StartOffset="200"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="client.Model.Road.java" Intrnl_Id="117">
+<LocList>
+<Loc EndOffset="256" SrcFileId="4" StartOffset="219"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S3" CovItemPrefix="client.Model.Road.java" Intrnl_Id="118">
+<LocList>
+<Loc EndOffset="297" SrcFileId="4" StartOffset="260"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="81" HierarchyLvlTypeId="9" Intrnl_Id="119" Name="getAdjacentRoadsA">
+<Header>
+<Loc EndOffset="339" SrcFileId="4" StartOffset="307"/>
+</Header>
+<LocList>
+<Loc EndOffset="376" SrcFileId="4" StartOffset="307"/>
+</LocList>
+<StmntSeq Intrnl_Id="120">
+<LocList>
+<Loc EndOffset="372" SrcFileId="4" StartOffset="345"/>
+</LocList>
+<BasicStmnt CovItemId="S4" CovItemPrefix="client.Model.Road.java" Intrnl_Id="121">
+<LocList>
+<Loc EndOffset="372" SrcFileId="4" StartOffset="345"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="82" HierarchyLvlTypeId="9" Intrnl_Id="122" Name="getAdjacentRoadsB">
+<Header>
+<Loc EndOffset="414" SrcFileId="4" StartOffset="382"/>
+</Header>
+<LocList>
+<Loc EndOffset="451" SrcFileId="4" StartOffset="382"/>
+</LocList>
+<StmntSeq Intrnl_Id="123">
+<LocList>
+<Loc EndOffset="447" SrcFileId="4" StartOffset="420"/>
+</LocList>
+<BasicStmnt CovItemId="S5" CovItemPrefix="client.Model.Road.java" Intrnl_Id="124">
+<LocList>
+<Loc EndOffset="447" SrcFileId="4" StartOffset="420"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="83" HierarchyLvlTypeId="9" Intrnl_Id="125" Name="toString">
+<Header>
+<Loc EndOffset="492" SrcFileId="4" StartOffset="456"/>
+</Header>
+<LocList>
+<Loc EndOffset="954" SrcFileId="4" StartOffset="456"/>
+</LocList>
+<StmntSeq Intrnl_Id="126">
+<LocList>
+<Loc EndOffset="539" SrcFileId="4" StartOffset="498"/>
+<Loc EndOffset="559" SrcFileId="4" StartOffset="543"/>
+<Loc EndOffset="578" SrcFileId="4" StartOffset="563"/>
+<Loc EndOffset="599" SrcFileId="4" StartOffset="582"/>
+<Loc EndOffset="721" SrcFileId="4" StartOffset="603"/>
+<Loc EndOffset="741" SrcFileId="4" StartOffset="725"/>
+<Loc EndOffset="762" SrcFileId="4" StartOffset="745"/>
+<Loc EndOffset="884" SrcFileId="4" StartOffset="766"/>
+<Loc EndOffset="904" SrcFileId="4" StartOffset="888"/>
+<Loc EndOffset="925" SrcFileId="4" StartOffset="908"/>
+<Loc EndOffset="950" SrcFileId="4" StartOffset="929"/>
+</LocList>
+<BasicStmnt CovItemId="S6" CovItemPrefix="client.Model.Road.java" Intrnl_Id="127">
+<LocList>
+<Loc EndOffset="539" SrcFileId="4" StartOffset="498"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="client.Model.Road.java" Intrnl_Id="128">
+<LocList>
+<Loc EndOffset="559" SrcFileId="4" StartOffset="543"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="client.Model.Road.java" Intrnl_Id="129">
+<LocList>
+<Loc EndOffset="578" SrcFileId="4" StartOffset="563"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="client.Model.Road.java" Intrnl_Id="130">
+<LocList>
+<Loc EndOffset="599" SrcFileId="4" StartOffset="582"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S10" CovItemPrefix="client.Model.Road.java" Intrnl_Id="131" MltplExecId="L1-2" MltplExecPrefix="client.Model.Road.java" NvrExecId="L1-0" NvrExecPrefix="client.Model.Road.java" OnceExecutedId="L1-1" OnceExecutedPrefix="client.Model.Road.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="132">
+<LocList>
+<Loc EndOffset="696" SrcFileId="4" StartOffset="662"/>
+<Loc EndOffset="716" SrcFileId="4" StartOffset="701"/>
+</LocList>
+<BasicStmnt CovItemId="S11" CovItemPrefix="client.Model.Road.java" Intrnl_Id="133">
+<LocList>
+<Loc EndOffset="696" SrcFileId="4" StartOffset="662"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S12" CovItemPrefix="client.Model.Road.java" Intrnl_Id="134">
+<LocList>
+<Loc EndOffset="716" SrcFileId="4" StartOffset="701"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="606" SrcFileId="4" StartOffset="603"/>
+<LocList>
+<Loc EndOffset="721" SrcFileId="4" StartOffset="603"/>
+</LocList>
+<RootTerm CovItemId="C1" CovItemPrefix="client.Model.Road.java" Intrnl_Id="135">
+<BasicBoolTerm Intrnl_Id="136">
+<LocList>
+<Loc EndOffset="649" SrcFileId="4" StartOffset="619"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S13" CovItemPrefix="client.Model.Road.java" Intrnl_Id="137">
+<LocList>
+<Loc EndOffset="741" SrcFileId="4" StartOffset="725"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S14" CovItemPrefix="client.Model.Road.java" Intrnl_Id="138">
+<LocList>
+<Loc EndOffset="762" SrcFileId="4" StartOffset="745"/>
+</LocList>
+</BasicStmnt>
+<LoopStmnt CovItemId="S15" CovItemPrefix="client.Model.Road.java" Intrnl_Id="139" MltplExecId="L2-2" MltplExecPrefix="client.Model.Road.java" NvrExecId="L2-0" NvrExecPrefix="client.Model.Road.java" OnceExecutedId="L2-1" OnceExecutedPrefix="client.Model.Road.java" OptBodyExec="true">
+<StmntSeq Intrnl_Id="140">
+<LocList>
+<Loc EndOffset="859" SrcFileId="4" StartOffset="825"/>
+<Loc EndOffset="879" SrcFileId="4" StartOffset="864"/>
+</LocList>
+<BasicStmnt CovItemId="S16" CovItemPrefix="client.Model.Road.java" Intrnl_Id="141">
+<LocList>
+<Loc EndOffset="859" SrcFileId="4" StartOffset="825"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S17" CovItemPrefix="client.Model.Road.java" Intrnl_Id="142">
+<LocList>
+<Loc EndOffset="879" SrcFileId="4" StartOffset="864"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+<Keyword EndOffset="769" SrcFileId="4" StartOffset="766"/>
+<LocList>
+<Loc EndOffset="884" SrcFileId="4" StartOffset="766"/>
+</LocList>
+<RootTerm CovItemId="C2" CovItemPrefix="client.Model.Road.java" Intrnl_Id="143">
+<BasicBoolTerm Intrnl_Id="144">
+<LocList>
+<Loc EndOffset="812" SrcFileId="4" StartOffset="782"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</LoopStmnt>
+<BasicStmnt CovItemId="S18" CovItemPrefix="client.Model.Road.java" Intrnl_Id="145">
+<LocList>
+<Loc EndOffset="904" SrcFileId="4" StartOffset="888"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S19" CovItemPrefix="client.Model.Road.java" Intrnl_Id="146">
+<LocList>
+<Loc EndOffset="925" SrcFileId="4" StartOffset="908"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S20" CovItemPrefix="client.Model.Road.java" Intrnl_Id="147">
+<LocList>
+<Loc EndOffset="950" SrcFileId="4" StartOffset="929"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="84" HierarchyLvlTypeId="9" Intrnl_Id="148" Name="equals">
+<Header>
+<Loc EndOffset="1002" SrcFileId="4" StartOffset="959"/>
+</Header>
+<LocList>
+<Loc EndOffset="1130" SrcFileId="4" StartOffset="959"/>
+</LocList>
+<StmntSeq Intrnl_Id="149">
+<LocList>
+<Loc EndOffset="1069" SrcFileId="4" StartOffset="1008"/>
+<Loc EndOffset="1126" SrcFileId="4" StartOffset="1073"/>
+</LocList>
+<CondStmnt CovItemId="S21" CovItemPrefix="client.Model.Road.java" Intrnl_Id="150">
+<Branch CovItemId="B1" CovItemPrefix="client.Model.Road.java" Implct="false" Intrnl_Id="151">
+<Cond/>
+<LocList>
+<Loc EndOffset="1069" SrcFileId="4" StartOffset="1045"/>
+</LocList>
+<StmntSeq Intrnl_Id="152">
+<LocList>
+<Loc EndOffset="1064" SrcFileId="4" StartOffset="1051"/>
+</LocList>
+<BasicStmnt CovItemId="S22" CovItemPrefix="client.Model.Road.java" Intrnl_Id="153">
+<LocList>
+<Loc EndOffset="1064" SrcFileId="4" StartOffset="1051"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</Branch>
+<Branch CovItemId="B2" CovItemPrefix="client.Model.Road.java" Implct="true" Intrnl_Id="154">
+<Cond/>
+<LocList/>
+<StmntSeq Intrnl_Id="155">
+<LocList/>
+</StmntSeq>
+</Branch>
+<Keyword EndOffset="1010" SrcFileId="4" StartOffset="1008"/>
+<LocList>
+<Loc EndOffset="1069" SrcFileId="4" StartOffset="1008"/>
+</LocList>
+<RootTerm CovItemId="C3" CovItemPrefix="client.Model.Road.java" Intrnl_Id="156">
+<BasicBoolTerm Intrnl_Id="157">
+<LocList>
+<Loc EndOffset="1043" SrcFileId="4" StartOffset="1012"/>
+</LocList>
+</BasicBoolTerm>
+</RootTerm>
+</CondStmnt>
+<BasicStmnt CovItemId="S23" CovItemPrefix="client.Model.Road.java" Intrnl_Id="158">
+<LocList>
+<Loc EndOffset="1126" SrcFileId="4" StartOffset="1073"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="86" HierarchyLvlTypeId="10" Intrnl_Id="159" Name="Port">
+<Header>
+<Loc EndOffset="42" SrcFileId="5" StartOffset="25"/>
+</Header>
+<LocList>
+<Loc EndOffset="49" SrcFileId="5" StartOffset="25"/>
+</LocList>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="91" HierarchyLvlTypeId="10" Intrnl_Id="160" Name="Player">
+<Header>
+<Loc EndOffset="170" SrcFileId="6" StartOffset="151"/>
+</Header>
+<LocList>
+<Loc EndOffset="1920" SrcFileId="6" StartOffset="151"/>
+</LocList>
+<HierarchyLvl HierarchyLvlId="87" HierarchyLvlTypeId="9" Intrnl_Id="161" Name="getCards">
+<Header>
+<Loc EndOffset="757" SrcFileId="6" StartOffset="734"/>
+</Header>
+<LocList>
+<Loc EndOffset="942" SrcFileId="6" StartOffset="734"/>
+</LocList>
+<StmntSeq Intrnl_Id="162">
+<LocList>
+<Loc EndOffset="921" SrcFileId="6" StartOffset="763"/>
+<Loc EndOffset="938" SrcFileId="6" StartOffset="925"/>
+</LocList>
+<BasicStmnt CovItemId="S1" CovItemPrefix="client.Model.Player.java" Intrnl_Id="163">
+<LocList>
+<Loc EndOffset="921" SrcFileId="6" StartOffset="763"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S2" CovItemPrefix="client.Model.Player.java" Intrnl_Id="164">
+<LocList>
+<Loc EndOffset="938" SrcFileId="6" StartOffset="925"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="88" HierarchyLvlTypeId="9" Intrnl_Id="165" Name="adjustCards">
+<Header>
+<Loc EndOffset="1174" SrcFileId="6" StartOffset="1138"/>
+</Header>
+<LocList>
+<Loc EndOffset="1399" SrcFileId="6" StartOffset="1138"/>
+</LocList>
+<StmntSeq Intrnl_Id="166">
+<LocList>
+<Loc EndOffset="1208" SrcFileId="6" StartOffset="1180"/>
+<Loc EndOffset="1239" SrcFileId="6" StartOffset="1212"/>
+<Loc EndOffset="1270" SrcFileId="6" StartOffset="1243"/>
+<Loc EndOffset="1302" SrcFileId="6" StartOffset="1274"/>
+<Loc EndOffset="1332" SrcFileId="6" StartOffset="1306"/>
+<Loc EndOffset="1372" SrcFileId="6" StartOffset="1336"/>
+<Loc EndOffset="1395" SrcFileId="6" StartOffset="1376"/>
+</LocList>
+<BasicStmnt CovItemId="S3" CovItemPrefix="client.Model.Player.java" Intrnl_Id="167">
+<LocList>
+<Loc EndOffset="1208" SrcFileId="6" StartOffset="1180"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S4" CovItemPrefix="client.Model.Player.java" Intrnl_Id="168">
+<LocList>
+<Loc EndOffset="1239" SrcFileId="6" StartOffset="1212"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S5" CovItemPrefix="client.Model.Player.java" Intrnl_Id="169">
+<LocList>
+<Loc EndOffset="1270" SrcFileId="6" StartOffset="1243"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S6" CovItemPrefix="client.Model.Player.java" Intrnl_Id="170">
+<LocList>
+<Loc EndOffset="1302" SrcFileId="6" StartOffset="1274"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S7" CovItemPrefix="client.Model.Player.java" Intrnl_Id="171">
+<LocList>
+<Loc EndOffset="1332" SrcFileId="6" StartOffset="1306"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S8" CovItemPrefix="client.Model.Player.java" Intrnl_Id="172">
+<LocList>
+<Loc EndOffset="1372" SrcFileId="6" StartOffset="1336"/>
+</LocList>
+</BasicStmnt>
+<BasicStmnt CovItemId="S9" CovItemPrefix="client.Model.Player.java" Intrnl_Id="173">
+<LocList>
+<Loc EndOffset="1395" SrcFileId="6" StartOffset="1376"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="89" HierarchyLvlTypeId="9" Intrnl_Id="174" Name="updateTotal">
+<Header>
+<Loc EndOffset="1591" SrcFileId="6" StartOffset="1565"/>
+</Header>
+<LocList>
+<Loc EndOffset="1716" SrcFileId="6" StartOffset="1565"/>
+</LocList>
+<StmntSeq Intrnl_Id="175">
+<LocList>
+<Loc EndOffset="1712" SrcFileId="6" StartOffset="1597"/>
+</LocList>
+<BasicStmnt CovItemId="S10" CovItemPrefix="client.Model.Player.java" Intrnl_Id="176">
+<LocList>
+<Loc EndOffset="1712" SrcFileId="6" StartOffset="1597"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="90" HierarchyLvlTypeId="9" Intrnl_Id="177" Name="getVPs">
+<Header>
+<Loc EndOffset="1881" SrcFileId="6" StartOffset="1862"/>
+</Header>
+<LocList>
+<Loc EndOffset="1917" SrcFileId="6" StartOffset="1862"/>
+</LocList>
+<StmntSeq Intrnl_Id="178">
+<LocList>
+<Loc EndOffset="1913" SrcFileId="6" StartOffset="1887"/>
+</LocList>
+<BasicStmnt CovItemId="S11" CovItemPrefix="client.Model.Player.java" Intrnl_Id="179">
+<LocList>
+<Loc EndOffset="1913" SrcFileId="6" StartOffset="1887"/>
+</LocList>
+</BasicStmnt>
+</StmntSeq>
+</HierarchyLvl>
+</HierarchyLvl>
+<HierarchyLvl HierarchyLvlId="92" HierarchyLvlTypeId="10" Intrnl_Id="180" Name="Hex">
+<Header>
+<Loc EndOffset="41" SrcFileId="7" StartOffset="25"/>
+</Header>
+<LocList>
+<Loc EndOffset="48" SrcFileId="7" StartOffset="25"/>
+</LocList>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+</HierarchyLvl>
+</MASTRoot>
+</TestSessionContainer>

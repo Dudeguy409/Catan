@@ -1,11 +1,7 @@
 import static org.junit.Assert.*;
-
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map.Entry;
-
 import org.junit.Test;
-
 import client.Controller.HexManager;
 import client.Controller.LocationKey;
 import client.Controller.StructureLocationKey;
@@ -131,59 +127,71 @@ public class HexManagerTest {
 
 		}
 	}
-	
+
 	@Test
 	public void testAllStructuresCovered() {
 		HexManager hm = new HexManager();
 		HashSet<Integer> set = new HashSet<Integer>();
-		for (Entry<StructureLocationKey, Integer> e : hm.structureMap.entrySet()) {
+		for (Entry<StructureLocationKey, Integer> e : hm.structureMap
+				.entrySet()) {
 			set.add(e.getValue());
 		}
 
 		assertEquals(54, set.size());
 	}
-	
+
 	@Test
 	public void testInitializeStructureMapSize() {
 		HexManager hm = new HexManager();
 		assertEquals(114, hm.structureMap.size());
 	}
-	
+
 	@Test
 	public void testStructureMapIteration() {
 		HexManager hm = new HexManager();
-		int id = hm.structureMap.get(new StructureLocationKey(6, HexComponent.StructurePosition.northeast));
+		int id = hm.structureMap.get(new StructureLocationKey(6,
+				HexComponent.StructurePosition.northeast));
 		assertEquals(id, 2);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(6, HexComponent.StructurePosition.east));
+
+		id = hm.structureMap.get(new StructureLocationKey(6,
+				HexComponent.StructurePosition.east));
 		assertEquals(id, 5);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(5, HexComponent.StructurePosition.northwest));
+
+		id = hm.structureMap.get(new StructureLocationKey(5,
+				HexComponent.StructurePosition.northwest));
 		assertEquals(id, 5);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(6, HexComponent.StructurePosition.southeast));
+
+		id = hm.structureMap.get(new StructureLocationKey(6,
+				HexComponent.StructurePosition.southeast));
 		assertEquals(id, 10);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(5, HexComponent.StructurePosition.west));
+
+		id = hm.structureMap.get(new StructureLocationKey(5,
+				HexComponent.StructurePosition.west));
 		assertEquals(id, 10);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(5, HexComponent.StructurePosition.southwest));
+
+		id = hm.structureMap.get(new StructureLocationKey(5,
+				HexComponent.StructurePosition.southwest));
 		assertEquals(id, 16);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(15, HexComponent.StructurePosition.east));
+
+		id = hm.structureMap.get(new StructureLocationKey(15,
+				HexComponent.StructurePosition.east));
 		assertEquals(id, 16);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(15, HexComponent.StructurePosition.southeast));
+
+		id = hm.structureMap.get(new StructureLocationKey(15,
+				HexComponent.StructurePosition.southeast));
 		assertEquals(id, 22);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(15, HexComponent.StructurePosition.southwest));
+
+		id = hm.structureMap.get(new StructureLocationKey(15,
+				HexComponent.StructurePosition.southwest));
 		assertEquals(id, 21);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(16, HexComponent.StructurePosition.east));
+
+		id = hm.structureMap.get(new StructureLocationKey(16,
+				HexComponent.StructurePosition.east));
 		assertEquals(id, 21);
-		
-		 id = hm.structureMap.get(new StructureLocationKey(18, HexComponent.StructurePosition.northwest));
-			assertEquals(id, 21);
+
+		id = hm.structureMap.get(new StructureLocationKey(18,
+				HexComponent.StructurePosition.northwest));
+		assertEquals(id, 21);
 	}
 
 }

@@ -1,5 +1,4 @@
 package client.Model;
-import java.awt.Color;
 
 /**
  * this class manages all of the individual player's data.
@@ -17,9 +16,10 @@ public class Player {
 	private int playedSoldierCount;
 	private int victoryPoints;
 	private int totalResourceCards;
-	private int playerIndex;
-	private int[] unplayedDevCardCount;
-	private Color color;
+	//TODO remove or implement
+//	private int playerIndex;
+//	private int[] unplayedDevCardCount;
+//	private Color color;
 
 	/**
 	 * returns all of the player's cards in a convenient array.
