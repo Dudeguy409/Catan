@@ -19,6 +19,10 @@ public class HexManager {
 	public int getRoadId(int hexIndex, HexComponent.RoadPosition pos) {
 		return this.roadMap.get(new LocationKey(hexIndex, pos));
 	}
+	
+	public int getStructureId(int hexIndex, HexComponent.StructurePosition pos) {
+		return -1;
+	}
 
 	private void initializeRoadMap() {
 		this.roadMap = new HashMap<LocationKey, Integer>();
