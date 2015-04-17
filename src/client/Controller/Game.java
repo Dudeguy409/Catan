@@ -2,6 +2,7 @@ package client.Controller;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -11,6 +12,8 @@ import client.GUI.HexComponent;
 import client.GUI.HexComponent.StructurePosition;
 import client.GUI.UserPanel;
 import client.Model.Player;
+import client.Model.RoadPiece;
+import client.Model.Structure;
 
 public class Game {
 
@@ -55,6 +58,7 @@ public class Game {
 	private int numberOfPlayers;
 	private RoadManager roadMgr;
 	private HexManager hexMgr;
+	private StructureManager structMgr;
 
 	/**
 	 * The number of hexes on the field.
@@ -120,7 +124,7 @@ public class Game {
 		configurePlayerColors();
 		this.roadMgr = new RoadManager(this.numberOfPlayers);
 		this.hexMgr = new HexManager();
-
+		this.structMgr = new StructureManager(this.numberOfPlayers);
 	}
 
 	private void configureNumberOfPlayers() {
@@ -237,6 +241,43 @@ public class Game {
 			this.board.addBuilding(hexId, pos, this.colorArray[playerIndex],
 					BuildType.city);
 		}
+		
+		// Check for adjacent road not returned by getAdjacentRoadPositionsForStructure
+
+		int structId = this.hexMgr.getStructureId(hexId, pos);
+
+		boolean isAdjacent = false; 
+
+		HexComponent.RoadPosition[] adjRoads = this
+				.getAdjacentRoadPositionsForStructure(pos);
+		
+		int[] adjacentRoadsOneA = this.roadMgr.roadDependencyMap.get(this.hexMgr.getRoadId(hexId, adjRoads[0]))
+				.getAdjacentRoadsA();
+		int[] adjacentRoadsOneB = this.roadMgr.roadDependencyMap.get(this.hexMgr.getRoadId(hexId, adjRoads[0]))
+				.getAdjacentRoadsB();
+		int[] adjacentRoadsTwoA = this.roadMgr.roadDependencyMap.get(this.hexMgr.getRoadId(hexId, adjRoads[1]))
+				.getAdjacentRoadsA();
+		int[] adjacentRoadsTwoB = this.roadMgr.roadDependencyMap.get(this.hexMgr.getRoadId(hexId, adjRoads[1]))
+				.getAdjacentRoadsB();
+		
+		int[] adjacentRoadsOne = new int[adjacentRoadsOneA.length + adjacentRoadsOneB.length];
+		System.arraycopy(adjacentRoadsOneA, 0, adjacentRoadsOne, 0, adjacentRoadsOneA.length);
+		System.arraycopy(adjacentRoadsOneB, 0, adjacentRoadsOne, adjacentRoadsOneA.length, adjacentRoadsOneB.length);
+		
+		int[] adjacentRoadsTwo = new int[adjacentRoadsTwoA.length + adjacentRoadsTwoB.length];
+		System.arraycopy(adjacentRoadsTwoA, 0, adjacentRoadsTwo, 0, adjacentRoadsTwoA.length);
+		System.arraycopy(adjacentRoadsTwoB, 0, adjacentRoadsTwo, adjacentRoadsTwoA.length, adjacentRoadsTwoB.length);
+		
+		for (int position : adjacentRoadsOne) {
+			for (int )
+		}
+
+		for (HashMap<Integer, RoadPiece> roadPieceMap : this.roadMgr.roadPieceDependencyMaps) {
+			for (HexComponent.RoadPosition roadPos : adjRoads) {
+			roadPieceMap.containsKey(roadPos.)
+			}
+		}
+
 	}
 
 	public void roll() {
@@ -270,7 +311,7 @@ public class Game {
 	}
 
 	public boolean hasAdjacentRoad(int structureId) {
-		
+
 		return false;
 	}
 
