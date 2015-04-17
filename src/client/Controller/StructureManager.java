@@ -11,7 +11,7 @@ public class StructureManager {
 	
 	public ArrayList<HashMap<Integer, StructurePiece>> structurePieceMaps;
 	public HashMap<Integer, Structure> structureDependencyMap;
-
+	
 	public StructureManager(int playerCount) {
 		structurePieceMaps = new ArrayList<HashMap<Integer, StructurePiece>>();
 		for (int i = 0; i < playerCount; i++) {
@@ -19,11 +19,32 @@ public class StructureManager {
 		}
 	}
 	
-	public void addStructure(int structureId, int playerNumber) throws Exception {
+	public void addStructure(int playerNumber, int structureId) throws Exception {
+		//check to make sure playerNumber and structureId are valid
+		if(playerNumber<0) {
+			throw new IndexOutOfBoundsException("Player Number "+playerNumber+" not valid.");
+		}
+		if(playerNumber>structurePieceMaps.size()) {
+			throw new IndexOutOfBoundsException("Structure ID "+structureId+" not valid.");
+		}
 		
+		
+		//check if structure already exists
+		for (HashMap<Integer, RoadPiece> hash : structurePieceMaps) {
+			if (hash.containsKey(roadIndex)) {// check if road exists
+				// throw new Exception("Road already exists");
+				noOverlap = false;
+			}
+		}
+		
+		//check to make sure there is no adjacent structure
+		
+		//check to make sure there is an adjacent road
+		
+		//actually add the structure
 	}
 	
-	public void updateStructure(int structureId, int playerNumber) throws Exception{
+	public void updateStructure(int playerNumber, int structureId) throws Exception{
 		
 	}
 	
