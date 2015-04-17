@@ -9,6 +9,7 @@ import client.Model.Road;
 public class HexManager {
 
 	public HashMap<LocationKey, Integer> roadMap;
+	public HashMap<StructureLocationKey, Integer> structureMap;
 
 	public HexManager() {
 

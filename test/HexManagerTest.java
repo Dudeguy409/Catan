@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import client.Controller.HexManager;
 import client.Controller.LocationKey;
+import client.Controller.StructureLocationKey;
 
 public class HexManagerTest {
 
@@ -40,14 +41,14 @@ public class HexManagerTest {
 		}
 
 		for (int i = 0; i < roadOccurences.length; i++) {
-			boolean isOnOnlyOneHex=false;
-			for(int j = 0; j < roadsOnOnlyOneHex.length;j++){
-				if(roadsOnOnlyOneHex[j]==i+1){
-					isOnOnlyOneHex=true;
+			boolean isOnOnlyOneHex = false;
+			for (int j = 0; j < roadsOnOnlyOneHex.length; j++) {
+				if (roadsOnOnlyOneHex[j] == i + 1) {
+					isOnOnlyOneHex = true;
 					break;
 				}
 			}
-			
+
 			if (isOnOnlyOneHex) {
 				assertEquals(roadOccurences[i], 1);
 			} else {
@@ -68,6 +69,83 @@ public class HexManagerTest {
 		for (int i = 0; i < hexRoadCounts.length; i++) {
 			assertEquals(6, hexRoadCounts[i]);
 		}
+	}
+
+	@Test
+	public void testCorrectNumberOfStructuresForEachHex() {
+		HexManager hm = new HexManager();
+		int[] hexStructureCounts = new int[19];
+		for (Entry<StructureLocationKey, Integer> e : hm.structureMap
+				.entrySet()) {
+			hexStructureCounts[((StructureLocationKey) (e.getKey()))
+					.getHexIndex()]++;
+		}
+
+		for (int i = 0; i < hexStructureCounts.length; i++) {
+			assertEquals(6, hexStructureCounts[i]);
+		}
+	}
+
+	@Test
+	public void testCorrectNumberForAllStructures() {
+		HexManager hm = new HexManager();
+		int[] structuresOnOnlyOneHex = {};
+		int[] structuresOnTwoHexs = {};
+		int[] structureOccurences = new int[54];
+		for (Entry<StructureLocationKey, Integer> e : hm.structureMap
+				.entrySet()) {
+			structureOccurences[e.getValue() - 1]++;
+		}
+
+		for (int i = 0; i < structureOccurences.length; i++) {
+			boolean isOnOnlyOneHex = false;
+
+			for (int j = 0; j < structuresOnOnlyOneHex.length; j++) {
+				if (structuresOnOnlyOneHex[j] == i + 1) {
+					isOnOnlyOneHex = true;
+					break;
+				}
+
+			}
+
+			if (isOnOnlyOneHex) {
+				assertEquals(structureOccurences[i], 1);
+			} else {
+				boolean isOnTwoHexes = false;
+				for (int j = 0; j < structuresOnTwoHexs.length; j++) {
+					if (structuresOnTwoHexs[j] == i + 1) {
+						isOnTwoHexes = true;
+						break;
+					}
+
+				}
+
+				if (isOnTwoHexes) {
+					assertEquals(structureOccurences[i], 2);
+				} else {
+					assertEquals(structureOccurences[i], 3);
+				}
+
+			}
+
+		}
+	}
+	
+	@Test
+	public void testAllStructuresCovered() {
+		HexManager hm = new HexManager();
+		HashSet<Integer> set = new HashSet<Integer>();
+		for (Entry<StructureLocationKey, Integer> e : hm.structureMap.entrySet()) {
+			set.add(e.getValue());
+		}
+
+		assertEquals(54, set.size());
+	}
+	
+	@Test
+	public void testInitializeStructureMapSize() {
+		HexManager hm = new HexManager();
+		assertEquals(114, hm.structureMap.size());
 	}
 
 }
