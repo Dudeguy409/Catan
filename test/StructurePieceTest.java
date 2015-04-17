@@ -17,13 +17,13 @@ public class StructurePieceTest {
 	@Test
 	public void testStructureMapInitializes() {
 		StructureManager sm = new StructureManager(3);
-		assertNotNull(sm.StructureDependencyMap);
+		assertNotNull(sm.structureDependencyMap);
 	}
 	
 	@Test
 	public void testStructureMapCorrectSize() {
 		StructureManager sm = new StructureManager(3);
-		assertEquals(3, sm.StructureDependencyMap.size());
+		assertEquals(3, sm.structureDependencyMap.size());
 	}
 	
 	@Test
