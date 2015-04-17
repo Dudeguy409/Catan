@@ -245,9 +245,9 @@ public class Game {
 		HexComponent.RoadPosition[] adjRoads = this
 				.getAdjacentRoadPositionsForStructure(pos);
 
-		int[] possibleRoads = new int[3];
-		possibleRoads[0] = this.hexMgr.getRoadId(hexId, adjRoads[0]);
-		possibleRoads[1] = this.hexMgr.getRoadId(hexId, adjRoads[1]);
+		ArrayList<Integer> possibleRoads = new ArrayList<Integer>();
+		possibleRoads.add(this.hexMgr.getRoadId(hexId, adjRoads[0]));
+		possibleRoads.add(this.hexMgr.getRoadId(hexId, adjRoads[1]));
 
 		int[] adjacentRoadsOneA = this.roadMgr.roadDependencyMap.get(
 				this.hexMgr.getRoadId(hexId, adjRoads[0])).getAdjacentRoadsA();
@@ -275,7 +275,7 @@ public class Game {
 		for (int position1 : adjacentRoadsOne) {
 			for (int position2 : adjacentRoadsTwo) {
 				if (position1 == position2) {
-					possibleRoads[2] = position1;
+					possibleRoads.add(position1);
 				}
 			}
 		}
