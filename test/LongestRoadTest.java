@@ -1,5 +1,9 @@
 import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
 import org.junit.Test;
+
 import client.Controller.RoadManager;
 import client.Model.Road;
 import client.Model.RoadPiece;
@@ -398,5 +402,33 @@ public class LongestRoadTest {
 
 		rslt = rm.findLongestRoadForPlayer(1);
 		assertEquals(0, rslt);
+	}
+	
+	@Test
+	public void testGetAllAdjacentRoadPieces() {
+		RoadManager rm = new RoadManager(3);
+		rm.addRoadPieceAtBeginning(0, 19);
+		rm.addRoadPiece(0, 22);
+		rm.addRoadPiece(0, 14);
+		rm.addRoadPiece(0, 15);
+		rm.addRoadPiece(0, 23);
+		
+		String result = Arrays.toString(rm.roadPieceDependencyMaps.get(0).get(19).getAllAdjacentRoads());
+
+		assertEquals("[22, 14, 15, 23]", result);
+	}
+	
+	@Test
+	public void testGetAllAdjacentRoads() {
+		RoadManager rm = new RoadManager(3);
+		rm.addRoadPieceAtBeginning(0, 19);
+		rm.addRoadPiece(0, 22);
+		rm.addRoadPiece(0, 14);
+		rm.addRoadPiece(0, 15);
+		rm.addRoadPiece(0, 23);
+		
+		String result = Arrays.toString(rm.roadDependencyMap.get(19).getAllAdjacentRoads());
+
+		assertEquals("[14, 22, 15, 23]", result);
 	}
 }
