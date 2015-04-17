@@ -270,12 +270,46 @@ public class Game {
 	}
 
 	public boolean hasAdjacentRoad(int structureId) {
+		
 		return false;
 	}
 
 	public HexComponent.RoadPosition[] getAdjacentRoadPositionsForStructure(
 			StructurePosition pos) {
-		return null;
+		switch (pos) {
+		case west:
+			HexComponent.RoadPosition[] arrayToReturn = {
+					HexComponent.RoadPosition.northwest,
+					HexComponent.RoadPosition.southwest };
+			return arrayToReturn;
+		case northwest:
+			HexComponent.RoadPosition[] arrayToReturn2 = {
+					HexComponent.RoadPosition.northwest,
+					HexComponent.RoadPosition.north };
+			return arrayToReturn2;
+		case northeast:
+			HexComponent.RoadPosition[] arrayToReturn3 = {
+					HexComponent.RoadPosition.north,
+					HexComponent.RoadPosition.northeast };
+			return arrayToReturn3;
+		case east:
+			HexComponent.RoadPosition[] arrayToReturn4 = {
+					HexComponent.RoadPosition.northeast,
+					HexComponent.RoadPosition.southeast };
+			return arrayToReturn4;
+		case southeast:
+			HexComponent.RoadPosition[] arrayToReturn5 = {
+					HexComponent.RoadPosition.south,
+					HexComponent.RoadPosition.southeast };
+			return arrayToReturn5;
+		case southwest:
+			HexComponent.RoadPosition[] arrayToReturn6 = {
+					HexComponent.RoadPosition.south,
+					HexComponent.RoadPosition.southwest };
+			return arrayToReturn6;
+		default:
+			return null;
+		}
 
 	}
 }
