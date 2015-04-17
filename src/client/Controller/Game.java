@@ -234,50 +234,69 @@ public class Game {
 			HexComponent.StructurePosition pos) {
 		// TODO do stuff
 		// TODO throw exceptions
-		if (this.currentBuildType == BuildType.settlement) {
-			this.board.addBuilding(hexId, pos, this.colorArray[playerIndex],
-					BuildType.settlement);
-		} else {
-			this.board.addBuilding(hexId, pos, this.colorArray[playerIndex],
-					BuildType.city);
-		}
-		
-		// Check for adjacent road not returned by getAdjacentRoadPositionsForStructure
+
+		// Check for adjacent road not returned by
+		// getAdjacentRoadPositionsForStructure
 
 		int structId = this.hexMgr.getStructureId(hexId, pos);
 
-		boolean isAdjacent = false; 
+		boolean isAdjacent = false;
 
 		HexComponent.RoadPosition[] adjRoads = this
 				.getAdjacentRoadPositionsForStructure(pos);
-		
-		int[] adjacentRoadsOneA = this.roadMgr.roadDependencyMap.get(this.hexMgr.getRoadId(hexId, adjRoads[0]))
-				.getAdjacentRoadsA();
-		int[] adjacentRoadsOneB = this.roadMgr.roadDependencyMap.get(this.hexMgr.getRoadId(hexId, adjRoads[0]))
-				.getAdjacentRoadsB();
-		int[] adjacentRoadsTwoA = this.roadMgr.roadDependencyMap.get(this.hexMgr.getRoadId(hexId, adjRoads[1]))
-				.getAdjacentRoadsA();
-		int[] adjacentRoadsTwoB = this.roadMgr.roadDependencyMap.get(this.hexMgr.getRoadId(hexId, adjRoads[1]))
-				.getAdjacentRoadsB();
-		
-		int[] adjacentRoadsOne = new int[adjacentRoadsOneA.length + adjacentRoadsOneB.length];
-		System.arraycopy(adjacentRoadsOneA, 0, adjacentRoadsOne, 0, adjacentRoadsOneA.length);
-		System.arraycopy(adjacentRoadsOneB, 0, adjacentRoadsOne, adjacentRoadsOneA.length, adjacentRoadsOneB.length);
-		
-		int[] adjacentRoadsTwo = new int[adjacentRoadsTwoA.length + adjacentRoadsTwoB.length];
-		System.arraycopy(adjacentRoadsTwoA, 0, adjacentRoadsTwo, 0, adjacentRoadsTwoA.length);
-		System.arraycopy(adjacentRoadsTwoB, 0, adjacentRoadsTwo, adjacentRoadsTwoA.length, adjacentRoadsTwoB.length);
-		
-		for (int position : adjacentRoadsOne) {
-			for (int )
-		}
 
-		for (HashMap<Integer, RoadPiece> roadPieceMap : this.roadMgr.roadPieceDependencyMaps) {
-			for (HexComponent.RoadPosition roadPos : adjRoads) {
-			roadPieceMap.containsKey(roadPos.)
+		int[] possibleRoads = new int[3];
+		possibleRoads[0] = this.hexMgr.getRoadId(hexId, adjRoads[0]);
+		possibleRoads[1] = this.hexMgr.getRoadId(hexId, adjRoads[1]);
+
+		int[] adjacentRoadsOneA = this.roadMgr.roadDependencyMap.get(
+				this.hexMgr.getRoadId(hexId, adjRoads[0])).getAdjacentRoadsA();
+		int[] adjacentRoadsOneB = this.roadMgr.roadDependencyMap.get(
+				this.hexMgr.getRoadId(hexId, adjRoads[0])).getAdjacentRoadsB();
+		int[] adjacentRoadsTwoA = this.roadMgr.roadDependencyMap.get(
+				this.hexMgr.getRoadId(hexId, adjRoads[1])).getAdjacentRoadsA();
+		int[] adjacentRoadsTwoB = this.roadMgr.roadDependencyMap.get(
+				this.hexMgr.getRoadId(hexId, adjRoads[1])).getAdjacentRoadsB();
+
+		int[] adjacentRoadsOne = new int[adjacentRoadsOneA.length
+				+ adjacentRoadsOneB.length];
+		System.arraycopy(adjacentRoadsOneA, 0, adjacentRoadsOne, 0,
+				adjacentRoadsOneA.length);
+		System.arraycopy(adjacentRoadsOneB, 0, adjacentRoadsOne,
+				adjacentRoadsOneA.length, adjacentRoadsOneB.length);
+
+		int[] adjacentRoadsTwo = new int[adjacentRoadsTwoA.length
+				+ adjacentRoadsTwoB.length];
+		System.arraycopy(adjacentRoadsTwoA, 0, adjacentRoadsTwo, 0,
+				adjacentRoadsTwoA.length);
+		System.arraycopy(adjacentRoadsTwoB, 0, adjacentRoadsTwo,
+				adjacentRoadsTwoA.length, adjacentRoadsTwoB.length);
+
+		for (int position1 : adjacentRoadsOne) {
+			for (int position2 : adjacentRoadsTwo) {
+				if (position1 == position2) {
+					possibleRoads[2] = position1;
+				}
 			}
 		}
 
+		for (HashMap<Integer, RoadPiece> roadPieceMap : this.roadMgr.roadPieceDependencyMaps) {
+			for (int roadPos : possibleRoads) {
+				if (roadPieceMap.containsKey(roadPos)) {
+					isAdjacent = true;
+				}
+			}
+		}
+
+		if (isAdjacent) {
+			if (this.currentBuildType == BuildType.settlement) {
+				this.board.addBuilding(hexId, pos,
+						this.colorArray[playerIndex], BuildType.settlement);
+			} else {
+				this.board.addBuilding(hexId, pos,
+						this.colorArray[playerIndex], BuildType.city);
+			}
+		}
 	}
 
 	public void roll() {
