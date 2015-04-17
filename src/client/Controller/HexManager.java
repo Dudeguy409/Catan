@@ -11,6 +11,7 @@ public class HexManager {
 	public HexManager() {
 
 		initializeRoadMap();
+		initializeStructureMap();
 
 	}
 
@@ -271,6 +272,259 @@ public class HexManager {
 				45);
 		this.roadMap.put(new LocationKey(18,
 				HexComponent.RoadPosition.southwest), 40);
+
+	}
+
+	private void initializeStructureMap() {
+
+		this.structureMap = new HashMap<StructureLocationKey, Integer>();
+
+		this.structureMap.put(new StructureLocationKey(0,
+				HexComponent.StructurePosition.west), 50);
+		this.structureMap.put(new StructureLocationKey(0,
+				HexComponent.StructurePosition.northwest), 45);
+		this.structureMap.put(new StructureLocationKey(0,
+				HexComponent.StructurePosition.northeast), 46);
+		this.structureMap.put(new StructureLocationKey(0,
+				HexComponent.StructurePosition.east), 51);
+		this.structureMap.put(new StructureLocationKey(0,
+				HexComponent.StructurePosition.southeast), 54);
+		this.structureMap.put(new StructureLocationKey(0,
+				HexComponent.StructurePosition.southwest), 53);
+
+		this.structureMap.put(new StructureLocationKey(1,
+				HexComponent.StructurePosition.west), 46);
+		this.structureMap.put(new StructureLocationKey(1,
+				HexComponent.StructurePosition.northwest), 40);
+		this.structureMap.put(new StructureLocationKey(1,
+				HexComponent.StructurePosition.northeast), 41);
+		this.structureMap.put(new StructureLocationKey(1,
+				HexComponent.StructurePosition.east), 47);
+		this.structureMap.put(new StructureLocationKey(1,
+				HexComponent.StructurePosition.southeast), 52);
+		this.structureMap.put(new StructureLocationKey(1,
+				HexComponent.StructurePosition.southwest), 51);
+
+		this.structureMap.put(new StructureLocationKey(2,
+				HexComponent.StructurePosition.west), 41);
+		this.structureMap.put(new StructureLocationKey(2,
+				HexComponent.StructurePosition.northwest), 35);
+		this.structureMap.put(new StructureLocationKey(2,
+				HexComponent.StructurePosition.northeast), 36);
+		this.structureMap.put(new StructureLocationKey(2,
+				HexComponent.StructurePosition.east), 42);
+		this.structureMap.put(new StructureLocationKey(2,
+				HexComponent.StructurePosition.southeast), 48);
+		this.structureMap.put(new StructureLocationKey(2,
+				HexComponent.StructurePosition.southwest), 47);
+
+		this.structureMap.put(new StructureLocationKey(3,
+				HexComponent.StructurePosition.west), 29);
+		this.structureMap.put(new StructureLocationKey(3,
+				HexComponent.StructurePosition.northwest), 23);
+		this.structureMap.put(new StructureLocationKey(3,
+				HexComponent.StructurePosition.northeast), 24);
+		this.structureMap.put(new StructureLocationKey(3,
+				HexComponent.StructurePosition.east), 30);
+		this.structureMap.put(new StructureLocationKey(3,
+				HexComponent.StructurePosition.southeast), 36);
+		this.structureMap.put(new StructureLocationKey(3,
+				HexComponent.StructurePosition.southwest), 35);
+
+		this.structureMap.put(new StructureLocationKey(4,
+				HexComponent.StructurePosition.west), 17);
+		this.structureMap.put(new StructureLocationKey(4,
+				HexComponent.StructurePosition.northwest), 11);
+		this.structureMap.put(new StructureLocationKey(4,
+				HexComponent.StructurePosition.northeast), 12);
+		this.structureMap.put(new StructureLocationKey(4,
+				HexComponent.StructurePosition.east), 18);
+		this.structureMap.put(new StructureLocationKey(4,
+				HexComponent.StructurePosition.southeast), 24);
+		this.structureMap.put(new StructureLocationKey(4,
+				HexComponent.StructurePosition.southwest), 23);
+
+		this.structureMap.put(new StructureLocationKey(5,
+				HexComponent.StructurePosition.west), 10);
+		this.structureMap.put(new StructureLocationKey(5,
+				HexComponent.StructurePosition.northwest), 5);
+		this.structureMap.put(new StructureLocationKey(5,
+				HexComponent.StructurePosition.northeast), 6);
+		this.structureMap.put(new StructureLocationKey(5,
+				HexComponent.StructurePosition.east), 11);
+		this.structureMap.put(new StructureLocationKey(5,
+				HexComponent.StructurePosition.southeast), 17);
+		this.structureMap.put(new StructureLocationKey(5,
+				HexComponent.StructurePosition.southwest), 16);
+
+		this.structureMap.put(new StructureLocationKey(6,
+				HexComponent.StructurePosition.west), 4);
+		this.structureMap.put(new StructureLocationKey(6,
+				HexComponent.StructurePosition.northwest), 1);
+		this.structureMap.put(new StructureLocationKey(6,
+				HexComponent.StructurePosition.northeast), 2);
+		this.structureMap.put(new StructureLocationKey(6,
+				HexComponent.StructurePosition.east), 5);
+		this.structureMap.put(new StructureLocationKey(6,
+				HexComponent.StructurePosition.southeast), 10);
+		this.structureMap.put(new StructureLocationKey(6,
+				HexComponent.StructurePosition.southwest), 9);
+
+		this.structureMap.put(new StructureLocationKey(7,
+				HexComponent.StructurePosition.west), 8);
+		this.structureMap.put(new StructureLocationKey(7,
+				HexComponent.StructurePosition.northwest), 3);
+		this.structureMap.put(new StructureLocationKey(7,
+				HexComponent.StructurePosition.northeast), 4);
+		this.structureMap.put(new StructureLocationKey(7,
+				HexComponent.StructurePosition.east), 9);
+		this.structureMap.put(new StructureLocationKey(7,
+				HexComponent.StructurePosition.southeast), 15);
+		this.structureMap.put(new StructureLocationKey(7,
+				HexComponent.StructurePosition.southwest), 14);
+
+		this.structureMap.put(new StructureLocationKey(8,
+				HexComponent.StructurePosition.west), 13);
+		this.structureMap.put(new StructureLocationKey(8,
+				HexComponent.StructurePosition.northwest), 7);
+		this.structureMap.put(new StructureLocationKey(8,
+				HexComponent.StructurePosition.northeast), 8);
+		this.structureMap.put(new StructureLocationKey(8,
+				HexComponent.StructurePosition.east), 14);
+		this.structureMap.put(new StructureLocationKey(8,
+				HexComponent.StructurePosition.southeast), 20);
+		this.structureMap.put(new StructureLocationKey(8,
+				HexComponent.StructurePosition.southwest), 19);
+
+		this.structureMap.put(new StructureLocationKey(9,
+				HexComponent.StructurePosition.west), 25);
+		this.structureMap.put(new StructureLocationKey(9,
+				HexComponent.StructurePosition.northwest), 19);
+		this.structureMap.put(new StructureLocationKey(9,
+				HexComponent.StructurePosition.northeast), 20);
+		this.structureMap.put(new StructureLocationKey(9,
+				HexComponent.StructurePosition.east), 26);
+		this.structureMap.put(new StructureLocationKey(9,
+				HexComponent.StructurePosition.southeast), 32);
+		this.structureMap.put(new StructureLocationKey(9,
+				HexComponent.StructurePosition.southwest), 31);
+
+		this.structureMap.put(new StructureLocationKey(10,
+				HexComponent.StructurePosition.west), 37);
+		this.structureMap.put(new StructureLocationKey(10,
+				HexComponent.StructurePosition.northwest), 31);
+		this.structureMap.put(new StructureLocationKey(10,
+				HexComponent.StructurePosition.northeast), 32);
+		this.structureMap.put(new StructureLocationKey(10,
+				HexComponent.StructurePosition.east), 38);
+		this.structureMap.put(new StructureLocationKey(10,
+				HexComponent.StructurePosition.southeast), 44);
+		this.structureMap.put(new StructureLocationKey(10,
+				HexComponent.StructurePosition.southwest), 43);
+
+		this.structureMap.put(new StructureLocationKey(11,
+				HexComponent.StructurePosition.west), 44);
+		this.structureMap.put(new StructureLocationKey(11,
+				HexComponent.StructurePosition.northwest), 38);
+		this.structureMap.put(new StructureLocationKey(11,
+				HexComponent.StructurePosition.northeast), 39);
+		this.structureMap.put(new StructureLocationKey(11,
+				HexComponent.StructurePosition.east), 45);
+		this.structureMap.put(new StructureLocationKey(11,
+				HexComponent.StructurePosition.southeast), 50);
+		this.structureMap.put(new StructureLocationKey(11,
+				HexComponent.StructurePosition.southwest), 49);
+
+		this.structureMap.put(new StructureLocationKey(12,
+				HexComponent.StructurePosition.west), 39);
+		this.structureMap.put(new StructureLocationKey(12,
+				HexComponent.StructurePosition.northwest), 33);
+		this.structureMap.put(new StructureLocationKey(12,
+				HexComponent.StructurePosition.northeast), 34);
+		this.structureMap.put(new StructureLocationKey(12,
+				HexComponent.StructurePosition.east), 40);
+		this.structureMap.put(new StructureLocationKey(12,
+				HexComponent.StructurePosition.southeast), 46);
+		this.structureMap.put(new StructureLocationKey(12,
+				HexComponent.StructurePosition.southwest), 45);
+
+		this.structureMap.put(new StructureLocationKey(13,
+				HexComponent.StructurePosition.west), 34);
+		this.structureMap.put(new StructureLocationKey(13,
+				HexComponent.StructurePosition.northwest), 28);
+		this.structureMap.put(new StructureLocationKey(13,
+				HexComponent.StructurePosition.northeast), 29);
+		this.structureMap.put(new StructureLocationKey(13,
+				HexComponent.StructurePosition.east), 35);
+		this.structureMap.put(new StructureLocationKey(13,
+				HexComponent.StructurePosition.southeast), 41);
+		this.structureMap.put(new StructureLocationKey(13,
+				HexComponent.StructurePosition.southwest), 40);
+
+		this.structureMap.put(new StructureLocationKey(14,
+				HexComponent.StructurePosition.west), 22);
+		this.structureMap.put(new StructureLocationKey(14,
+				HexComponent.StructurePosition.northwest), 16);
+		this.structureMap.put(new StructureLocationKey(14,
+				HexComponent.StructurePosition.northeast), 17);
+		this.structureMap.put(new StructureLocationKey(14,
+				HexComponent.StructurePosition.east), 23);
+		this.structureMap.put(new StructureLocationKey(14,
+				HexComponent.StructurePosition.southeast), 29);
+		this.structureMap.put(new StructureLocationKey(14,
+				HexComponent.StructurePosition.southwest), 28);
+
+		this.structureMap.put(new StructureLocationKey(15,
+				HexComponent.StructurePosition.west), 15);
+		this.structureMap.put(new StructureLocationKey(15,
+				HexComponent.StructurePosition.northwest), 9);
+		this.structureMap.put(new StructureLocationKey(15,
+				HexComponent.StructurePosition.northeast), 10);
+		this.structureMap.put(new StructureLocationKey(15,
+				HexComponent.StructurePosition.east), 16);
+		this.structureMap.put(new StructureLocationKey(15,
+				HexComponent.StructurePosition.southeast), 22);
+		this.structureMap.put(new StructureLocationKey(15,
+				HexComponent.StructurePosition.southwest), 21);
+
+		this.structureMap.put(new StructureLocationKey(16,
+				HexComponent.StructurePosition.west), 20);
+		this.structureMap.put(new StructureLocationKey(16,
+				HexComponent.StructurePosition.northwest), 14);
+		this.structureMap.put(new StructureLocationKey(16,
+				HexComponent.StructurePosition.northeast), 15);
+		this.structureMap.put(new StructureLocationKey(16,
+				HexComponent.StructurePosition.east), 21);
+		this.structureMap.put(new StructureLocationKey(16,
+				HexComponent.StructurePosition.southeast), 27);
+		this.structureMap.put(new StructureLocationKey(16,
+				HexComponent.StructurePosition.southwest), 26);
+
+		this.structureMap.put(new StructureLocationKey(17,
+				HexComponent.StructurePosition.west), 32);
+		this.structureMap.put(new StructureLocationKey(17,
+				HexComponent.StructurePosition.northwest), 26);
+		this.structureMap.put(new StructureLocationKey(17,
+				HexComponent.StructurePosition.northeast), 27);
+		this.structureMap.put(new StructureLocationKey(17,
+				HexComponent.StructurePosition.east), 33);
+		this.structureMap.put(new StructureLocationKey(17,
+				HexComponent.StructurePosition.southeast), 39);
+		this.structureMap.put(new StructureLocationKey(17,
+				HexComponent.StructurePosition.southwest), 38);
+
+		this.structureMap.put(new StructureLocationKey(18,
+				HexComponent.StructurePosition.west), 27);
+		this.structureMap.put(new StructureLocationKey(18,
+				HexComponent.StructurePosition.northwest), 21);
+		this.structureMap.put(new StructureLocationKey(18,
+				HexComponent.StructurePosition.northeast), 22);
+		this.structureMap.put(new StructureLocationKey(18,
+				HexComponent.StructurePosition.east), 28);
+		this.structureMap.put(new StructureLocationKey(18,
+				HexComponent.StructurePosition.southeast), 34);
+		this.structureMap.put(new StructureLocationKey(18,
+				HexComponent.StructurePosition.southwest), 33);
 
 	}
 

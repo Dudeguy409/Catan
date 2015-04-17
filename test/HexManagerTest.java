@@ -86,8 +86,10 @@ public class HexManagerTest {
 	@Test
 	public void testCorrectNumberForAllStructures() {
 		HexManager hm = new HexManager();
-		int[] structuresOnOnlyOneHex = {};
-		int[] structuresOnTwoHexs = {};
+		int[] structuresOnOnlyOneHex = { 1, 2, 3, 6, 7, 12, 18, 13, 25, 30, 37,
+				42, 43, 48, 49, 52, 53, 54 };
+		int[] structuresOnTwoHexs = { 4, 5, 8, 11, 19, 24, 31, 36, 44, 47, 50,
+				51 };
 		int[] structureOccurences = new int[54];
 		for (Entry<StructureLocationKey, Integer> e : hm.structureMap
 				.entrySet()) {
