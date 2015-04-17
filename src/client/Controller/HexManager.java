@@ -20,7 +20,7 @@ public class HexManager {
 	}
 
 	public int getStructureId(int hexIndex, HexComponent.StructurePosition pos) {
-		return -1;
+		return this.structureMap.get(new StructureLocationKey(hexIndex, pos));
 	}
 
 	private void initializeRoadMap() {
