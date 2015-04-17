@@ -2,9 +2,6 @@ package client.Controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import client.Model.Road;
-import client.Model.RoadPiece;
 import client.Model.Structure;
 
 public class StructureManager {

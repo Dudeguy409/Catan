@@ -1,10 +1,7 @@
 package client.Controller;
 
 import java.util.HashMap;
-
-import client.Controller.Game.BuildType;
 import client.GUI.HexComponent;
-import client.Model.Road;
 
 public class HexManager {
 
@@ -20,7 +17,7 @@ public class HexManager {
 	public int getRoadId(int hexIndex, HexComponent.RoadPosition pos) {
 		return this.roadMap.get(new LocationKey(hexIndex, pos));
 	}
-	
+
 	public int getStructureId(int hexIndex, HexComponent.StructurePosition pos) {
 		return -1;
 	}

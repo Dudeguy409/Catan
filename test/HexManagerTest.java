@@ -9,6 +9,7 @@ import org.junit.Test;
 import client.Controller.HexManager;
 import client.Controller.LocationKey;
 import client.Controller.StructureLocationKey;
+import client.GUI.HexComponent;
 
 public class HexManagerTest {
 
@@ -146,6 +147,43 @@ public class HexManagerTest {
 	public void testInitializeStructureMapSize() {
 		HexManager hm = new HexManager();
 		assertEquals(114, hm.structureMap.size());
+	}
+	
+	@Test
+	public void testStructureMapIteration() {
+		HexManager hm = new HexManager();
+		int id = hm.structureMap.get(new StructureLocationKey(6, HexComponent.StructurePosition.northeast));
+		assertEquals(id, 2);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(6, HexComponent.StructurePosition.east));
+		assertEquals(id, 5);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(5, HexComponent.StructurePosition.northwest));
+		assertEquals(id, 5);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(6, HexComponent.StructurePosition.southeast));
+		assertEquals(id, 10);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(5, HexComponent.StructurePosition.west));
+		assertEquals(id, 10);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(5, HexComponent.StructurePosition.southwest));
+		assertEquals(id, 16);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(15, HexComponent.StructurePosition.east));
+		assertEquals(id, 16);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(15, HexComponent.StructurePosition.southeast));
+		assertEquals(id, 22);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(15, HexComponent.StructurePosition.southwest));
+		assertEquals(id, 21);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(16, HexComponent.StructurePosition.east));
+		assertEquals(id, 21);
+		
+		 id = hm.structureMap.get(new StructureLocationKey(18, HexComponent.StructurePosition.northwest));
+			assertEquals(id, 21);
 	}
 
 }
