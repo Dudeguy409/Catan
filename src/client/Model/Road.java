@@ -10,6 +10,19 @@ public class Road {
 		this.adjacentRoadsB = adjacentRoadsB;
 	}
 	
+	public int[] getAllAdjacentRoads() {
+		int[] result = new int[this.adjacentRoadsA.length + this.adjacentRoadsB.length];
+		for(int i = 0; i<this.adjacentRoadsA.length; i++) {
+			result[i] = this.adjacentRoadsA[i];
+		}
+		
+		for(int i = 0; i<this.adjacentRoadsB.length; i++) {
+			result[this.adjacentRoadsA.length + i] = this.adjacentRoadsB[i];
+		}
+		
+		return result;
+	}
+	
 	public int[] getAdjacentRoadsA() {
 		return this.adjacentRoadsA;
 	}
