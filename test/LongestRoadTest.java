@@ -29,7 +29,7 @@ public class LongestRoadTest {
 	@Test
 	public void testRoadMapCorrectSize() {
 		RoadManager rm = new RoadManager(3);
-		assertEquals(3, rm.roadDependencyMap.size());
+		assertEquals(3, rm.roadPieceDependencyMaps.size());
 	}
 	
 	@Test
@@ -46,9 +46,15 @@ public class LongestRoadTest {
 	}
 	
 	@Test(expected=IndexOutOfBoundsException.class)
-	public void testRoadMapThrowsExceptionWhenNonLocationReferenced() {
+	public void testRoadMapThrowsExceptionWhenNonLocationReferencedA() {
 		RoadManager rm = new RoadManager(3);
-		rm.addRoadPiece(2, -1);
+		rm.addRoadPiece(2, 0);
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void testRoadMapThrowsExceptionWhenNonLocationReferencedB() {
+		RoadManager rm = new RoadManager(4);
+		rm.addRoadPiece(73, 0);
 	}
 
 	@Test
@@ -58,15 +64,15 @@ public class LongestRoadTest {
 		rslt = rm.getRoadCountForPlayer(0);
 		assertEquals(0, rslt);
 
-		rm.addRoadPiece(0, 19);
+		rm.addRoadPieceAtBeginning(0, 19);
 
 		rslt = rm.getRoadCountForPlayer(0);
 		assertEquals(1, rslt);
 
-		rm.addRoadPiece(0, 20);
-		rm.addRoadPiece(0, 24);
-		rm.addRoadPiece(0, 30);
-		rm.addRoadPiece(0, 1);
+		rm.addRoadPieceAtBeginning(0, 20);
+		rm.addRoadPieceAtBeginning(0, 24);
+		rm.addRoadPieceAtBeginning(0, 30);
+		rm.addRoadPieceAtBeginning(0, 1);
 
 		rslt = rm.getRoadCountForPlayer(0);
 		assertEquals(5, rslt);
@@ -371,5 +377,34 @@ public class LongestRoadTest {
 		road.setAdjacentRoadsB(adjacentRoadsB);
 		
 		assertTrue(road.getAdjacentRoadsB() == adjacentRoadsB);
+	}
+	
+	@Test
+	public void testTwoPlayersAddingSameRoad() {
+		int rslt;
+		RoadManager rm = new RoadManager(3);
+		rm.addRoadPieceAtBeginning(0, 19);
+		rm.addRoadPiece(0, 22);
+		rm.addRoadPieceAtBeginning(1, 19);
+
+		rslt = rm.findLongestRoadForPlayer(0);
+		assertEquals(2, rslt);
+		
+		rslt = rm.findLongestRoadForPlayer(1);
+		assertEquals(0, rslt);
+	}
+	
+	@Test
+	public void testTwoPlayersAddingSameRoadAtBeginning() {
+		int rslt;
+		RoadManager rm = new RoadManager(3);
+		rm.addRoadPieceAtBeginning(0, 19);
+		rm.addRoadPieceAtBeginning(1, 19);
+
+		rslt = rm.findLongestRoadForPlayer(0);
+		assertEquals(1, rslt);
+		
+		rslt = rm.findLongestRoadForPlayer(1);
+		assertEquals(0, rslt);
 	}
 }
