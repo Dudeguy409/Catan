@@ -25,16 +25,10 @@ public class StructurePieceTest {
 	}
 
 	@Test
-	public void testStructureMapCorrectSize() {
+	public void testStructureMapsCorrectSize() {
 		StructureManager sm = new StructureManager(3);
-		assertEquals(3, sm.structureDependencyMap.size());
-	}
-
-	@Test
-	public void testStructureMapDoesntAddsStructure() throws Exception {
-		StructureManager sm = new StructureManager(3);
-		sm.addStructure(1, 5);
-		assertEquals(0, sm.getSettlementCountForPlayer(1));
+		assertEquals(54, sm.structureDependencyMap.size());
+		assertEquals(3, sm.structurePieceMaps.size());
 	}
 
 	@Test
@@ -54,7 +48,7 @@ public class StructurePieceTest {
 		sm.addStructure(3, 5);
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test(expected = Exception.class)
 	public void testStructureMapThrowsExceptionWhenNonLocationReferenced() throws Exception {
 		StructureManager sm = new StructureManager(3);
 		RoadManager rm = new RoadManager(3);
@@ -93,7 +87,7 @@ public class StructurePieceTest {
 		assertEquals(2, rslt);
 	}
 
-	@Test
+	@Test(expected = Exception.class)
 	public void testAddTwoAdjacent() throws Exception {
 		int rslt;
 		StructureManager sm = new StructureManager(3);
@@ -106,7 +100,7 @@ public class StructurePieceTest {
 		assertEquals(1, rslt);
 	}
 
-	@Test
+	@Test(expected = Exception.class)
 	public void testOpponentAddAdjacent() throws Exception {
 		int rslt;
 		StructureManager sm = new StructureManager(3);
@@ -125,24 +119,23 @@ public class StructurePieceTest {
 	public void testStructureIteration() {
 		StructureManager sm = new StructureManager(3);
 
-		Structure s = sm.structureDependencyMap.get(new StructureLocationKey(0,
-				HexComponent.StructurePosition.west));
-		List<int[]> ls = Arrays.asList(s.getAdjacentSettlements());
+		Structure s = sm.structureDependencyMap.get(50);
+		System.out.println(s);
+		Integer[] lst = s.getAdjacentSettlements();
+		List<Integer> ls = Arrays.asList(lst);
 		assertEquals(s.getId(), 50);
 		assertTrue(ls.contains(45));
 		assertTrue(ls.contains(53));
 		assertEquals(ls.size(), 2);
 
-		s = sm.structureDependencyMap.get(new StructureLocationKey(0,
-				HexComponent.StructurePosition.west));
+		s = sm.structureDependencyMap.get(53);
 		ls = Arrays.asList(s.getAdjacentSettlements());
 		assertEquals(s.getId(), 53);
 		assertTrue(ls.contains(54));
 		assertTrue(ls.contains(50));
 		assertEquals(ls.size(), 2);
 
-		s = sm.structureDependencyMap.get(new StructureLocationKey(0,
-				HexComponent.StructurePosition.west));
+		s = sm.structureDependencyMap.get(51);
 		ls = Arrays.asList(s.getAdjacentSettlements());
 		assertEquals(s.getId(), 51);
 		assertTrue(ls.contains(54));
@@ -150,8 +143,7 @@ public class StructurePieceTest {
 		assertTrue(ls.contains(46));
 		assertEquals(ls.size(), 3);
 
-		s = sm.structureDependencyMap.get(new StructureLocationKey(0,
-				HexComponent.StructurePosition.west));
+		s = sm.structureDependencyMap.get(40);
 		ls = Arrays.asList(s.getAdjacentSettlements());
 		assertEquals(s.getId(), 40);
 		assertTrue(ls.contains(34));
@@ -159,16 +151,14 @@ public class StructurePieceTest {
 		assertTrue(ls.contains(41));
 		assertEquals(ls.size(), 3);
 
-		s = sm.structureDependencyMap.get(new StructureLocationKey(0,
-				HexComponent.StructurePosition.west));
+		s = sm.structureDependencyMap.get(37);
 		ls = Arrays.asList(s.getAdjacentSettlements());
 		assertEquals(s.getId(), 37);
 		assertTrue(ls.contains(43));
 		assertTrue(ls.contains(31));
 		assertEquals(ls.size(), 2);
 
-		s = sm.structureDependencyMap.get(new StructureLocationKey(0,
-				HexComponent.StructurePosition.west));
+		s = sm.structureDependencyMap.get(27);
 		ls = Arrays.asList(s.getAdjacentSettlements());
 		assertEquals(s.getId(), 27);
 		assertTrue(ls.contains(33));
@@ -176,8 +166,7 @@ public class StructurePieceTest {
 		assertTrue(ls.contains(21));
 		assertEquals(ls.size(), 3);
 
-		s = sm.structureDependencyMap.get(new StructureLocationKey(0,
-				HexComponent.StructurePosition.west));
+		s = sm.structureDependencyMap.get(28);
 		ls = Arrays.asList(s.getAdjacentSettlements());
 		assertEquals(s.getId(), 28);
 		assertTrue(ls.contains(34));
@@ -185,8 +174,7 @@ public class StructurePieceTest {
 		assertTrue(ls.contains(29));
 		assertEquals(ls.size(), 3);
 
-		s = sm.structureDependencyMap.get(new StructureLocationKey(0,
-				HexComponent.StructurePosition.west));
+		s = sm.structureDependencyMap.get(29);
 		ls = Arrays.asList(s.getAdjacentSettlements());
 		assertEquals(s.getId(), 29);
 		assertTrue(ls.contains(23));
