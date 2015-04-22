@@ -1,0 +1,8 @@
+player queue initializes
+a dice roll adds resources to the right settlements/hexes/players
+normal game starts at end of pre-game mode
+buy/build works as expected
+victory point count is increased when it needs to and not when it shouldn't
+victory points end game
+turns end as expected
+pre-game player iterator works
