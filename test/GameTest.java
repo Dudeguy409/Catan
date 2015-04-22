@@ -27,7 +27,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void TestPlayerQueueInitializes() throws NoSuchFieldException, SecurityException {
+	public void TestPlayerQueueInitializes() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Field field = Game.class.getDeclaredField("prePlayerQueue");
 		field.setAccessible(true);
 
@@ -35,9 +35,6 @@ public class GameTest {
 
 		field.set(game, prePlayerQueue);
 	}
-	
-	@Test
-	public void 
 
 	@Test
 	public void getAdjacentRoadsForStructureTest() {
