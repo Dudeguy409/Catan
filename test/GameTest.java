@@ -1,6 +1,7 @@
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,9 +32,11 @@ public class GameTest {
 		Field field = Game.class.getDeclaredField("prePlayerQueue");
 		field.setAccessible(true);
 
-		Queue prePlayerQueue = new LinkedList<Integer>();
-
-		field.set(game, prePlayerQueue);
+		Queue<Integer> prePlayerQueue = (LinkedList<Integer>)(field.get(game));
+		Integer[] values = {1, 2, 3, 3, 2, 1};
+		Queue<Integer> expectedQueue = new LinkedList<Integer>(Arrays.asList(values));
+		
+		assertEquals(expectedQueue, prePlayerQueue);
 	}
 
 	@Test
