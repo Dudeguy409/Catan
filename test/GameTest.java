@@ -67,5 +67,84 @@ public class GameTest {
 		assertTrue(poses.size() == 2);
 
 	}
+	
+	@Test
+	public void testThatOneRollAddsResources() {
+		//TODO
+	}
+	
+	@Test
+	public void testAddResourcesOneSettlement() {
+		//TODO
+	}
+	
+	@Test
+	public void testAddResourcesOneCity() {
+		//TODO
+	}
+	
+	@Test
+	public void testAddResourcesOneCityAndOneSettlement() {
+		//TODO
+	}
+	
+	@Test
+	public void testThatNoSettlementsAddsNoResources() {
+		//TODO
+		
+	}
+	
+	@Test
+	public void testThatNormalGameStartsAfterPreGame() {
+		//TODO
+	}
+	
+	//Tests for buying things
+	//TODO add tests for buying development cards
+	@Test
+	public void testBuyAndBuildRoad() {
+		//TODO
+	}
+	
+	@Test
+	public void testBuyAndBuildSettlement() {
+		//TODO
+	}
+	
+	@Test
+	public void testBuyAndBuildCity() {
+		//TODO
+	}
+	
+	//TODO Victory Point tests - add more
+	@Test
+	public void testVictoryPointForLongestRoad() {
+		//TODO
+	}
+	
+	@Test
+	public void testAddOneVictoryPointForOneSettlement() {
+		//TODO
+	}
+	
+	@Test
+	public void testAddTwoVictoryPointsForOneCity() {
+		//TODO
+	}
+	
+	@Test
+	public void testThatGameEnds() {
+		//TODO
+	}
+	
+	@Test
+	public void testThatTurnEnds() {
+		//TODO
+	}
+	
+	@Test
+	public void testPreGameIteration() {
+		//TODO
+	}
 
 }
