@@ -1,10 +1,14 @@
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import client.Controller.Game;
 import client.GUI.HexComponent;
 
@@ -21,6 +25,19 @@ public class GameTest {
 		// TODO
 		// assertTrue(false);
 	}
+	
+	@Test
+	public void TestPlayerQueueInitializes() throws NoSuchFieldException, SecurityException {
+		Field field = Game.class.getDeclaredField("prePlayerQueue");
+		field.setAccessible(true);
+
+		Queue prePlayerQueue = new LinkedList<Integer>();
+
+		field.set(game, prePlayerQueue);
+	}
+	
+	@Test
+	public void 
 
 	@Test
 	public void getAdjacentRoadsForStructureTest() {
