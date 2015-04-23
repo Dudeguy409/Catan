@@ -12,8 +12,10 @@ public class RoadManager {
 
 	public ArrayList<HashMap<Integer, RoadPiece>> roadPieceDependencyMaps;
 	public HashMap<Integer, Road> roadDependencyMap;
+	final int playerCount;
 
 	public RoadManager(int playerCount) {
+		this.playerCount = playerCount;
 
 		roadPieceDependencyMaps = new ArrayList<HashMap<Integer, RoadPiece>>();
 		for (int i = 0; i < playerCount; i++) {
@@ -36,6 +38,20 @@ public class RoadManager {
 			}
 		}
 		return max;
+	}
+	
+	public int getPlayerWithLongestRoad() {
+		int maxLength = 0;
+		int winningPlayer = -1;
+		
+		for(int i = 0; i<playerCount; i++) {
+			if(findLongestRoadForPlayer(i)>maxLength) {
+				maxLength = findLongestRoadForPlayer(i);
+				winningPlayer = i;
+			}
+		}
+		
+		return winningPlayer;
 	}
 
 	public int findLongestRoadForRoadPiece(int road, int playerIndex) {

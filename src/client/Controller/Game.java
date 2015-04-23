@@ -214,7 +214,7 @@ public class Game {
 
 	public void addRoad(int playerIndex, int hexId,
 			HexComponent.RoadPosition pos) {
-		// TODO do stuff
+		// TODO keep track of longest road
 		// TODO throw exceptions
 		int roadId = this.hexMgr.getRoadId(hexId, pos);
 		int currentRoadCount = this.roadMgr.getRoadCountForPlayer(playerIndex);
