@@ -135,10 +135,6 @@ public class GameTest {
 	}
 
 	@Test
-	public void testAddResourcesOneCity() {
-		// TODO
-	}
-	
 	public void testAddResourcesOneCity() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
@@ -181,10 +177,6 @@ public class GameTest {
 	}
 
 	@Test
-	public void testThatNoSettlementsAddsNoResources() {
-		// TODO
-	}
-	
 	public void testThatNoSettlementsAddsNoResources() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		game.setUserPanel(new UserPanel(game));
 		game.roll();
