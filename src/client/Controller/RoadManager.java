@@ -40,7 +40,7 @@ public class RoadManager {
 		return max;
 	}
 	
-	public int getPlayerWithLongestRoad() {
+/*	public int getPlayerWithLongestRoad() {
 		int maxLength = 0;
 		int winningPlayer = -1;
 		
@@ -52,7 +52,7 @@ public class RoadManager {
 		}
 		
 		return winningPlayer;
-	}
+	}*/
 
 	public int findLongestRoadForRoadPiece(int road, int playerIndex) {
 		int[] adjacentRoads = roadPieceDependencyMaps.get(playerIndex)

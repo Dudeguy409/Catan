@@ -432,7 +432,7 @@ public class LongestRoadTest {
 		assertEquals("[14, 22, 15, 23]", result);
 	}
 	
-	@Test
+/*	@Test
 	public void testGetPlayerWithLongestRoad() {
 		RoadManager rm = new RoadManager(4);
 		rm.addRoadPieceAtBeginning(3, 29);
@@ -452,5 +452,5 @@ public class LongestRoadTest {
 		rm.addRoadPiece(1, 45);
 		rm.addRoadPiece(1, 41);
 		
-	}
+	}*/
 }

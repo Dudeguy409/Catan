@@ -353,6 +353,23 @@ public class GameTest {
 		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(3), 4);
 	}
 	
+	@Test
+	public void testGetPlayerWithLongestRoadEqualLengths() {
+		// The player with older road should win if roads are the same length.
+		game.addRoad(0, 0, HexComponent.RoadPosition.south);
+		assertEquals(game.getPlayerWithLongestRoad(), 0);
+		
+		game.endTurn();
+		
+		assertEquals(game.getCurrentPlayer(), 1);
+		
+		game.addRoad(1, 0, HexComponent.RoadPosition.northeast);
+		assertEquals(game.getPlayerWithLongestRoad(), 0);
+		game.addRoad(1, 0, HexComponent.RoadPosition.southeast);
+		assertEquals(game.getPlayerWithLongestRoad(), 0);
+		
+	}
+	
 
 
 }
