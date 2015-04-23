@@ -92,8 +92,35 @@ public class GameTest {
 	}
 	
 	@Test
-	public void testThatOneRollAddsResources() {
+	public void testThatOneRollAddsResources() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
 		
+		Player player = new Player();
+		Field woodField = Player.class.getDeclaredField("woodCount");
+		Field brickField = Player.class.getDeclaredField("brickCount");
+		Field woolField = Player.class.getDeclaredField("woolCount");
+		Field wheatField = Player.class.getDeclaredField("wheatCount");
+		woodField.setAccessible(true);
+		brickField.setAccessible(true);
+		woolField.setAccessible(true);
+		wheatField.setAccessible(true);
+		
+		woodField.set(player, 2);
+		brickField.set(player, 2);
+		woolField.set(player, 1);
+		wheatField.set(player, 1);
+		
+		Player[] players = {new Player(), player};
+		field.set(game, players);
+		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.setBuildType(Game.BuildType.settlement);
+		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		//game.roll(2);
+		
+		assertEquals(1, player.getCards()[2]);
 	}
 	
 	@Test
@@ -102,8 +129,40 @@ public class GameTest {
 	}
 	
 	@Test
-	public void testAddResourcesOneCity() {
-		//TODO
+	public void testAddResourcesOneCity() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
+		game.roll();
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+		
+		Player player = new Player();
+		Field woodField = Player.class.getDeclaredField("woodCount");
+		Field brickField = Player.class.getDeclaredField("brickCount");
+		Field woolField = Player.class.getDeclaredField("woolCount");
+		Field wheatField = Player.class.getDeclaredField("wheatCount");
+		Field oreField = Player.class.getDeclaredField("oreCount");
+		woodField.setAccessible(true);
+		brickField.setAccessible(true);
+		woolField.setAccessible(true);
+		wheatField.setAccessible(true);
+		oreField.setAccessible(true);
+		
+		woodField.set(player, 2);
+		brickField.set(player, 2);
+		woolField.set(player, 1);
+		wheatField.set(player, 3);
+		oreField.set(player, 3);
+		
+		Player[] players = {new Player(), player};
+		field.set(game, players);
+		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.setBuildType(Game.BuildType.settlement);
+		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		game.setBuildType(Game.BuildType.city);
+		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		//game.roll(2);
+		assertEquals(2, player.getCards()[2]);
 	}
 	
 	@Test
@@ -134,7 +193,6 @@ public class GameTest {
 	public void testBuyAndBuildRoad() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
-		game.roll();
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 		
@@ -146,9 +204,9 @@ public class GameTest {
 		woodField.set(player, 1);
 		brickField.set(player, 1);
 		
-		Player[] players = {new Player(), new Player(), player};
+		Player[] players = {new Player(), player};
 		field.set(game, players);
-		game.addRoad(game.getCurrentPlayer(), 15, HexComponent.RoadPosition.north);
+		game.addRoad(1, 15, HexComponent.RoadPosition.north);
 		assertEquals(0, woodField.get(player));
 		assertEquals(0, brickField.get(player));
 	}
@@ -157,7 +215,6 @@ public class GameTest {
 	public void testBuyAndBuildSettlement() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
-		game.roll();
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 		
@@ -171,14 +228,16 @@ public class GameTest {
 		woolField.setAccessible(true);
 		wheatField.setAccessible(true);
 		
-		woodField.set(player, 1);
-		brickField.set(player, 1);
+		woodField.set(player, 2);
+		brickField.set(player, 2);
 		woolField.set(player, 1);
 		wheatField.set(player, 1);
 		
-		Player[] players = {new Player(), new Player(), player};
+		Player[] players = {new Player(), player};
 		field.set(game, players);
-		game.addRoad(game.getCurrentPlayer(), 15, HexComponent.RoadPosition.north);
+		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.setBuildType(Game.BuildType.settlement);
+		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
 		assertEquals(0, woodField.get(player));
 		assertEquals(0, brickField.get(player));
 		assertEquals(0, woolField.get(player));
@@ -186,8 +245,43 @@ public class GameTest {
 	}
 	
 	@Test
-	public void testBuyAndBuildCity() {
-		//TODO
+	public void testBuyAndBuildCity() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
+		game.roll();
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+		
+		Player player = new Player();
+		Field woodField = Player.class.getDeclaredField("woodCount");
+		Field brickField = Player.class.getDeclaredField("brickCount");
+		Field woolField = Player.class.getDeclaredField("woolCount");
+		Field wheatField = Player.class.getDeclaredField("wheatCount");
+		Field oreField = Player.class.getDeclaredField("oreCount");
+		woodField.setAccessible(true);
+		brickField.setAccessible(true);
+		woolField.setAccessible(true);
+		wheatField.setAccessible(true);
+		oreField.setAccessible(true);
+		
+		woodField.set(player, 2);
+		brickField.set(player, 2);
+		woolField.set(player, 1);
+		wheatField.set(player, 3);
+		oreField.set(player, 3);
+		
+		Player[] players = {new Player(), player};
+		field.set(game, players);
+		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.setBuildType(Game.BuildType.settlement);
+		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		game.setBuildType(Game.BuildType.city);
+		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		assertEquals(0, woodField.get(player));
+		assertEquals(0, brickField.get(player));
+		assertEquals(0, woolField.get(player));
+		assertEquals(0, wheatField.get(player));
+		assertEquals(0, oreField.get(player));
 	}
 	
 	//TODO Victory Point tests - add more
