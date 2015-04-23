@@ -36,8 +36,12 @@ public class Main {
 		frame.setSize(SIZE);
 		frame.setTitle("Settlers of Catan");
 		frame.setLayout(new FlowLayout());
-		Game game = new Game(playerCount, colors);
+		Game.Resource[] hexResources = HexResourceTypeGenerator.getHexColors(0L);
+		
+		Game game = new Game(playerCount, colors, hexResources);
 		UserPanel myPanel = new UserPanel(game);
+		
+		
 		frame.add(myPanel, FlowLayout.LEFT);
 		BoardRenderer myBoard = new BoardRenderer(game);
 		frame.add(myBoard, FlowLayout.CENTER);
