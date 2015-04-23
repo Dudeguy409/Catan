@@ -6,10 +6,10 @@ import java.util.List;
 import org.junit.Test;
 
 import client.Controller.RoadManager;
-import client.Controller.StructureLocationKey;
 import client.Controller.StructureManager;
 import client.GUI.HexComponent;
 import client.Model.Structure;
+import client.Model.StructureLocationKey;
 
 public class StructurePieceTest {
 	@Test

@@ -1,11 +1,14 @@
 import static org.junit.Assert.*;
+
 import java.util.HashSet;
 import java.util.Map.Entry;
+
 import org.junit.Test;
+
 import client.Controller.HexManager;
-import client.Controller.LocationKey;
-import client.Controller.StructureLocationKey;
 import client.GUI.HexComponent;
+import client.Model.LocationKey;
+import client.Model.StructureLocationKey;
 
 public class HexManagerTest {
 

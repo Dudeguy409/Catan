@@ -1,4 +1,4 @@
-package client.Controller;
+package client.Model;
 
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.RoadPosition;

@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import client.Controller.Game.BuildType;
 import client.Model.Structure;
+import client.Model.StructurePiece;
 
 public class StructureManager {
 

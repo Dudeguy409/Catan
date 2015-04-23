@@ -1,7 +1,10 @@
 package client.Controller;
 
 import java.util.HashMap;
+
 import client.GUI.HexComponent;
+import client.Model.LocationKey;
+import client.Model.StructureLocationKey;
 
 public class HexManager {
 

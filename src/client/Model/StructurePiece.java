@@ -1,4 +1,4 @@
-package client.Controller;
+package client.Model;
 
 import client.Controller.Game.BuildType;
 
@@ -12,7 +12,7 @@ public class StructurePiece {
 		this.type = BuildType.settlement;
 	}
 
-	protected boolean upgrade() {
+	public boolean upgrade() {
 		if (this.type == BuildType.settlement) {
 			this.type = BuildType.city;
 			return true;
