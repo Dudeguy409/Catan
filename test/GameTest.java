@@ -1,16 +1,24 @@
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
+import java.awt.FlowLayout;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javax.swing.JFrame;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import client.Controller.Game;
+import client.Controller.StructureManager;
+import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
+import client.GUI.UserPanel;
+import client.Model.Player;
 
 public class GameTest {
 	Game game;
@@ -25,9 +33,10 @@ public class GameTest {
 		// TODO
 		// assertTrue(false);
 	}
-	
+
 	@Test
-	public void TestPlayerQueueInitializes() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void TestPlayerQueueInitializes() throws NoSuchFieldException,
+			SecurityException, IllegalArgumentException, IllegalAccessException {
 		Field field = Game.class.getDeclaredField("prePlayerQueue");
 		field.setAccessible(true);
 
@@ -81,84 +90,99 @@ public class GameTest {
 		assertTrue(poses.size() == 2);
 
 	}
-	
+
 	@Test
 	public void testThatOneRollAddsResources() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testAddResourcesOneSettlement() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testAddResourcesOneCity() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testAddResourcesOneCityAndOneSettlement() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testThatNoSettlementsAddsNoResources() {
-		//TODO
-		
+		// TODO
+
 	}
-	
+
 	@Test
 	public void testThatNormalGameStartsAfterPreGame() {
-		//TODO
+		// TODO
 	}
-	
-	//Tests for buying things
-	//TODO add tests for buying development cards
+
+	// Tests for buying things
+	// TODO add tests for buying development cards
 	@Test
 	public void testBuyAndBuildRoad() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testBuyAndBuildSettlement() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testBuyAndBuildCity() {
-		//TODO
+		// TODO
 	}
-	
-	//TODO Victory Point tests - add more
+
+	// TODO Victory Point tests - add more
 	@Test
 	public void testVictoryPointForLongestRoad() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testAddOneVictoryPointForOneSettlement() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testAddTwoVictoryPointsForOneCity() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testThatGameEnds() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testThatTurnEnds() {
-		//TODO
+		// TODO
 	}
-	
+
 	@Test
 	public void testPreGameIteration() {
-		//TODO
+		// TODO
+	}
+
+	@Test
+	public void testCalculateVictoryPointsForPlayerFromStructures()
+			throws Exception {
+
+		Player player = new Player();
+		StructureManager sManager = new StructureManager(3);
+
+		sManager.addStructure(0, 30);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 1);
+		
+		sManager.addStructure(0,25);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 2);
+
 	}
 
 }
