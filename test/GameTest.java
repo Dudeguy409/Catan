@@ -174,15 +174,34 @@ public class GameTest {
 	public void testCalculateVictoryPointsForPlayerFromStructures()
 			throws Exception {
 
-		Player player = new Player();
-		StructureManager sManager = new StructureManager(3);
+		StructureManager sManager = new StructureManager(4);
 
 		sManager.addStructure(0, 30);
 		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 1);
 		
 		sManager.addStructure(0,25);
 		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 2);
-
+		
+		sManager.updateStructure(0, 25);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 3);
+		
+		sManager.addStructure(3,3);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 3);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(3), 1);
+		
+		sManager.addStructure(3, 40);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 3);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(3), 2);
+		
+		sManager.updateStructure(3, 3);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 3);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(3), 3);
+		
+		sManager.updateStructure(3, 40);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(0), 3);
+		assertEquals(sManager.calculateStructureVictoyPointsForPlayer(3), 4);
 	}
+	
+
 
 }

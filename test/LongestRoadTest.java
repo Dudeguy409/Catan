@@ -431,4 +431,26 @@ public class LongestRoadTest {
 
 		assertEquals("[14, 22, 15, 23]", result);
 	}
+	
+	@Test
+	public void testGetPlayerWithLongestRoad() {
+		RoadManager rm = new RoadManager(4);
+		rm.addRoadPieceAtBeginning(3, 29);
+		rm.addRoadPiece(3, 24);
+		assertEquals(3, rm.getPlayerWithLongestRoad());
+		
+		rm.addRoadPieceAtBeginning(0, 19);
+		rm.addRoadPiece(0, 22);
+		rm.addRoadPiece(0, 14);
+		rm.addRoadPiece(0, 15);
+		rm.addRoadPiece(0, 23);
+		assertEquals(0, rm.getPlayerWithLongestRoad());
+		
+		rm.addRoadPiece(1, 28);
+		rm.addRoadPiece(1, 32);
+		rm.addRoadPiece(1, 40);
+		rm.addRoadPiece(1, 45);
+		rm.addRoadPiece(1, 41);
+		
+	}
 }
