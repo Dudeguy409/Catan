@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import client.Controller.Game;
+import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.UserPanel;
 import client.Model.Player;
@@ -132,6 +133,7 @@ public class GameTest {
 	@Test
 	public void testBuyAndBuildRoad() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
 		game.roll();
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
@@ -147,13 +149,40 @@ public class GameTest {
 		Player[] players = {new Player(), new Player(), player};
 		field.set(game, players);
 		game.addRoad(game.getCurrentPlayer(), 15, HexComponent.RoadPosition.north);
-		assertEquals(0, woodField);
-		assertEquals(0, brickField);
+		assertEquals(0, woodField.get(player));
+		assertEquals(0, brickField.get(player));
 	}
 	
 	@Test
-	public void testBuyAndBuildSettlement() {
-		//TODO
+	public void testBuyAndBuildSettlement() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
+		game.roll();
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+		
+		Player player = new Player();
+		Field woodField = Player.class.getDeclaredField("woodCount");
+		Field brickField = Player.class.getDeclaredField("brickCount");
+		Field woolField = Player.class.getDeclaredField("woolCount");
+		Field wheatField = Player.class.getDeclaredField("wheatCount");
+		woodField.setAccessible(true);
+		brickField.setAccessible(true);
+		woolField.setAccessible(true);
+		wheatField.setAccessible(true);
+		
+		woodField.set(player, 1);
+		brickField.set(player, 1);
+		woolField.set(player, 1);
+		wheatField.set(player, 1);
+		
+		Player[] players = {new Player(), new Player(), player};
+		field.set(game, players);
+		game.addRoad(game.getCurrentPlayer(), 15, HexComponent.RoadPosition.north);
+		assertEquals(0, woodField.get(player));
+		assertEquals(0, brickField.get(player));
+		assertEquals(0, woolField.get(player));
+		assertEquals(0, wheatField.get(player));
 	}
 	
 	@Test
