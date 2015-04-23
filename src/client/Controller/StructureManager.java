@@ -77,6 +77,19 @@ public class StructureManager {
 		return settlementCount;
 	}
 
+	public int calculateStructureVictoyPointsForPlayer(int playerNumber) {
+		int pointCount = 0;
+		for (Entry<Integer, StructurePiece> e : this.structurePieceMaps.get(
+				playerNumber).entrySet()) {
+			if (e.getValue().getBuildType() == BuildType.settlement) {
+				pointCount++;
+			} else if (e.getValue().getBuildType() == BuildType.city) {
+				pointCount += 2;
+			}
+		}
+		return pointCount;
+	}
+
 	public int getCityCountForPlayer(int playerNumber) {
 		int cityCount = 0;
 		for (Entry<Integer, StructurePiece> e : this.structurePieceMaps.get(
