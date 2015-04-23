@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,18 +8,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import client.Controller.Game;
 import client.GUI.HexComponent;
+import client.GUI.UserPanel;
+import client.Model.Player;
 
 public class GameTest {
 	Game game;
 
 	@Before
 	public void setUp() throws Exception {
-		game = new Game();
+		Color[] colors = {new Color(2), new Color(3)};
+		game = new Game(2, colors);
 	}
 
 	@Test
@@ -87,7 +92,7 @@ public class GameTest {
 	
 	@Test
 	public void testThatOneRollAddsResources() {
-		//TODO
+		
 	}
 	
 	@Test
@@ -106,9 +111,15 @@ public class GameTest {
 	}
 	
 	@Test
-	public void testThatNoSettlementsAddsNoResources() {
-		//TODO
-		
+	public void testThatNoSettlementsAddsNoResources() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		game.setUserPanel(new UserPanel(game));
+		game.roll();
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Player[] players = (Player[])(field.get(game));
+		Player player = players[game.getCurrentPlayer()];
+		assertEquals(0, player.getCards()[6]);
 	}
 	
 	@Test
@@ -119,8 +130,25 @@ public class GameTest {
 	//Tests for buying things
 	//TODO add tests for buying development cards
 	@Test
-	public void testBuyAndBuildRoad() {
-		//TODO
+	public void testBuyAndBuildRoad() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		game.setUserPanel(new UserPanel(game));
+		game.roll();
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+		
+		Player player = new Player();
+		Field woodField = Player.class.getDeclaredField("woodCount");
+		Field brickField = Player.class.getDeclaredField("brickCount");
+		woodField.setAccessible(true);
+		brickField.setAccessible(true);
+		woodField.set(player, 1);
+		brickField.set(player, 1);
+		
+		Player[] players = {new Player(), new Player(), player};
+		field.set(game, players);
+		game.addRoad(game.getCurrentPlayer(), 15, HexComponent.RoadPosition.north);
+		assertEquals(0, woodField);
+		assertEquals(0, brickField);
 	}
 	
 	@Test
