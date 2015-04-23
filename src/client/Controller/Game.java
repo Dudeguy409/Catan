@@ -4,9 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
-import javax.swing.JOptionPane;
-
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.StructurePosition;
@@ -66,7 +63,7 @@ public class Game {
 	private static int[] randomNumberArray = new int[boardSize];
 	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 
-	public Game() {
+	public Game(int playerCount, Color[] pColors) {
 
 		// This array contains all of the roll numbers in the order that they
 		// are always supposed to appear. These are placed in a clockwise inward
@@ -119,75 +116,20 @@ public class Game {
 			}
 		}
 
-		configureNumberOfPlayers();
-		configurePlayerColors();
+		this.numberOfPlayers=playerCount;
+		this.colorArray=pColors;
+		this.players= new Player[this.numberOfPlayers];
+		for(int i = 0; i < this.numberOfPlayers;i++){
+			this.players[i]= new Player();
+		}
 		this.roadMgr = new RoadManager(this.numberOfPlayers);
 		this.hexMgr = new HexManager();
 		this.structMgr = new StructureManager(this.numberOfPlayers);
 	}
 
-	private void configureNumberOfPlayers() {
-		// TODO exitOnClose with warning window
-		Object[] options1 = { "2", "3", "4" };
-		this.numberOfPlayers = JOptionPane.showOptionDialog(null,
-				"How many players are there?", "Setup",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				options1, options1[1]) + 2;
-	}
 
-	private void configurePlayerColors() {
-		// TODO exitOnClose with warningWindow
-		Object[] options2 = { "Red", "Blue", "White", "Magenta", "Orange",
-				"Cyan" };
-		this.players = new Player[this.numberOfPlayers];
-		this.colorArray = new Color[this.numberOfPlayers];
-		for (int i = 0; i < this.numberOfPlayers; i++) {
-			boolean diffColor = true;
-			while (diffColor) {
-				int color = JOptionPane.showOptionDialog(null,
-						"What color would you like, Player " + (i + 1) + "?",
-						"Setup", JOptionPane.DEFAULT_OPTION,
-						JOptionPane.QUESTION_MESSAGE, null, options2, null);
-				diffColor = false;
-				switch (color) {
-				case 0:
-					this.colorArray[i] = Color.red;
-					break;
-				case 1:
-					this.colorArray[i] = Color.blue;
-					break;
-				case 2:
-					this.colorArray[i] = Color.white;
-					break;
-				case 3:
-					this.colorArray[i] = Color.magenta;
-					break;
-				case 4:
-					this.colorArray[i] = Color.orange;
-					break;
-				case 5:
-					this.colorArray[i] = Color.cyan;
-					break;
-				case 6:
-					this.colorArray[i] = Color.black;
-					break;
-				case 7:
-					this.colorArray[i] = Color.red;
-					break;
-				}
-				for (int j = 0; j < i; j++) {
-					if (this.colorArray[i] == this.colorArray[j])
-						diffColor = true;
-					// verifies that the user selects a color that hasn't
-					// already been chosen.
-				}
 
-			}
-
-			this.players[i] = new Player();
-		}
-
-	}
+	
 
 	public void setUserPanel(UserPanel panel) {
 		this.userPanel = panel;
