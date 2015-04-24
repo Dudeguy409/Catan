@@ -75,6 +75,104 @@ public class UserPanel extends JPanel {
 		this.game.setUserPanel(this);
 
 	}
+	
+	
+	public void setCurrentPlayer(int playerIndex) {
+		this.currentPlayer = playerIndex;
+		for (int i = 0; i < this.numberOfPlayers; i++) {
+			if (i == this.currentPlayer) {
+				this.playerLabel[i].setFont(new Font("Times New Roman", 3, 25));
+			} else {
+				this.playerLabel[i].setFont(new Font("Times New Roman", 1, 15));
+			}
+		}
+
+		this.repaint();
+
+	}
+	
+
+	public void setBeginningBuildSettlement() {
+		this.roadButton.setVisible(false);
+		this.settlementButton.setVisible(true);
+	}
+
+	
+	protected void enableGameStart() {
+		this.startButton.setVisible(false);
+		this.buildButton.setVisible(true);
+		this.setCurrentPlayer(this.game.getCurrentPlayer());
+	}
+	
+	protected void displayPriceChartDialog() {
+		ReferenceComponent priceRefComponent = new ReferenceComponent();
+		JPanel pricePanel = new JPanel();
+		pricePanel.add(priceRefComponent);
+		JDialog pricesDialog = new JDialog();
+		pricesDialog.add(pricePanel);
+		pricesDialog.setSize(priceRefComponent.getPreferredSize());
+		pricesDialog.setVisible(true);
+		
+	}
+
+	private void buildCity() {
+		this.game.setBuildType(Game.BuildType.city);
+
+	}
+
+	private void buildRoad() {
+		this.game.setBuildType(Game.BuildType.road);
+	}
+
+	private void buildSettlement() {
+		this.game.setBuildType(Game.BuildType.settlement);
+
+	}
+
+	public void setTurnPhase(Game.TurnPhase phase) {
+		switch (phase) {
+		case preroll:
+			this.rollButton.setEnabled(true);
+			this.buildButton.setEnabled(false);
+			this.endButton.setEnabled(false);
+			this.buildPanel.setVisible(false);
+			break;
+		}
+	}
+
+
+
+	private void endTurn() {
+		this.game.endTurn();
+	}
+
+	private void toggleCardPanel() {
+		if (this.cardsShowed) {
+			this.cardButton.setText("vv Show Cards vv");
+			this.cardPanel.setVisible(false);
+			this.cardsShowed = false;
+		} else {
+			this.cardButton.setText("^^ Hide Cards ^^");
+			this.cardsShowed = true;
+			this.cardPanel.setVisible(true);
+		}
+	}
+
+	public void setRolls(int[] rolls) {
+		this.dice.setDice(rolls[1], rolls[2]);
+		this.rollButton.setEnabled(false);
+		this.buildButton.setEnabled(true);
+		this.endButton.setEnabled(true);
+	}
+
+	private void roll() {
+		this.game.roll();
+	}
+
+	private void drawDevCard() {
+		this.game.drawDevCard();
+	}
+	
 
 	private void addStartGameButton() {
 		this.startButton = new JButton("Start Game");
@@ -88,35 +186,17 @@ public class UserPanel extends JPanel {
 		this.add(startButton);
 	}
 
-	protected void enableGameStart() {
-		this.startButton.setVisible(false);
-		this.buildButton.setVisible(true);
-		this.setCurrentPlayer(this.game.getCurrentPlayer());
-	}
-
 	private void addPricesButton() {
 		this.pricesButton = new JButton("Price Guide");
 		pricesButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ReferenceComponent priceRefComponent = new ReferenceComponent();
-				JPanel pricePanel = new JPanel();
-				pricePanel.add(priceRefComponent);
-				JDialog pricesDialog = new JDialog();
-				pricesDialog.add(pricePanel);
-				pricesDialog.setSize(priceRefComponent.getPreferredSize());
-				pricesDialog.setVisible(true);
 				displayPriceChartDialog();
 			}
 		});
 		pricesButton.setVisible(false);
 		this.add(pricesButton);
-	}
-
-	protected void displayPriceChartDialog() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void addBuildPanel() {
@@ -164,47 +244,7 @@ public class UserPanel extends JPanel {
 		this.add(this.buildPanel);
 
 	}
-
-	public void setCurrentPlayer(int playerIndex) {
-		this.currentPlayer = playerIndex;
-		for (int i = 0; i < this.numberOfPlayers; i++) {
-			if (i == this.currentPlayer) {
-				this.playerLabel[i].setFont(new Font("Times New Roman", 3, 25));
-			} else {
-				this.playerLabel[i].setFont(new Font("Times New Roman", 1, 15));
-			}
-		}
-
-		this.repaint();
-
-	}
-
-	private void buildCity() {
-		this.game.setBuildType(Game.BuildType.city);
-
-	}
-
-	private void buildRoad() {
-		this.game.setBuildType(Game.BuildType.road);
-
-	}
-
-	private void buildSettlement() {
-		this.game.setBuildType(Game.BuildType.settlement);
-
-	}
-
-	public void setTurnPhase(Game.TurnPhase phase) {
-		switch (phase) {
-		case preroll:
-			this.rollButton.setEnabled(true);
-			this.buildButton.setEnabled(false);
-			this.endButton.setEnabled(false);
-			this.buildPanel.setVisible(false);
-			break;
-		}
-	}
-
+	
 	private void addTurnPanel() {
 		// this section creates the panel for the player's actions/choices. You
 		// must roll. Afterwards, you can build or end your turn.
@@ -223,9 +263,7 @@ public class UserPanel extends JPanel {
 		this.buildButton = new JButton("Build");
 		this.buildButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				UserPanel.this.buildPanel.setVisible(true);
-				UserPanel.this.buildButton.setEnabled(false);
-				// the dice are removed to make room for the build/buy options.
+				enableBuild();
 			}
 		});
 		this.endButton = new JButton("End Turn");
@@ -245,6 +283,25 @@ public class UserPanel extends JPanel {
 		this.add(turnPanel);
 
 	}
+
+	protected void enableBuild() {
+		this.buildPanel.setVisible(true);
+		this.buildButton.setEnabled(false);
+		if(game.isBeginningOfGame()){
+			if(game.hasBuiltRoad()){
+				this.settlementButton.setVisible(true);
+			}else{
+				this.roadButton.setVisible(true);
+			}
+		
+		}else{
+			this.settlementButton.setVisible(true);
+			this.cityButton.setVisible(true);
+			this.devButton.setVisible(true);
+			this.roadButton.setVisible(true);
+		}
+	}
+
 
 	private void addCardButton() {
 		// creates a button which allows the user to hide their cards. It
@@ -333,35 +390,14 @@ public class UserPanel extends JPanel {
 		this.add(currentPlayerLabel);
 	}
 
-	private void endTurn() {
-		this.game.endTurn();
+
+	public void resetBeginningMode() {
+		this.settlementButton.setVisible(false);
+		this.enableGameStart();
+		
 	}
 
-	private void toggleCardPanel() {
-		if (this.cardsShowed) {
-			this.cardButton.setText("vv Show Cards vv");
-			this.cardPanel.setVisible(false);
-			this.cardsShowed = false;
-		} else {
-			this.cardButton.setText("^^ Hide Cards ^^");
-			this.cardsShowed = true;
-			this.cardPanel.setVisible(true);
-		}
-	}
 
-	public void setRolls(int[] rolls) {
-		this.dice.setDice(rolls[1], rolls[2]);
-		this.rollButton.setEnabled(false);
-		this.buildButton.setEnabled(true);
-		this.endButton.setEnabled(true);
-	}
-
-	private void roll() {
-		this.game.roll();
-	}
-
-	private void drawDevCard() {
-		this.game.drawDevCard();
-	}
+	
 
 }

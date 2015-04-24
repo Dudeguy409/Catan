@@ -3,7 +3,9 @@ package client.Controller;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
@@ -49,7 +51,7 @@ public class Game {
 	private BoardRenderer board;
 	private UserPanel userPanel;
 	private TurnPhase currentTurnPhase = TurnPhase.build;
-	private BuildType currentBuildType = BuildType.city;
+	private BuildType currentBuildType = BuildType.none;
 	private int currentPlayer;
 	private Player[] players;
 	private Color[] colorArray;
@@ -62,6 +64,7 @@ public class Game {
 	private int maxRoadLength = 0;
 	private int playerWithLongestRoad = -1;
 	private boolean preGameMode = true;
+	private boolean hasBuiltRoad = false;
 	private ArrayList<Hex> hexArray;
 
 	/**
@@ -74,7 +77,7 @@ public class Game {
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
 			int startingPlayer) {
 
-		this.currentPlayer=startingPlayer;
+		this.currentPlayer = startingPlayer;
 		this.randomColorArray = hexResources;
 		this.dice = dice;
 
@@ -119,8 +122,18 @@ public class Game {
 	}
 
 	private void generateStartingTurnsQueue() {
-		this.startingTurnsQueue = null;
-
+		this.startingTurnsQueue = new LinkedList<Integer>();
+		Stack<Integer> reverseOrder = new Stack<Integer>();
+		for (int i = 0; i < this.numberOfPlayers; i++) {
+			int index = i+this.currentPlayer%this.numberOfPlayers;
+			this.startingTurnsQueue.add(index);
+			reverseOrder.push(index);
+		}
+		
+		for (int i = 0; i < this.numberOfPlayers; i++) {
+			this.startingTurnsQueue.add(reverseOrder.pop());
+		}
+		this.startingTurnsQueue.poll();
 	}
 
 	public void setUserPanel(UserPanel panel) {
@@ -145,12 +158,12 @@ public class Game {
 		return this.currentPlayer;
 	}
 
-	public void addRoad(int playerIndex, int hexId,
+	public boolean addRoad(int playerIndex, int hexId,
 			HexComponent.RoadPosition pos) {
 		// TODO throw exceptions
 		int roadId = this.hexMgr.getRoadId(hexId, pos);
 		int currentRoadCount = this.roadMgr.getRoadCountForPlayer(playerIndex);
-		if (currentRoadCount == 0) {
+		if (currentRoadCount < 2) {
 			this.roadMgr.addRoadPieceAtBeginning(playerIndex, roadId);
 		} else {
 			this.roadMgr.addRoadPiece(playerIndex, roadId);
@@ -167,7 +180,7 @@ public class Game {
 		}
 	}
 
-	public void addBuilding(int playerIndex, int hexId,
+	public boolean addBuilding(int playerIndex, int hexId,
 			HexComponent.StructurePosition pos) {
 		// TODO do stuff
 		// TODO throw exceptions
@@ -276,7 +289,7 @@ public class Game {
 	}
 
 	public boolean hasAdjacentRoad(int structureId) {
-
+//TODO remove???
 		return false;
 	}
 
@@ -326,11 +339,6 @@ public class Game {
 		return playerWithLongestRoad;
 	}
 
-	public void processStartGameClick() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public int getVictoryPointsForPlayer(int playerNumber) {
 		int points = 0;
 		if (playerWithLongestRoad == playerNumber) {
@@ -361,6 +369,21 @@ public class Game {
 			}
 		} else
 			addBuilding(this.currentPlayer, hexID, pos);
+		proceedWithBeginningPhase();
+	}
+
+	private void proceedWithBeginningPhase() {
+		if(this.startingTurnsQueue.isEmpty()){
+			this.preGameMode=false;
+			//TODO continue with game
+		}else{
+			int playerIndex = this.startingTurnsQueue.poll();
+			this.hasBuiltRoad=false;
+			this.currentBuildType=BuildType.none;
+			this.currentPlayer=playerIndex;
+			this.userPanel.resetBeginningMode();
+		}
+
 	}
 
 	public void processBuildRoadClick(int hexID, HexComponent.RoadPosition pos) {
@@ -371,19 +394,36 @@ public class Game {
 				cp.adjustCards(delta);
 				addRoad(this.currentPlayer, hexID, pos);
 			}
-		} else 
+		} else {
+			if (hasBuiltRoad) {
+				// ERROR!!!
+				this.userPanel.setBeginningBuildSettlement();
+			} else {
+				// TODO add boolean return type to add road
 				addRoad(this.currentPlayer, hexID, pos);
+				this.hasBuiltRoad = true;
+				this.userPanel.setBeginningBuildSettlement();
+			}
+
+		}
 	}
 
-	// Returns the number of the winning player. If no player has won yet, it returns -1.
+	// Returns the number of the winning player. If no player has won yet, it
+	// returns -1.
 	public int checkVictory() {
-		for(int i = 0; i < numberOfPlayers; i++) {
-			if(getVictoryPointsForPlayer(i)>=10) {
+		for (int i = 0; i < numberOfPlayers; i++) {
+			if (getVictoryPointsForPlayer(i) >= 10) {
 				return i;
 			}
 		}
 		return -1;
 	}
+
+	public boolean isBeginningOfGame() {
+		return this.preGameMode;
+	}
+
+	public boolean hasBuiltRoad() {
+		return this.hasBuiltRoad;
+	}
 }
-
-
