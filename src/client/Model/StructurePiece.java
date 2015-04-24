@@ -11,6 +11,7 @@ public class StructurePiece {
 	public StructurePiece(int id, int playerIndex) {
 		this.id = id;
 		this.type = BuildType.settlement;
+		this.playerIndex=playerIndex;
 	}
 
 	public boolean upgrade() {

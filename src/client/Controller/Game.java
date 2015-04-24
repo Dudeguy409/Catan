@@ -202,6 +202,7 @@ public class Game {
 
 	public boolean addBuilding(int playerIndex, int hexId,
 			HexComponent.StructurePosition pos) {
+		//System.out.println("current Player: "+(playerIndex+1));
 		// TODO throw exceptions
 
 		// Check for adjacent road not returned by
@@ -285,8 +286,7 @@ public class Game {
 		int[] rolls = this.dice.rollDice();
 		this.userPanel.setRolls(rolls);
 
-		int roll = rolls[0] + rolls[1];
-
+		int roll = rolls[0];
 		ArrayList<Hex> rolledHexes = findRolledHexes(roll);
 
 		for (int i = 0; i < rolledHexes.size(); i++) {
@@ -314,6 +314,13 @@ public class Game {
 						.getStructurePiece(structPositions[j]);
 
 				if (p != null) {
+//					System.out.println("Structure: player "
+//							+ (1 + p.getPlayerIndex()) + ", buildType: "
+//							+ p.getBuildType() + "resource: "
+//							+ hex.getResource() + ", structure id: "
+//							+ p.getStructureId() + ", hex id: "
+//							+ hex.getHexID() + ", hex roll number: "
+//							+ hex.getRollNumber());
 					int cardsToAdd = 0;
 					if (p.getBuildType() == BuildType.city) {
 						cardsToAdd = 2;
@@ -555,8 +562,8 @@ public class Game {
 	public int getRoadCountForPlayer(int playerIndex) {
 		return this.roadMgr.getRoadCountForPlayer(playerIndex);
 	}
-	
-	private void updateUserPanelCards(){
+
+	private void updateUserPanelCards() {
 		this.userPanel.updateResourceCards(this.players[this.currentPlayer]
 				.getCards());
 	}

@@ -50,7 +50,7 @@ public class StructureManager {
 			throw new Exception(
 					"a structure already exists immediately adjacent to the selected location");
 		}
-
+		
 		// actually add the structure
 		this.structurePieceMaps.get(playerNumber).put(structureId,
 				new StructurePiece(structureId, playerNumber));
