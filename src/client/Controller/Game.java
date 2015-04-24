@@ -378,4 +378,16 @@ public class Game {
 		} else
 			addRoad(this.currentPlayer, hexID, pos);
 	}
+
+	// Returns the number of the winning player. If no player has won yet, it returns -1.
+	public int checkVictory() {
+		for(int i = 0; i < numberOfPlayers; i++) {
+			if(getVictoryPointsForPlayer(i)>=10) {
+				return i;
+			}
+		}
+		return -1;
+	}
 }
+
+
