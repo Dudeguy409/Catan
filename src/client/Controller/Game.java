@@ -58,6 +58,8 @@ public class Game {
 	private StructureManager structMgr;
 	private IDice dice;
 	private Queue<Integer> startingTurnsQueue;
+	private int maxRoadLength=0;
+	private int playerWithLongestRoad;
 
 	/**
 	 * The number of hexes on the field.
@@ -137,7 +139,6 @@ public class Game {
 
 	public void addRoad(int playerIndex, int hexId,
 			HexComponent.RoadPosition pos) {
-		// TODO keep track of longest road
 		// TODO throw exceptions
 		int roadId = this.hexMgr.getRoadId(hexId, pos);
 		int currentRoadCount = this.roadMgr.getRoadCountForPlayer(playerIndex);
@@ -149,6 +150,12 @@ public class Game {
 		if (this.roadMgr.getRoadCountForPlayer(playerIndex) > currentRoadCount) {
 			this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
 					BuildType.road);
+		}
+		
+		// TODO keep track of longest road
+		if(roadMgr.findLongestRoadForPlayer(currentPlayer)>maxRoadLength) {
+			maxRoadLength = roadMgr.findLongestRoadForPlayer(currentPlayer);
+			playerWithLongestRoad = currentPlayer;
 		}
 	}
 
@@ -303,5 +310,9 @@ public class Game {
 			return null;
 		}
 
+	}
+
+	public Object getPlayerWithLongestRoad() {
+		return playerWithLongestRoad;
 	}
 }
