@@ -3,6 +3,7 @@ package client.Controller;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Queue;
 
 import javax.swing.JOptionPane;
@@ -14,6 +15,8 @@ import client.GUI.UserPanel;
 import client.Model.Hex;
 import client.Model.Player;
 import client.Model.RoadPiece;
+import client.Model.StructureLocationKey;
+import client.Model.StructurePiece;
 
 public class Game {
 
@@ -251,6 +254,42 @@ public class Game {
 	public void roll() {
 		int[] rolls = this.dice.rollDice();
 		this.userPanel.setRolls(rolls);
+
+		int roll = rolls[0] + rolls[1];
+		ArrayList<Hex> rolled = new ArrayList<Hex>();
+		for (Hex hex : this.hexArray) {
+			if (hex.getRollNumber() == roll) {
+				rolled.add(hex);
+			}
+		}
+
+		HashSet<Integer> posStruct = new HashSet<Integer>();
+
+		for (Hex hex : rolled) {
+			int hexID = this.hexArray.indexOf(hex);
+			posStruct.add(this.hexMgr.getStructureId(hexID,
+					HexComponent.StructurePosition.east));
+			posStruct.add(this.hexMgr.getStructureId(hexID,
+					HexComponent.StructurePosition.northeast));
+			posStruct.add(this.hexMgr.getStructureId(hexID,
+					HexComponent.StructurePosition.northwest));
+			posStruct.add(this.hexMgr.getStructureId(hexID,
+					HexComponent.StructurePosition.southeast));
+			posStruct.add(this.hexMgr.getStructureId(hexID,
+					HexComponent.StructurePosition.southwest));
+			posStruct.add(this.hexMgr.getStructureId(hexID,
+					HexComponent.StructurePosition.west));
+		}
+
+		for (HashMap<Integer, StructurePiece> map : this.structMgr.structurePieceMaps) {
+			for (int pos : posStruct) {
+				if (map.containsKey(pos)) {
+					if (map.get(pos).getBuildType().equals(BuildType.settlement)) {
+						Player player = this.players[this.structMgr.structurePieceMaps.indexOf(map)];
+					}
+				}
+			}
+		}
 	}
 
 	public void drawDevCard() {
@@ -382,8 +421,8 @@ public class Game {
 				cp.adjustCards(delta);
 				addRoad(this.currentPlayer, hexID, pos);
 			}
-		} else 
-				addRoad(this.currentPlayer, hexID, pos);
+		} else
+			addRoad(this.currentPlayer, hexID, pos);
 	}
 
 	// Returns the number of the winning player. If no player has won yet, it
