@@ -58,8 +58,9 @@ public class Game {
 	private StructureManager structMgr;
 	private IDice dice;
 	private Queue<Integer> startingTurnsQueue;
-	private int maxRoadLength=0;
+	private int maxRoadLength = 0;
 	private int playerWithLongestRoad;
+	private boolean preGameMode = true;
 
 	/**
 	 * The number of hexes on the field.
@@ -73,7 +74,7 @@ public class Game {
 
 		this.randomColorArray = hexResources;
 		this.dice = dice;
-		
+
 		generateStartingTurnsQueue();
 
 		// This array contains all of the roll numbers in the order that they
@@ -111,7 +112,7 @@ public class Game {
 
 	private void generateStartingTurnsQueue() {
 		this.startingTurnsQueue = null;
-		
+
 	}
 
 	public void setUserPanel(UserPanel panel) {
@@ -151,9 +152,9 @@ public class Game {
 			this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
 					BuildType.road);
 		}
-		
+
 		// TODO keep track of longest road
-		if(roadMgr.findLongestRoadForPlayer(currentPlayer)>maxRoadLength) {
+		if (roadMgr.findLongestRoadForPlayer(currentPlayer) > maxRoadLength) {
 			maxRoadLength = roadMgr.findLongestRoadForPlayer(currentPlayer);
 			playerWithLongestRoad = currentPlayer;
 		}
@@ -318,9 +319,32 @@ public class Game {
 		}
 		return playerWithLongestRoad;
 	}
-	
+
 	public void processStartGameClick() {
 		// TODO Auto-generated method stub
-		
+	}
+
+	public void processBuildClick(int hexID, HexComponent.StructurePosition pos) {
+		if (this.preGameMode != true) {
+			if (this.currentTurnPhase == Game.TurnPhase.build)
+				checkCards(hexID, pos);
+		}
+	}
+
+	private void checkCards(int hexID, HexComponent.StructurePosition pos) {
+		Player cp = players[this.currentPlayer];
+		switch (this.currentBuildType) {
+		case city:
+			if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3)
+				addBuilding(this.currentPlayer, hexID, pos);
+		case settlement:
+			if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1 && cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1)
+				addBuilding(this.currentPlayer, hexID, pos);
+		case road:
+			if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1)
+				addBuilding(this.currentPlayer, hexID, pos);
+		default:
+			break;
+		}
 	}
 }

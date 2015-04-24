@@ -50,7 +50,7 @@ public class GameTest {
 				Resource.sheep };
 		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 1);
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0);
 	}
 
 	public void setUpGameDavis() throws Exception {
@@ -74,9 +74,9 @@ public class GameTest {
 	}
 
 	@Test
-	public void TestPlayerQueueInitializes() throws NoSuchFieldException,
-			SecurityException, IllegalArgumentException, IllegalAccessException {
-		Field field = Game.class.getDeclaredField("prePlayerQueue");
+	public void TestPlayerQueueInitializes() throws Exception {
+		setUpGameEthan();
+		Field field = Game.class.getDeclaredField("startingTurnsQueue");
 		field.setAccessible(true);
 
 		Queue<Integer> prePlayerQueue = (LinkedList<Integer>) (field.get(game));
@@ -134,8 +134,8 @@ public class GameTest {
 	}
 
 	@Test
-	public void testThatOneRollAddsResources() throws NoSuchFieldException,
-			SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void testThatOneRollAddsResources() throws Exception {
+		setUpGameEthan();
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
 		Field field = Game.class.getDeclaredField("players");
@@ -161,19 +161,14 @@ public class GameTest {
 		game.addRoad(1, 15, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
 		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
-		// game.roll(2);
+		game.roll();
 
 		assertEquals(1, player.getCards()[2]);
 	}
 
 	@Test
-	public void testAddResourcesOneSettlement() {
-		// TODO
-	}
-
-	@Test
-	public void testAddResourcesOneCity() throws IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException {
+	public void testAddResourcesOneCity() throws Exception {
+		setUpGameEthan();
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
 		game.roll();
@@ -205,7 +200,7 @@ public class GameTest {
 		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
 		game.setBuildType(Game.BuildType.city);
 		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
-		// game.roll(2);
+		game.roll();
 		assertEquals(2, player.getCards()[2]);
 	}
 
@@ -216,8 +211,8 @@ public class GameTest {
 
 	@Test
 	public void testThatNoSettlementsAddsNoResources()
-			throws NoSuchFieldException, SecurityException,
-			IllegalArgumentException, IllegalAccessException {
+			throws Exception {
+		setUpGameEthan();
 		game.setUserPanel(new UserPanel(game));
 		game.roll();
 		Field field = Game.class.getDeclaredField("players");
@@ -246,8 +241,8 @@ public class GameTest {
 	// Tests for buying things
 	// TODO add tests for buying development cards
 	@Test
-	public void testBuyAndBuildRoad() throws NoSuchFieldException,
-			SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void testBuyAndBuildRoad() throws Exception {
+		setUpGameEthan();
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
 		Field field = Game.class.getDeclaredField("players");
@@ -269,8 +264,8 @@ public class GameTest {
 	}
 
 	@Test
-	public void testBuyAndBuildSettlement() throws NoSuchFieldException,
-			SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void testBuyAndBuildSettlement() throws Exception {
+		setUpGameEthan();
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
 		Field field = Game.class.getDeclaredField("players");
@@ -303,8 +298,8 @@ public class GameTest {
 	}
 
 	@Test
-	public void testBuyAndBuildCity() throws NoSuchFieldException,
-			SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void testBuyAndBuildCity() throws Exception {
+		setUpGameEthan();
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
 		game.roll();
