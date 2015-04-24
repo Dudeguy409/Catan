@@ -3,8 +3,11 @@ package client.Controller;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.Random;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
 import client.GUI.BoardRenderer;
 import client.GUI.UserPanel;
 
@@ -36,12 +39,12 @@ public class Main {
 		frame.setSize(SIZE);
 		frame.setTitle("Settlers of Catan");
 		frame.setLayout(new FlowLayout());
-		Game.Resource[] hexResources = HexResourceTypeGenerator.getHexColors(0L);
-		
-		Game game = new Game(playerCount, colors, hexResources);
+		Game.Resource[] hexResources = HexResourceTypeGenerator
+				.getHexColors(new Random().nextLong());
+
+		Game game = new Game(playerCount, colors, hexResources, new Dice());
 		UserPanel myPanel = new UserPanel(game);
-		
-		
+
 		frame.add(myPanel, FlowLayout.LEFT);
 		BoardRenderer myBoard = new BoardRenderer(game);
 		frame.add(myBoard, FlowLayout.CENTER);
@@ -97,8 +100,8 @@ public class Main {
 					System.out.println(rslt);
 					if (rslt != 2) {
 						System.exit(0);
-					}else{
-						diffColor=false;
+					} else {
+						diffColor = false;
 					}
 				}
 

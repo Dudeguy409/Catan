@@ -1,7 +1,7 @@
 package client.Controller;
 
 
-public class Dice {
+public class Dice implements IDice {
 
 	private Die firstDie;
 	private Die secondDie;

@@ -3,7 +3,6 @@ package client.Controller;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.StructurePosition;
@@ -55,6 +54,7 @@ public class Game {
 	private RoadManager roadMgr;
 	private HexManager hexMgr;
 	private StructureManager structMgr;
+	private IDice dice;
 
 	/**
 	 * The number of hexes on the field.
@@ -63,15 +63,18 @@ public class Game {
 	private static int[] randomNumberArray = new int[boardSize];
 	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 
-	public Game(int playerCount, Color[] pColors, Resource[] hexResources) {
+	public Game(int playerCount, Color[] pColors, Resource[] hexResources, IDice dice) {
 
+		this.randomColorArray = hexResources;
+		this.dice = dice;
+		
 		// This array contains all of the roll numbers in the order that they
 		// are always supposed to appear. These are placed in a clockwise inward
 		// spiral starting at the bottom hex.
 		int[] rollNumberArray = { 5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4,
 				5, 6, 3, 11 };
 
-		this.randomColorArray = hexResources;
+		
 
 		// adjusts the rollNumberArray to include a -1 in the right spot to
 		// represent a desert.
@@ -220,7 +223,7 @@ public class Game {
 	}
 
 	public void roll() {
-		int[] rolls = new Dice().rollDice();
+		int[] rolls = this.dice.rollDice();
 		this.userPanel.setRolls(rolls);
 
 	}
