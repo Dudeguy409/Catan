@@ -27,7 +27,7 @@ import client.Model.Player;
 public class GameTest {
 	Game game;
 	
-	public void setUpGameA() throws Exception {
+	public void setUpGameEthan() throws Exception {
 		Color[] colors = { new Color(2), new Color(3), new Color(40)  };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
@@ -40,7 +40,7 @@ public class GameTest {
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0);
 	}
 	
-	public void setUpGameB() throws Exception {
+	public void setUpGameAndrew() throws Exception {
 		Color[] colors = { new Color(2), new Color(3) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
@@ -53,7 +53,7 @@ public class GameTest {
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 1);
 	}
 	
-	public void setUpGameC() throws Exception {
+	public void setUpGameDavis() throws Exception {
 		Color[] colors = { new Color(2), new Color(3), new Color(32), new Color(55) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
