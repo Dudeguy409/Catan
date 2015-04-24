@@ -315,4 +315,9 @@ public class Game {
 	public Object getPlayerWithLongestRoad() {
 		return playerWithLongestRoad;
 	}
+	
+	public void processStartGameClick() {
+		// TODO Auto-generated method stub
+		
+	}
 }
