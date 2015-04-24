@@ -511,12 +511,7 @@ public class Game {
 					this.userPanel.setBeginningBuildSettlement();
 				}
 			}
-
 		}
-
-		// } else
-		//	addRoad(this.currentPlayer, hexID, pos);
-
 	}
 
 	// Returns the number of the winning player. If no player has won yet, it
