@@ -1,7 +1,6 @@
 import static org.junit.Assert.*;
 
 import java.awt.FlowLayout;
-
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -406,20 +405,30 @@ public class GameTest {
 	}
 
 	@Test
-	public void testGetPlayerWithLongestRoadEqualLengths() {
+	public void testGetPlayerWithLongestRoadEqualLengths() throws Exception {
 		// The player with older road should win if roads are the same length.
+		
+		setUpGameC();
+		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
+		
+		assertEquals(null, game.getPlayerWithLongestRoad());
+		
 		game.addRoad(0, 0, HexComponent.RoadPosition.south);
-		assertEquals(game.getPlayerWithLongestRoad(), 0);
+		assertEquals(0, game.getPlayerWithLongestRoad());
 
 		game.endTurn();
 
 		assertEquals(game.getCurrentPlayer(), 1);
 
 		game.addRoad(1, 0, HexComponent.RoadPosition.northeast);
-		assertEquals(game.getPlayerWithLongestRoad(), 0);
+		assertEquals(0, game.getPlayerWithLongestRoad());
 		game.addRoad(1, 0, HexComponent.RoadPosition.southeast);
-		assertEquals(game.getPlayerWithLongestRoad(), 0);
-
+		assertEquals(1, game.getPlayerWithLongestRoad());
+		
+		game.addRoad(0, 0, HexComponent.RoadPosition.southwest);
+		assertEquals(1, game.getPlayerWithLongestRoad());
+		
 	}
 
 }
