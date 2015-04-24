@@ -182,9 +182,9 @@ public class Game {
 		}
 
 		// TODO keep track of longest road
-		if (roadMgr.findLongestRoadForPlayer(currentPlayer) > maxRoadLength) {
-			maxRoadLength = roadMgr.findLongestRoadForPlayer(currentPlayer);
-			playerWithLongestRoad = currentPlayer;
+		if (roadMgr.findLongestRoadForPlayer(playerIndex) > maxRoadLength) {
+			maxRoadLength = roadMgr.findLongestRoadForPlayer(playerIndex);
+			playerWithLongestRoad = playerIndex;
 		}
 		return roadAdded;
 	}
@@ -462,8 +462,8 @@ public class Game {
 
 	public int getVictoryPointsForPlayer(int playerNumber) {
 		int points = 0;
-		if (playerWithLongestRoad == playerNumber) {
-			points++;
+		if (maxRoadLength >= 5 && playerWithLongestRoad == playerNumber) {
+			points+=2;
 		}
 		points += structMgr
 				.calculateStructureVictoyPointsForPlayer(playerNumber);
