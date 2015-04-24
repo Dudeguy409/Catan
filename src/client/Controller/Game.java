@@ -3,6 +3,8 @@ package client.Controller;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Queue;
+
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.StructurePosition;
@@ -55,6 +57,7 @@ public class Game {
 	private HexManager hexMgr;
 	private StructureManager structMgr;
 	private IDice dice;
+	private Queue<Integer> startingTurnsQueue;
 
 	/**
 	 * The number of hexes on the field.
@@ -63,18 +66,19 @@ public class Game {
 	private static int[] randomNumberArray = new int[boardSize];
 	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 
-	public Game(int playerCount, Color[] pColors, Resource[] hexResources, IDice dice) {
+	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
+			int startingPlayer) {
 
 		this.randomColorArray = hexResources;
 		this.dice = dice;
 		
+		generateStartingTurnsQueue();
+
 		// This array contains all of the roll numbers in the order that they
 		// are always supposed to appear. These are placed in a clockwise inward
 		// spiral starting at the bottom hex.
 		int[] rollNumberArray = { 5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4,
 				5, 6, 3, 11 };
-
-		
 
 		// adjusts the rollNumberArray to include a -1 in the right spot to
 		// represent a desert.
@@ -92,8 +96,8 @@ public class Game {
 			}
 		}
 
-		this.numberOfPlayers = playerCount;
 		this.colorArray = pColors;
+		this.numberOfPlayers = this.colorArray.length;
 		this.players = new Player[this.numberOfPlayers];
 		for (int i = 0; i < this.numberOfPlayers; i++) {
 			this.players[i] = new Player();
@@ -101,6 +105,11 @@ public class Game {
 		this.roadMgr = new RoadManager(this.numberOfPlayers);
 		this.hexMgr = new HexManager();
 		this.structMgr = new StructureManager(this.numberOfPlayers);
+	}
+
+	private void generateStartingTurnsQueue() {
+		this.startingTurnsQueue = null;
+		
 	}
 
 	public void setUserPanel(UserPanel panel) {
