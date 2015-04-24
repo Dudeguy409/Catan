@@ -75,8 +75,7 @@ public class UserPanel extends JPanel {
 		this.game.setUserPanel(this);
 
 	}
-	
-	
+
 	public void setCurrentPlayer(int playerIndex) {
 		this.currentPlayer = playerIndex;
 		for (int i = 0; i < this.numberOfPlayers; i++) {
@@ -90,20 +89,18 @@ public class UserPanel extends JPanel {
 		this.repaint();
 
 	}
-	
 
 	public void setBeginningBuildSettlement() {
 		this.roadButton.setVisible(false);
 		this.settlementButton.setVisible(true);
 	}
 
-	
 	protected void enableGameStart() {
 		this.startButton.setVisible(false);
 		this.buildButton.setVisible(true);
 		this.setCurrentPlayer(this.game.getCurrentPlayer());
 	}
-	
+
 	protected void displayPriceChartDialog() {
 		ReferenceComponent priceRefComponent = new ReferenceComponent();
 		JPanel pricePanel = new JPanel();
@@ -112,7 +109,7 @@ public class UserPanel extends JPanel {
 		pricesDialog.add(pricePanel);
 		pricesDialog.setSize(priceRefComponent.getPreferredSize());
 		pricesDialog.setVisible(true);
-		
+
 	}
 
 	private void buildCity() {
@@ -139,8 +136,6 @@ public class UserPanel extends JPanel {
 			break;
 		}
 	}
-
-
 
 	private void endTurn() {
 		this.game.endTurn();
@@ -172,7 +167,6 @@ public class UserPanel extends JPanel {
 	private void drawDevCard() {
 		this.game.drawDevCard();
 	}
-	
 
 	private void addStartGameButton() {
 		this.startButton = new JButton("Start Game");
@@ -244,7 +238,7 @@ public class UserPanel extends JPanel {
 		this.add(this.buildPanel);
 
 	}
-	
+
 	private void addTurnPanel() {
 		// this section creates the panel for the player's actions/choices. You
 		// must roll. Afterwards, you can build or end your turn.
@@ -287,21 +281,20 @@ public class UserPanel extends JPanel {
 	protected void enableBuild() {
 		this.buildPanel.setVisible(true);
 		this.buildButton.setEnabled(false);
-		if(game.isBeginningOfGame()){
-			if(game.hasBuiltRoad()){
+		if (game.isBeginningOfGame()) {
+			if (game.hasBuiltRoad()) {
 				this.settlementButton.setVisible(true);
-			}else{
+			} else {
 				this.roadButton.setVisible(true);
 			}
-		
-		}else{
+
+		} else {
 			this.settlementButton.setVisible(true);
 			this.cityButton.setVisible(true);
 			this.devButton.setVisible(true);
 			this.roadButton.setVisible(true);
 		}
 	}
-
 
 	private void addCardButton() {
 		// creates a button which allows the user to hide their cards. It
@@ -390,14 +383,24 @@ public class UserPanel extends JPanel {
 		this.add(currentPlayerLabel);
 	}
 
-
 	public void resetBeginningMode() {
 		this.settlementButton.setVisible(false);
 		this.buildButton.setEnabled(true);
-		this.setCurrentPlayer(this.game.getCurrentPlayer());	
+		this.setCurrentPlayer(this.game.getCurrentPlayer());
 	}
 
+	public void setupNormalGame() {
+		this.endButton.setVisible(true);
+		this.rollButton.setVisible(true);
+		this.cardButton.setVisible(true);
+		this.pricesButton.setVisible(true);
+		this.settlementButton.setVisible(true);
+		this.roadButton.setVisible(true);
+		this.devButton.setVisible(true);
+		this.cityButton.setVisible(true);
+		this.dice.setVisible(true);
+		this.setTurnPhase(Game.TurnPhase.preroll);
 
-	
+	}
 
 }

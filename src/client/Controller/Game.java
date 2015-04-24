@@ -307,11 +307,6 @@ public class Game {
 		return this.numberOfPlayers;
 	}
 
-	public boolean hasAdjacentRoad(int structureId) {
-		// TODO remove???
-		return false;
-	}
-
 	public HexComponent.RoadPosition[] getAdjacentRoadPositionsForStructure(
 			StructurePosition pos) {
 		switch (pos) {
@@ -433,7 +428,8 @@ public class Game {
 	private void proceedWithBeginningPhase() {
 		if (this.startingTurnsQueue.isEmpty()) {
 			this.preGameMode = false;
-			// TODO continue with game
+			this.currentBuildType = BuildType.none;
+			this.userPanel.setupNormalGame();
 		} else {
 			int playerIndex = this.startingTurnsQueue.poll();
 			this.hasBuiltRoad = false;
