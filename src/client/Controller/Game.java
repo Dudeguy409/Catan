@@ -9,6 +9,7 @@ import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.StructurePosition;
 import client.GUI.UserPanel;
+import client.Model.Hex;
 import client.Model.Player;
 import client.Model.RoadPiece;
 
@@ -61,6 +62,7 @@ public class Game {
 	private int maxRoadLength = 0;
 	private int playerWithLongestRoad = -1;
 	private boolean preGameMode = true;
+	private ArrayList<Hex> hexArray;
 
 	/**
 	 * The number of hexes on the field.
@@ -97,6 +99,11 @@ public class Game {
 					randomNumberArray[i] = rollNumberArray[i - 1];
 				}
 			}
+		}
+
+		this.hexArray = new ArrayList<Hex>();
+		for (int j = 0; j < boardSize; j++) {
+			hexArray.add(new Hex(randomNumberArray[j], randomColorArray[j]));
 		}
 
 		this.colorArray = pColors;
@@ -344,7 +351,7 @@ public class Game {
 				cp.adjustCards(delta);
 				addBuilding(this.currentPlayer, hexID, pos);
 			}
-		} else 
+		} else
 			addBuilding(this.currentPlayer, hexID, pos);
 	}
 
@@ -360,8 +367,7 @@ public class Game {
 		}
 	}
 
-	public void processBuildRoadClick(int hexID,
-			HexComponent.RoadPosition pos) {
+	public void processBuildRoadClick(int hexID, HexComponent.RoadPosition pos) {
 		Player cp = players[this.currentPlayer];
 		if (this.preGameMode != true) {
 			if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1) {
