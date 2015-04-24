@@ -336,7 +336,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void testThatNormalGameStartsAfterPreGame() {
+	public void testThatOnlyOneRoadCanBeAddedDuringEachTurnForEachPlayerInPreGame() {
 		setUpGameAndrew();
 	
 		game.setBuildType(Game.BuildType.road);

@@ -74,6 +74,7 @@ public class Game {
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
 			int startingPlayer) {
 
+		this.currentPlayer=startingPlayer;
 		this.randomColorArray = hexResources;
 		this.dice = dice;
 
@@ -124,7 +125,6 @@ public class Game {
 
 	public void setUserPanel(UserPanel panel) {
 		this.userPanel = panel;
-		this.userPanel.setCurrentPlayer(this.currentPlayer);
 	}
 
 	public void setBoardRenderer(BoardRenderer board) {

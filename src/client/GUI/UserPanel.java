@@ -41,6 +41,9 @@ public class UserPanel extends JPanel {
 	private JButton cityButton;
 	private JButton roadButton;
 	private JButton devButton;
+	private JButton pricesButton;
+	private JPanel turnPanel;
+	private JButton startButton;
 
 	/**
 	 * creates the user panel to go alongside the board.
@@ -55,10 +58,13 @@ public class UserPanel extends JPanel {
 		addCurrentPlayerLabel();
 		addPlayerStatsPanel();
 
+		addStartGameButton();
+
 		addTurnPanel();
 		addBuildPanel();
 
 		this.dice = new DiceRenderer();
+		this.dice.setVisible(false);
 		this.add(this.dice);
 
 		addCardButton();
@@ -70,8 +76,26 @@ public class UserPanel extends JPanel {
 
 	}
 
+	private void addStartGameButton() {
+		this.startButton = new JButton("Start Game");
+		startButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				enableGameStart();
+			}
+		});
+		this.add(startButton);
+	}
+
+	protected void enableGameStart() {
+		this.startButton.setVisible(false);
+		this.buildButton.setVisible(true);
+		this.setCurrentPlayer(this.game.getCurrentPlayer());
+	}
+
 	private void addPricesButton() {
-		JButton pricesButton = new JButton("Price Guide");
+		this.pricesButton = new JButton("Price Guide");
 		pricesButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -83,9 +107,16 @@ public class UserPanel extends JPanel {
 				pricesDialog.add(pricePanel);
 				pricesDialog.setSize(priceRefComponent.getPreferredSize());
 				pricesDialog.setVisible(true);
+				displayPriceChartDialog();
 			}
 		});
+		pricesButton.setVisible(false);
 		this.add(pricesButton);
+	}
+
+	protected void displayPriceChartDialog() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void addBuildPanel() {
@@ -126,7 +157,10 @@ public class UserPanel extends JPanel {
 		this.buildPanel.add(this.cityButton);
 		this.buildPanel.add(this.roadButton);
 		this.buildPanel.add(this.devButton);
-		this.buildPanel.setVisible(false);
+		this.settlementButton.setVisible(false);
+		this.cityButton.setVisible(false);
+		this.devButton.setVisible(false);
+		this.roadButton.setVisible(false);
 		this.add(this.buildPanel);
 
 	}
@@ -177,7 +211,7 @@ public class UserPanel extends JPanel {
 		// TODO don't allow people the option to build or end their turn before
 		// they roll. Disable build button after they already click it.
 		// TODO add trade button.
-		JPanel turnPanel = new JPanel();
+		this.turnPanel = new JPanel();
 		turnPanel.setPreferredSize(new Dimension(300, 30));
 		turnPanel.setBackground(Color.red);
 		this.rollButton = new JButton("Roll");
@@ -205,8 +239,9 @@ public class UserPanel extends JPanel {
 		turnPanel.add(this.buildButton);
 		turnPanel.add(this.endButton);
 
-		this.buildButton.setEnabled(false);
-		this.endButton.setEnabled(false);
+		this.buildButton.setVisible(false);
+		this.rollButton.setVisible(false);
+		this.endButton.setVisible(false);
 		this.add(turnPanel);
 
 	}
@@ -221,6 +256,8 @@ public class UserPanel extends JPanel {
 				toggleCardPanel();
 			}
 		});
+
+		this.cardButton.setVisible(false);
 		this.add(this.cardButton);
 
 	}
