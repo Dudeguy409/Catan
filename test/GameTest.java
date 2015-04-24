@@ -146,19 +146,8 @@ public class GameTest {
 		field.setAccessible(true);
 
 		Player player = new Player();
-		Field woodField = Player.class.getDeclaredField("woodCount");
-		Field brickField = Player.class.getDeclaredField("brickCount");
-		Field woolField = Player.class.getDeclaredField("woolCount");
-		Field wheatField = Player.class.getDeclaredField("wheatCount");
-		woodField.setAccessible(true);
-		brickField.setAccessible(true);
-		woolField.setAccessible(true);
-		wheatField.setAccessible(true);
-
-		woodField.set(player, 2);
-		brickField.set(player, 2);
-		woolField.set(player, 1);
-		wheatField.set(player, 1);
+		int[] delta = { 1, 2, 1, 2, 0, 0 };
+		player.adjustCards(delta);
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
@@ -181,22 +170,8 @@ public class GameTest {
 		field.setAccessible(true);
 
 		Player player = new Player();
-		Field woodField = Player.class.getDeclaredField("woodCount");
-		Field brickField = Player.class.getDeclaredField("brickCount");
-		Field woolField = Player.class.getDeclaredField("woolCount");
-		Field wheatField = Player.class.getDeclaredField("wheatCount");
-		Field oreField = Player.class.getDeclaredField("oreCount");
-		woodField.setAccessible(true);
-		brickField.setAccessible(true);
-		woolField.setAccessible(true);
-		wheatField.setAccessible(true);
-		oreField.setAccessible(true);
-
-		woodField.set(player, 2);
-		brickField.set(player, 2);
-		woolField.set(player, 1);
-		wheatField.set(player, 3);
-		oreField.set(player, 3);
+		int[] delta = { 3, 2, 1, 2, 3, 0 };
+		player.adjustCards(delta);
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
@@ -388,18 +363,14 @@ public class GameTest {
 		field.setAccessible(true);
 
 		Player player = new Player();
-		Field woodField = Player.class.getDeclaredField("woodCount");
-		Field brickField = Player.class.getDeclaredField("brickCount");
-		woodField.setAccessible(true);
-		brickField.setAccessible(true);
-		woodField.set(player, 1);
-		brickField.set(player, 1);
+		int[] delta = { 0, 1, 0, 1, 0, 0 };
+		player.adjustCards(delta);
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
-		assertEquals(0, woodField.get(player));
-		assertEquals(0, brickField.get(player));
+		assertEquals(0, player.getCards()[1]);
+		assertEquals(0, player.getCards()[3]);
 	}
 
 	@Test
@@ -411,29 +382,18 @@ public class GameTest {
 		field.setAccessible(true);
 
 		Player player = new Player();
-		Field woodField = Player.class.getDeclaredField("woodCount");
-		Field brickField = Player.class.getDeclaredField("brickCount");
-		Field woolField = Player.class.getDeclaredField("woolCount");
-		Field wheatField = Player.class.getDeclaredField("wheatCount");
-		woodField.setAccessible(true);
-		brickField.setAccessible(true);
-		woolField.setAccessible(true);
-		wheatField.setAccessible(true);
-
-		woodField.set(player, 2);
-		brickField.set(player, 2);
-		woolField.set(player, 1);
-		wheatField.set(player, 1);
-
+		int[] delta = { 1, 2, 1, 2, 0, 0 };
+		player.adjustCards(delta);
+		
 		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
 		game.processBuildStructureClick(15, HexComponent.StructurePosition.northwest);
-		assertEquals(0, woodField.get(player));
-		assertEquals(0, brickField.get(player));
-		assertEquals(0, woolField.get(player));
-		assertEquals(0, wheatField.get(player));
+		assertEquals(0, player.getCards()[1]);
+		assertEquals(0, player.getCards()[3]);
+		assertEquals(0, player.getCards()[2]);
+		assertEquals(0, player.getCards()[0]);
 	}
 
 	@Test
@@ -446,22 +406,8 @@ public class GameTest {
 		field.setAccessible(true);
 
 		Player player = new Player();
-		Field woodField = Player.class.getDeclaredField("woodCount");
-		Field brickField = Player.class.getDeclaredField("brickCount");
-		Field woolField = Player.class.getDeclaredField("woolCount");
-		Field wheatField = Player.class.getDeclaredField("wheatCount");
-		Field oreField = Player.class.getDeclaredField("oreCount");
-		woodField.setAccessible(true);
-		brickField.setAccessible(true);
-		woolField.setAccessible(true);
-		wheatField.setAccessible(true);
-		oreField.setAccessible(true);
-
-		woodField.set(player, 2);
-		brickField.set(player, 2);
-		woolField.set(player, 1);
-		wheatField.set(player, 3);
-		oreField.set(player, 3);
+		int[] delta = { 3, 2, 1, 2, 3, 0 };
+		player.adjustCards(delta);
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
@@ -470,11 +416,11 @@ public class GameTest {
 		game.processBuildStructureClick(15, HexComponent.StructurePosition.northwest);
 		game.setBuildType(Game.BuildType.city);
 		game.processBuildStructureClick(15, HexComponent.StructurePosition.northwest);
-		assertEquals(0, woodField.get(player));
-		assertEquals(0, brickField.get(player));
-		assertEquals(0, woolField.get(player));
-		assertEquals(0, wheatField.get(player));
-		assertEquals(0, oreField.get(player));
+		assertEquals(0, player.getCards()[1]);
+		assertEquals(0, player.getCards()[3]);
+		assertEquals(0, player.getCards()[2]);
+		assertEquals(0, player.getCards()[0]);
+		assertEquals(0, player.getCards()[4]);
 	}
 
 	@Test
