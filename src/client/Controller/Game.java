@@ -304,4 +304,9 @@ public class Game {
 		}
 
 	}
+
+	public void processStartGameClick() {
+		// TODO Auto-generated method stub
+		
+	}
 }

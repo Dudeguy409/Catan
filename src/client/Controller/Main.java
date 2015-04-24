@@ -42,7 +42,8 @@ public class Main {
 		Game.Resource[] hexResources = HexResourceTypeGenerator
 				.getHexColors(new Random().nextLong());
 
-		Game game = new Game(playerCount, colors, hexResources, new Dice());
+		Game game = new Game(colors, hexResources, new Dice(),
+				new Random().nextInt(colors.length));
 		UserPanel myPanel = new UserPanel(game);
 
 		frame.add(myPanel, FlowLayout.LEFT);
