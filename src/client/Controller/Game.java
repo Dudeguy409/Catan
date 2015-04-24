@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
+import client.GUI.HexComponent.RoadPosition;
 import client.GUI.HexComponent.StructurePosition;
 import client.GUI.UserPanel;
 import client.Model.Hex;
@@ -80,6 +81,8 @@ public class Game {
 		this.currentPlayer = startingPlayer;
 		this.randomColorArray = hexResources;
 		this.dice = dice;
+		this.colorArray = pColors;
+		this.numberOfPlayers = pColors.length;
 
 		generateStartingTurnsQueue();
 
@@ -110,8 +113,6 @@ public class Game {
 			hexArray.add(new Hex(randomNumberArray[j], randomColorArray[j]));
 		}
 
-		this.colorArray = pColors;
-		this.numberOfPlayers = this.colorArray.length;
 		this.players = new Player[this.numberOfPlayers];
 		for (int i = 0; i < this.numberOfPlayers; i++) {
 			this.players[i] = new Player();
@@ -125,11 +126,11 @@ public class Game {
 		this.startingTurnsQueue = new LinkedList<Integer>();
 		Stack<Integer> reverseOrder = new Stack<Integer>();
 		for (int i = 0; i < this.numberOfPlayers; i++) {
-			int index = i+this.currentPlayer%this.numberOfPlayers;
+			int index = (i + this.currentPlayer) % this.numberOfPlayers;
 			this.startingTurnsQueue.add(index);
 			reverseOrder.push(index);
 		}
-		
+
 		for (int i = 0; i < this.numberOfPlayers; i++) {
 			this.startingTurnsQueue.add(reverseOrder.pop());
 		}
@@ -161,14 +162,18 @@ public class Game {
 	public boolean addRoad(int playerIndex, int hexId,
 			HexComponent.RoadPosition pos) {
 		// TODO throw exceptions
+		boolean roadAdded = false;
 		int roadId = this.hexMgr.getRoadId(hexId, pos);
 		int currentRoadCount = this.roadMgr.getRoadCountForPlayer(playerIndex);
 		if (currentRoadCount < 2) {
-			this.roadMgr.addRoadPieceAtBeginning(playerIndex, roadId);
+			if (isValidBeginnerRoad(hexId, pos)) {
+				this.roadMgr.addRoadPieceAtBeginning(playerIndex, roadId);
+			}
 		} else {
 			this.roadMgr.addRoadPiece(playerIndex, roadId);
 		}
 		if (this.roadMgr.getRoadCountForPlayer(playerIndex) > currentRoadCount) {
+			roadAdded = true;
 			this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
 					BuildType.road);
 		}
@@ -178,11 +183,22 @@ public class Game {
 			maxRoadLength = roadMgr.findLongestRoadForPlayer(currentPlayer);
 			playerWithLongestRoad = currentPlayer;
 		}
+		return roadAdded;
+	}
+
+	private boolean isValidBeginnerRoad(int hexId, RoadPosition pos) {
+		HexComponent.StructurePosition[] structPos = getAdjacentStructurePositionsForRoad(pos);
+		int a = this.hexMgr.getStructureId(hexId, structPos[0]);
+		int b = this.hexMgr.getStructureId(hexId, structPos[1]);
+		if ((this.structMgr.isValidBeginningSettlementPosition(a))
+				|| (this.structMgr.isValidBeginningSettlementPosition(b))) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean addBuilding(int playerIndex, int hexId,
 			HexComponent.StructurePosition pos) {
-		// TODO do stuff
 		// TODO throw exceptions
 
 		// Check for adjacent road not returned by
@@ -252,11 +268,14 @@ public class Game {
 							this.colorArray[playerIndex], BuildType.city);
 				}
 
+				return true;
+
 			} catch (Exception e) {
 				System.out.println(e);
 			}
 
 		}
+		return false;
 	}
 
 	public void roll() {
@@ -289,7 +308,7 @@ public class Game {
 	}
 
 	public boolean hasAdjacentRoad(int structureId) {
-//TODO remove???
+		// TODO remove???
 		return false;
 	}
 
@@ -332,6 +351,45 @@ public class Game {
 
 	}
 
+	private StructurePosition[] getAdjacentStructurePositionsForRoad(
+			RoadPosition pos) {
+		switch (pos) {
+		case north:
+			HexComponent.StructurePosition[] arrayToReturn = {
+					HexComponent.StructurePosition.northwest,
+					HexComponent.StructurePosition.northeast };
+			return arrayToReturn;
+		case northwest:
+			HexComponent.StructurePosition[] arrayToReturn2 = {
+					HexComponent.StructurePosition.northwest,
+					HexComponent.StructurePosition.west };
+			return arrayToReturn2;
+		case northeast:
+			HexComponent.StructurePosition[] arrayToReturn3 = {
+					HexComponent.StructurePosition.east,
+					HexComponent.StructurePosition.northeast };
+			return arrayToReturn3;
+		case south:
+			HexComponent.StructurePosition[] arrayToReturn4 = {
+					HexComponent.StructurePosition.southwest,
+					HexComponent.StructurePosition.southeast };
+			return arrayToReturn4;
+		case southeast:
+			HexComponent.StructurePosition[] arrayToReturn5 = {
+					HexComponent.StructurePosition.east,
+					HexComponent.StructurePosition.southeast };
+			return arrayToReturn5;
+		case southwest:
+			HexComponent.StructurePosition[] arrayToReturn6 = {
+					HexComponent.StructurePosition.west,
+					HexComponent.StructurePosition.southwest };
+			return arrayToReturn6;
+		default:
+			return null;
+		}
+
+	}
+
 	public Object getPlayerWithLongestRoad() {
 		if (maxRoadLength <= 0) {
 			return null;
@@ -367,20 +425,20 @@ public class Game {
 					addBuilding(this.currentPlayer, hexID, pos);
 				}
 			}
-		} else
-			addBuilding(this.currentPlayer, hexID, pos);
-		proceedWithBeginningPhase();
+		} else if (addBuilding(this.currentPlayer, hexID, pos)) {
+			proceedWithBeginningPhase();
+		}
 	}
 
 	private void proceedWithBeginningPhase() {
-		if(this.startingTurnsQueue.isEmpty()){
-			this.preGameMode=false;
-			//TODO continue with game
-		}else{
+		if (this.startingTurnsQueue.isEmpty()) {
+			this.preGameMode = false;
+			// TODO continue with game
+		} else {
 			int playerIndex = this.startingTurnsQueue.poll();
-			this.hasBuiltRoad=false;
-			this.currentBuildType=BuildType.none;
-			this.currentPlayer=playerIndex;
+			this.hasBuiltRoad = false;
+			this.currentBuildType = BuildType.none;
+			this.currentPlayer = playerIndex;
 			this.userPanel.resetBeginningMode();
 		}
 
@@ -399,10 +457,11 @@ public class Game {
 				// ERROR!!!
 				this.userPanel.setBeginningBuildSettlement();
 			} else {
-				// TODO add boolean return type to add road
-				addRoad(this.currentPlayer, hexID, pos);
-				this.hasBuiltRoad = true;
-				this.userPanel.setBeginningBuildSettlement();
+
+				if (addRoad(this.currentPlayer, hexID, pos)) {
+					this.hasBuiltRoad = true;
+					this.userPanel.setBeginningBuildSettlement();
+				}
 			}
 
 		}
