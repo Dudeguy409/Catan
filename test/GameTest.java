@@ -39,6 +39,9 @@ public class GameTest {
 		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0);
+		Field field = Game.class.getDeclaredField("preGameMode");
+		field.setAccessible(true);
+		field.set(game, false);
 	}
 
 	public void setUpGameAndrew() throws Exception {
@@ -392,7 +395,7 @@ public class GameTest {
 		woodField.set(player, 1);
 		brickField.set(player, 1);
 
-		Player[] players = { new Player(), player };
+		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		assertEquals(0, woodField.get(player));
@@ -422,7 +425,7 @@ public class GameTest {
 		woolField.set(player, 1);
 		wheatField.set(player, 1);
 
-		Player[] players = { new Player(), player };
+		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
@@ -460,7 +463,7 @@ public class GameTest {
 		wheatField.set(player, 3);
 		oreField.set(player, 3);
 
-		Player[] players = { new Player(), player };
+		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
