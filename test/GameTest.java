@@ -341,37 +341,41 @@ public class GameTest {
 		assertEquals(0, oreField.get(player));
 	}
 
-	// TODO Victory Point tests - add more
 	@Test
 	public void testVictoryPointForLongestRoad() {
-		// TODO
+		setUpGameDavis();
+		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
+		
+		game.addRoad(0, 0, HexComponent.RoadPosition.northeast);
+		
+		assertEquals(1, game.getVictoryPointsForPlayer(0));
 	}
 
 	@Test
 	public void testAddOneVictoryPointForOneSettlement() {
-		// TODO
+		setUpGameDavis();
+		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
+		
+		game.addBuilding(0, 0, HexComponent.StructurePosition.northeast);
+		
+		assertEquals(1, game.getVictoryPointsForPlayer(0));
 	}
 
 	@Test
-	public void testAddTwoVictoryPointsForOneCity() {
+	public void testAddTwoVictoryPointsForOneCity() throws Exception {
 		// TODO
+		setUpGameDavis();
+		game.setUserPanel(new UserPanel(game));
+		game.setBoardRenderer(new BoardRenderer(game));
+		
+		game.addBuilding(0, 0, HexComponent.StructurePosition.northeast);
+		game.addBuilding(0, 0, HexComponent.StructurePosition.northeast);
+		
+		assertEquals(2, game.getVictoryPointsForPlayer(0));
 	}
-
-	@Test
-	public void testThatGameEnds() {
-		// TODO
-	}
-
-	@Test
-	public void testThatTurnEnds() {
-		// TODO
-	}
-
-	@Test
-	public void testPreGameIteration() {
-		// TODO
-	}
-
+	
 	@Test
 	public void testCalculateVictoryPointsForPlayerFromStructures()
 			throws Exception {
@@ -405,10 +409,25 @@ public class GameTest {
 	}
 
 	@Test
+	public void testThatGameEnds() {
+		// TODO
+	}
+
+	@Test
+	public void testThatTurnEnds() {
+		// TODO
+	}
+
+	@Test
+	public void testPreGameIteration() {
+		// TODO
+	}
+
+	@Test
 	public void testGetPlayerWithLongestRoadEqualLengths() throws Exception {
 		// The player with older road should win if roads are the same length.
 		
-		setUpGameC();
+		setUpGameDavis();
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
 		
