@@ -313,6 +313,9 @@ public class Game {
 	}
 
 	public Object getPlayerWithLongestRoad() {
+		if(maxRoadLength<=0) {
+			return null;
+		}
 		return playerWithLongestRoad;
 	}
 	
