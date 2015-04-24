@@ -167,12 +167,11 @@ public class BoardRenderer extends JComponent implements MouseListener {
 				if (buildType != Game.BuildType.road) {
 					HexComponent.StructurePosition pos = this
 							.determineStructurePosition(nearArray);
-					this.game.addBuilding(this.game.getCurrentPlayer(),
-							this.hexIndexToGUITranslator[hexId], pos);
+					this.game.processBuildStructureClick(this.hexIndexToGUITranslator[hexId], pos);
 				} else {
 					HexComponent.RoadPosition pos = this
 							.determineRoadPosition(nearArray);
-					this.game.addRoad(this.game.getCurrentPlayer(),
+					this.game.processBuildRoadClick(
 							this.hexIndexToGUITranslator[hexId], pos);
 				}
 			}

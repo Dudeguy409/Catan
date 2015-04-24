@@ -31,21 +31,14 @@ public class StructureManager {
 		}
 
 		// check if structure already exists
-		for (HashMap<Integer, StructurePiece> hash : structurePieceMaps) {
-			if (hash.containsKey(structureId)) {// check if road exists
-				throw new Exception("a strucutre already exists there");
-			}
+		if (settlementAlreadyExistsThere(structureId)) {
+			throw new Exception("a structure already exists there");
 		}
 
 		// check to make sure there is no adjacent structure
-		for (int structId : this.structureDependencyMap.get(structureId)
-				.getAdjacentSettlements()) {
-			for (HashMap<Integer, StructurePiece> hash : structurePieceMaps) {
-				if (hash.containsKey(structId)) {// check if road exists
-					throw new Exception(
-							"a strucutre already exists immediately adjacent to the selected location");
-				}
-			}
+		if (isAdjacentToOtherSettlements(structureId)) {
+			throw new Exception(
+					"a structure already exists immediately adjacent to the selected location");
 		}
 
 		// actually add the structure
@@ -197,6 +190,31 @@ public class StructureManager {
 		structureDependencyMap.put(53, new Structure(53, new int[] { 50, 54 }));
 		structureDependencyMap.put(54, new Structure(54, new int[] { 53, 51 }));
 
+	}
+
+	protected boolean isAdjacentToOtherSettlements(int structureId) {
+		for (int structId : this.structureDependencyMap.get(structureId)
+				.getAdjacentSettlements()) {
+			for (HashMap<Integer, StructurePiece> hash : structurePieceMaps) {
+				if (hash.containsKey(structId)) {// check if road exists
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean settlementAlreadyExistsThere(int structureId) {
+		for (HashMap<Integer, StructurePiece> hash : structurePieceMaps) {
+			if (hash.containsKey(structureId)) {// check if road exists
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected boolean isValidBeginningSettlementPosition(int structureId) {
+		return !(isAdjacentToOtherSettlements(structureId) || settlementAlreadyExistsThere(structureId));
 	}
 
 }

@@ -393,8 +393,8 @@ public class UserPanel extends JPanel {
 
 	public void resetBeginningMode() {
 		this.settlementButton.setVisible(false);
-		this.enableGameStart();
-		
+		this.buildButton.setEnabled(true);
+		this.setCurrentPlayer(this.game.getCurrentPlayer());	
 	}
 
 
