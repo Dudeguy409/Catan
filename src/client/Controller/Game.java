@@ -59,12 +59,9 @@ public class Game {
 	private IDice dice;
 	private Queue<Integer> startingTurnsQueue;
 	private int maxRoadLength = 0;
-<<<<<<< HEAD
+	
 	private int playerWithLongestRoad = -1;
-=======
-	private int playerWithLongestRoad;
 	private boolean preGameMode = true;
->>>>>>> origin/master
 
 	/**
 	 * The number of hexes on the field.
