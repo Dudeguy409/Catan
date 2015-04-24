@@ -58,8 +58,8 @@ public class Game {
 	private StructureManager structMgr;
 	private IDice dice;
 	private Queue<Integer> startingTurnsQueue;
-	private int maxRoadLength=0;
-	private int playerWithLongestRoad;
+	private int maxRoadLength = 0;
+	private int playerWithLongestRoad = -1;
 
 	/**
 	 * The number of hexes on the field.
@@ -73,7 +73,7 @@ public class Game {
 
 		this.randomColorArray = hexResources;
 		this.dice = dice;
-		
+
 		generateStartingTurnsQueue();
 
 		// This array contains all of the roll numbers in the order that they
@@ -111,7 +111,7 @@ public class Game {
 
 	private void generateStartingTurnsQueue() {
 		this.startingTurnsQueue = null;
-		
+
 	}
 
 	public void setUserPanel(UserPanel panel) {
@@ -151,9 +151,9 @@ public class Game {
 			this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
 					BuildType.road);
 		}
-		
+
 		// TODO keep track of longest road
-		if(roadMgr.findLongestRoadForPlayer(currentPlayer)>maxRoadLength) {
+		if (roadMgr.findLongestRoadForPlayer(currentPlayer) > maxRoadLength) {
 			maxRoadLength = roadMgr.findLongestRoadForPlayer(currentPlayer);
 			playerWithLongestRoad = currentPlayer;
 		}
@@ -313,14 +313,24 @@ public class Game {
 	}
 
 	public Object getPlayerWithLongestRoad() {
-		if(maxRoadLength<=0) {
+		if (maxRoadLength <= 0) {
 			return null;
 		}
 		return playerWithLongestRoad;
 	}
-	
+
 	public void processStartGameClick() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public int getVictoryPointsForPlayer(int playerNumber) {
+		int points = 0;
+		if (playerWithLongestRoad == playerNumber) {
+			points++;
+		}
+		points += structMgr
+				.calculateStructureVictoyPointsForPlayer(playerNumber);
+		return points;
 	}
 }

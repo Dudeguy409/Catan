@@ -17,6 +17,7 @@ import org.junit.Test;
 import client.Controller.FakeDice;
 import client.Controller.Game;
 import client.Controller.StructureManager;
+import client.Controller.Game.BuildType;
 import client.Controller.Game.Resource;
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
@@ -342,10 +343,12 @@ public class GameTest {
 	}
 
 	@Test
-	public void testVictoryPointForLongestRoad() {
+	public void testVictoryPointForLongestRoad() throws Exception {
 		setUpGameDavis();
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
+		
+		assertEquals(0, game.getVictoryPointsForPlayer(0));
 		
 		game.addRoad(0, 0, HexComponent.RoadPosition.northeast);
 		
@@ -353,14 +356,18 @@ public class GameTest {
 	}
 
 	@Test
-	public void testAddOneVictoryPointForOneSettlement() {
+	public void testAddOneVictoryPointForOneSettlement() throws Exception {
 		setUpGameDavis();
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
 		
+		game.addRoad(0, 0, HexComponent.RoadPosition.northeast);
+		assertEquals(1, game.getVictoryPointsForPlayer(0));
+		
+		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 0, HexComponent.StructurePosition.northeast);
 		
-		assertEquals(1, game.getVictoryPointsForPlayer(0));
+		assertEquals(2, game.getVictoryPointsForPlayer(0));
 	}
 
 	@Test
@@ -370,10 +377,17 @@ public class GameTest {
 		game.setUserPanel(new UserPanel(game));
 		game.setBoardRenderer(new BoardRenderer(game));
 		
-		game.addBuilding(0, 0, HexComponent.StructurePosition.northeast);
-		game.addBuilding(0, 0, HexComponent.StructurePosition.northeast);
+		assertEquals(0, game.getVictoryPointsForPlayer(3));
 		
-		assertEquals(2, game.getVictoryPointsForPlayer(0));
+		game.addRoad(3, 3, HexComponent.RoadPosition.northeast);
+		game.setBuildType(BuildType.settlement);
+		game.addBuilding(3, 3, HexComponent.StructurePosition.northeast);
+		assertEquals(1, game.getVictoryPointsForPlayer(3));
+		
+		game.setBuildType(BuildType.city);
+		game.addBuilding(3, 3, HexComponent.StructurePosition.northeast);
+		
+		assertEquals(2, game.getVictoryPointsForPlayer(3));
 	}
 	
 	@Test
