@@ -59,7 +59,6 @@ public class Game {
 	private IDice dice;
 	private Queue<Integer> startingTurnsQueue;
 	private int maxRoadLength = 0;
-	
 	private int playerWithLongestRoad = -1;
 	private boolean preGameMode = true;
 
@@ -243,7 +242,6 @@ public class Game {
 	public void roll() {
 		int[] rolls = this.dice.rollDice();
 		this.userPanel.setRolls(rolls);
-
 	}
 
 	public void drawDevCard() {
@@ -336,39 +334,42 @@ public class Game {
 		return points;
 	}
 
-	public void processBuildSettlementClick(int hexID, HexComponent.StructurePosition pos) {
+	public void processBuildSettlementClick(int hexID,
+			HexComponent.StructurePosition pos) {
+		Player cp = players[this.currentPlayer];
 		if (this.preGameMode != true) {
-			if (this.currentTurnPhase == Game.TurnPhase.build)
-				checkCards(hexID, pos);
-		}
-	}
-	
-	public void processBuildCityClick(int hexID, HexComponent.StructurePosition pos) {
-		Player cp = players[this.currentPlayer];
-		if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1 && cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1)
-			addBuilding(this.currentPlayer, hexID, pos);
-	}
-	
-	public void processBuildRoadClick(int hexID, HexComponent.StructurePosition pos) {
-		
-	}
-
-	private void checkCards(int hexID, HexComponent.StructurePosition pos) {
-		Player cp = players[this.currentPlayer];
-		switch (this.currentBuildType) {
-		case city:
-			if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3) {
-				
+			if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1
+					&& cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1) {
+				int[] delta = { -1, -1, 0, 0, 0, 0, 0 };
+				cp.adjustCards(delta);
 				addBuilding(this.currentPlayer, hexID, pos);
 			}
-		case settlement:
-			if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1 && cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1)
+		} else 
+			addBuilding(this.currentPlayer, hexID, pos);
+	}
+
+	public void processBuildCityClick(int hexID,
+			HexComponent.StructurePosition pos) {
+		Player cp = players[this.currentPlayer];
+		if (this.preGameMode != true) {
+			if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3) {
+				int[] delta = { -2, 0, 0, 0, -3, 0, 0 };
+				cp.adjustCards(delta);
 				addBuilding(this.currentPlayer, hexID, pos);
-		case road:
-			if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1)
-				addBuilding(this.currentPlayer, hexID, pos);
-		default:
-			break;
+			}
 		}
+	}
+
+	public void processBuildRoadClick(int hexID,
+			HexComponent.RoadPosition pos) {
+		Player cp = players[this.currentPlayer];
+		if (this.preGameMode != true) {
+			if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1) {
+				int[] delta = { 0, -1, 0, -1, 0, 0, 0 };
+				cp.adjustCards(delta);
+				addRoad(this.currentPlayer, hexID, pos);
+			}
+		} else
+			addRoad(this.currentPlayer, hexID, pos);
 	}
 }
