@@ -26,9 +26,21 @@ import client.Model.Player;
 
 public class GameTest {
 	Game game;
-
-	@Before
-	public void setUp() throws Exception {
+	
+	public void setUpGameA() throws Exception {
+		Color[] colors = { new Color(2), new Color(3), new Color(40)  };
+		Game.Resource[] resources = { Resource.desert, Resource.wheat,
+				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
+				Resource.wood, Resource.brick, Resource.wheat, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.wood, Resource.wheat,
+				Resource.sheep, Resource.ore, Resource.wood, Resource.brick,
+				Resource.sheep };
+		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0);
+	}
+	
+	public void setUpGameB() throws Exception {
 		Color[] colors = { new Color(2), new Color(3) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
@@ -39,6 +51,19 @@ public class GameTest {
 		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 1);
+	}
+	
+	public void setUpGameC() throws Exception {
+		Color[] colors = { new Color(2), new Color(3), new Color(32), new Color(55) };
+		Game.Resource[] resources = { Resource.desert, Resource.wheat,
+				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
+				Resource.wood, Resource.brick, Resource.wheat, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.wood, Resource.wheat,
+				Resource.sheep, Resource.ore, Resource.wood, Resource.brick,
+				Resource.sheep };
+		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 2);
 	}
 
 	@Test
