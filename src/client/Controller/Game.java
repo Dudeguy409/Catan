@@ -61,6 +61,7 @@ public class Game {
 	private int maxRoadLength = 0;
 	private int playerWithLongestRoad = -1;
 	private boolean preGameMode = true;
+	private boolean addedFirstRoad = false;
 
 	/**
 	 * The number of hexes on the field.
@@ -334,34 +335,31 @@ public class Game {
 		return points;
 	}
 
-	public void processBuildSettlementClick(int hexID,
+	public void processBuildStructureClick(int hexID,
 			HexComponent.StructurePosition pos) {
 		Player cp = players[this.currentPlayer];
 		if (this.preGameMode != true) {
-			if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1
-					&& cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1) {
-				int[] delta = { -1, -1, 0, 0, 0, 0, 0 };
-				cp.adjustCards(delta);
-				addBuilding(this.currentPlayer, hexID, pos);
+			if (this.currentBuildType == BuildType.settlement) {
+				if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1
+						&& cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1) {
+					int[] delta = { -1, -1, 0, 0, 0, 0, 0 };
+					cp.adjustCards(delta);
+					addBuilding(this.currentPlayer, hexID, pos);
+				}
+			} else {
+				if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3) {
+					int[] delta = { -2, 0, 0, 0, -3, 0, 0 };
+					cp.adjustCards(delta);
+					addBuilding(this.currentPlayer, hexID, pos);
+				}
 			}
-		} else 
-			addBuilding(this.currentPlayer, hexID, pos);
-	}
-
-	public void processBuildCityClick(int hexID,
-			HexComponent.StructurePosition pos) {
-		Player cp = players[this.currentPlayer];
-		if (this.preGameMode != true) {
-			if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3) {
-				int[] delta = { -2, 0, 0, 0, -3, 0, 0 };
-				cp.adjustCards(delta);
+		} else {
+			if (this.addedFirstRoad == false)
 				addBuilding(this.currentPlayer, hexID, pos);
-			}
 		}
 	}
 
-	public void processBuildRoadClick(int hexID,
-			HexComponent.RoadPosition pos) {
+	public void processBuildRoadClick(int hexID, HexComponent.RoadPosition pos) {
 		Player cp = players[this.currentPlayer];
 		if (this.preGameMode != true) {
 			if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1) {
@@ -369,7 +367,9 @@ public class Game {
 				cp.adjustCards(delta);
 				addRoad(this.currentPlayer, hexID, pos);
 			}
-		} else
-			addRoad(this.currentPlayer, hexID, pos);
+		} else {
+			if (this.addedFirstRoad == false)
+				addRoad(this.currentPlayer, hexID, pos);
+		}
 	}
 }
