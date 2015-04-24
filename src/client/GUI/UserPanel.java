@@ -325,6 +325,10 @@ public class UserPanel extends JPanel {
 		}
 		this.add(playerPanel);
 	}
+	
+	public void updateVPLabel(int playerNumber, int victoryPoints) {
+		this.vPLabel[playerNumber].setText("VPs:  " + victoryPoints);
+	}
 
 	private void addCurrentPlayerLabel() {
 		JLabel currentPlayerLabel = new JLabel("Current Player:");

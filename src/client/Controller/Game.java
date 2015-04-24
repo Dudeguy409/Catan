@@ -266,7 +266,7 @@ public class Game {
 		this.currentPlayer = (this.currentPlayer + 1) % this.numberOfPlayers;
 		this.userPanel.setCurrentPlayer(this.currentPlayer);
 		this.userPanel.setTurnPhase(TurnPhase.preroll);
-
+		
 		if (checkVictory() >= 0) {
 			JOptionPane.showMessageDialog(null, "Congratulations! Player "
 					+ checkVictory() + 1 + " has won the game!", "Game Over",
@@ -348,6 +348,7 @@ public class Game {
 		}
 		points += structMgr
 				.calculateStructureVictoyPointsForPlayer(playerNumber);
+		userPanel.updateVPLabel(playerNumber, points);
 		return points;
 	}
 
