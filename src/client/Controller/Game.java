@@ -59,7 +59,12 @@ public class Game {
 	private IDice dice;
 	private Queue<Integer> startingTurnsQueue;
 	private int maxRoadLength = 0;
+<<<<<<< HEAD
 	private int playerWithLongestRoad = -1;
+=======
+	private int playerWithLongestRoad;
+	private boolean preGameMode = true;
+>>>>>>> origin/master
 
 	/**
 	 * The number of hexes on the field.
@@ -129,7 +134,7 @@ public class Game {
 		return this.currentTurnPhase;
 	}
 
-	public BuildType getBuildType() {
+	public BuildType getCurrentBuildType() {
 		return this.currentBuildType;
 	}
 
@@ -332,5 +337,41 @@ public class Game {
 		points += structMgr
 				.calculateStructureVictoyPointsForPlayer(playerNumber);
 		return points;
+	}
+
+	public void processBuildSettlementClick(int hexID, HexComponent.StructurePosition pos) {
+		if (this.preGameMode != true) {
+			if (this.currentTurnPhase == Game.TurnPhase.build)
+				checkCards(hexID, pos);
+		}
+	}
+	
+	public void processBuildCityClick(int hexID, HexComponent.StructurePosition pos) {
+		Player cp = players[this.currentPlayer];
+		if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1 && cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1)
+			addBuilding(this.currentPlayer, hexID, pos);
+	}
+	
+	public void processBuildRoadClick(int hexID, HexComponent.StructurePosition pos) {
+		
+	}
+
+	private void checkCards(int hexID, HexComponent.StructurePosition pos) {
+		Player cp = players[this.currentPlayer];
+		switch (this.currentBuildType) {
+		case city:
+			if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3) {
+				
+				addBuilding(this.currentPlayer, hexID, pos);
+			}
+		case settlement:
+			if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1 && cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1)
+				addBuilding(this.currentPlayer, hexID, pos);
+		case road:
+			if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1)
+				addBuilding(this.currentPlayer, hexID, pos);
+		default:
+			break;
+		}
 	}
 }
