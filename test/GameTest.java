@@ -161,7 +161,7 @@ public class GameTest {
 		field.set(game, players);
 		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
-		game.processBuildSettlementClick(3, HexComponent.StructurePosition.northwest);
+		game.processBuildStructureClick(3, HexComponent.StructurePosition.northwest);
 		game.roll();
 
 		assertEquals(1, player.getCards()[4]);
@@ -171,6 +171,7 @@ public class GameTest {
 	public void testAddResourcesOneCity() throws Exception {
 		setUpGameEthan();
 		game.setUserPanel(new UserPanel(game));
+		
 		game.setBoardRenderer(new BoardRenderer(game));
 		game.roll();
 		Field field = Game.class.getDeclaredField("players");
@@ -198,9 +199,9 @@ public class GameTest {
 		field.set(game, players);
 		game.processBuildRoadClick(3, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
-		game.processBuildSettlementClick(3, HexComponent.StructurePosition.northwest);
+		game.processBuildStructureClick(3, HexComponent.StructurePosition.northwest);
 		game.setBuildType(Game.BuildType.city);
-		game.processBuildCityClick(3, HexComponent.StructurePosition.northwest);
+		game.processBuildStructureClick(3, HexComponent.StructurePosition.northwest);
 		game.roll();
 		assertEquals(2, player.getCards()[4]);
 	}
@@ -393,7 +394,7 @@ public class GameTest {
 
 		Player[] players = { new Player(), player };
 		field.set(game, players);
-		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		assertEquals(0, woodField.get(player));
 		assertEquals(0, brickField.get(player));
 	}
@@ -423,9 +424,9 @@ public class GameTest {
 
 		Player[] players = { new Player(), player };
 		field.set(game, players);
-		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
-		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		game.processBuildStructureClick(15, HexComponent.StructurePosition.northwest);
 		assertEquals(0, woodField.get(player));
 		assertEquals(0, brickField.get(player));
 		assertEquals(0, woolField.get(player));
@@ -461,11 +462,11 @@ public class GameTest {
 
 		Player[] players = { new Player(), player };
 		field.set(game, players);
-		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
-		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		game.processBuildStructureClick(15, HexComponent.StructurePosition.northwest);
 		game.setBuildType(Game.BuildType.city);
-		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		game.processBuildStructureClick(15, HexComponent.StructurePosition.northwest);
 		assertEquals(0, woodField.get(player));
 		assertEquals(0, brickField.get(player));
 		assertEquals(0, woolField.get(player));

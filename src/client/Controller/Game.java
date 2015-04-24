@@ -9,6 +9,7 @@ import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.StructurePosition;
 import client.GUI.UserPanel;
+import client.Model.Hex;
 import client.Model.Player;
 import client.Model.RoadPiece;
 
@@ -61,7 +62,7 @@ public class Game {
 	private int maxRoadLength = 0;
 	private int playerWithLongestRoad = -1;
 	private boolean preGameMode = true;
-	private boolean addedFirstRoad = false;
+	private ArrayList<Hex> hexArray;
 
 	/**
 	 * The number of hexes on the field.
@@ -98,6 +99,11 @@ public class Game {
 					randomNumberArray[i] = rollNumberArray[i - 1];
 				}
 			}
+		}
+
+		this.hexArray = new ArrayList<Hex>();
+		for (int j = 0; j < boardSize; j++) {
+			hexArray.add(new Hex(randomNumberArray[j], randomColorArray[j]));
 		}
 
 		this.colorArray = pColors;
@@ -353,10 +359,8 @@ public class Game {
 					addBuilding(this.currentPlayer, hexID, pos);
 				}
 			}
-		} else {
-			if (this.addedFirstRoad == false)
-				addBuilding(this.currentPlayer, hexID, pos);
-		}
+		} else
+			addBuilding(this.currentPlayer, hexID, pos);
 	}
 
 	public void processBuildRoadClick(int hexID, HexComponent.RoadPosition pos) {
@@ -367,9 +371,19 @@ public class Game {
 				cp.adjustCards(delta);
 				addRoad(this.currentPlayer, hexID, pos);
 			}
-		} else {
-			if (this.addedFirstRoad == false)
+		} else 
 				addRoad(this.currentPlayer, hexID, pos);
+	}
+
+	// Returns the number of the winning player. If no player has won yet, it returns -1.
+	public int checkVictory() {
+		for(int i = 0; i < numberOfPlayers; i++) {
+			if(getVictoryPointsForPlayer(i)>=10) {
+				return i;
+			}
 		}
+		return -1;
 	}
 }
+
+
