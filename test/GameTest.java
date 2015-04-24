@@ -231,17 +231,147 @@ public class GameTest {
 	@Test
 	public void testThatNormalGameStartsAfterPreGame() {
 		setUpGameAndrew();
+		
+		Field field = Game.class.getDeclaredField("startingTurnsQueue");
+		field.setAccessible(true);
+
+		Queue<Integer> prePlayerQueue = (LinkedList<Integer>) (field.get(game));
+		Integer[] values = { 1 , 0, 0 , 1 };
+		Queue<Integer> expectedQueue = new LinkedList<Integer>(
+				Arrays.asList(values));
+
+		assertEquals(expectedQueue, prePlayerQueue);
+		
 		assertEquals(game.getCurrentPlayer(), 1);
 		assertEquals(game.getCurrentBuildType(), Game.BuildType.none);
+		assertEquals(game.isBeginningOfGame(), true);
+		assertEquals(game.getVictoryPointsForPlayer(0),0);
+		assertEquals(game.getVictoryPointsForPlayer(1),0);
 		game.setBuildType(Game.BuildType.road);
-		game.processBuildRoadClick(12, );
+		game.processBuildRoadClick(12, HexComponent.RoadPosition.south);
+		assertEquals(game.getVictoryPointsForPlayer(1),0);
+		assertEquals(game.getCurrentPlayer(), 1);
+		assertEquals(game.isBeginningOfGame(), true);
 		game.setBuildType(Game.BuildType.settlement);
-		game.processBuildStructureClick(12,);
+		game.processBuildStructureClick(12,HexComponent.StructurePosition.southwest);
+		assertEquals(game.getVictoryPointsForPlayer(1),1);
+		assertEquals(game.getCurrentPlayer(), 0);
+		
+	
+		 field = Game.class.getDeclaredField("startingTurnsQueue");
+		field.setAccessible(true);
+
+		 prePlayerQueue = (LinkedList<Integer>) (field.get(game));
+		Integer[] values2 = {  0, 0 , 1 };
+		 expectedQueue = new LinkedList<Integer>(
+				Arrays.asList(values2));
+
+		assertEquals(expectedQueue, prePlayerQueue);
+		
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(16, HexComponent.RoadPosition.southeast);
+		assertEquals(game.getVictoryPointsForPlayer(0),0);
+		assertEquals(game.getCurrentPlayer(), 0);
+		assertEquals(game.isBeginningOfGame(), true);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(16,HexComponent.StructurePosition.southeast);
+		
+		 field = Game.class.getDeclaredField("startingTurnsQueue");
+		field.setAccessible(true);
+
+		 prePlayerQueue = (LinkedList<Integer>) (field.get(game));
+		Integer[] values3 = { 0 , 1 };
+		 expectedQueue = new LinkedList<Integer>(
+				Arrays.asList(values3));
+
+		assertEquals(expectedQueue, prePlayerQueue);
+		
+		assertEquals(game.getVictoryPointsForPlayer(0),1);
+		assertEquals(game.getCurrentPlayer(), 0);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(9, HexComponent.RoadPosition.northwest);
+		assertEquals(game.getVictoryPointsForPlayer(0),1);
+		assertEquals(game.getCurrentPlayer(), 0);
+		assertEquals(game.isBeginningOfGame(), true);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(9,HexComponent.StructurePosition.northwest);
+		assertEquals(game.getVictoryPointsForPlayer(0),2);
+		assertEquals(game.getCurrentPlayer(), 1);
+		assertEquals(game.isBeginningOfGame(), true);
+		
+		
+		 field = Game.class.getDeclaredField("startingTurnsQueue");
+		field.setAccessible(true);
+
+		 prePlayerQueue = (LinkedList<Integer>) (field.get(game));
+		 Integer[] values4 = { 1 };
+		 expectedQueue = new LinkedList<Integer>(
+				Arrays.asList(values4));
+
+		assertEquals(expectedQueue, prePlayerQueue);
+		
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(14, HexComponent.RoadPosition.northwest);
+		assertEquals(game.getVictoryPointsForPlayer(1),1);
+		assertEquals(game.getCurrentPlayer(), 1);
+		assertEquals(game.isBeginningOfGame(), true);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(14,HexComponent.StructurePosition.northwest);
+		assertEquals(game.getVictoryPointsForPlayer(1),2);
+		assertEquals(game.getVictoryPointsForPlayer(0),2);
+		assertEquals(game.getCurrentPlayer(), 0);
+		assertEquals(game.isBeginningOfGame(), false);
+		
+		 field = Game.class.getDeclaredField("startingTurnsQueue");
+		field.setAccessible(true);
+
+		prePlayerQueue = (LinkedList<Integer>) (field.get(game));
+
+		assertTrue(prePlayerQueue.isEmpty());
 		
 		
 	
 
 	}
+	
+	@Test
+	public void testThatNormalGameStartsAfterPreGame() {
+		setUpGameAndrew();
+	
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(12, HexComponent.RoadPosition.south);
+		game.processBuildRoadClick(12, HexComponent.RoadPosition.southeast);
+		game.processBuildRoadClick(12, HexComponent.RoadPosition.northeast);
+		game.processBuildRoadClick(12, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(12, HexComponent.RoadPosition.northwest);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(12,HexComponent.StructurePosition.southwest);
+		assertEquals(game.getVictoryPointsForPlayer(0),1);
+		assertEquals(game.getRoadCountForPlayer(0),1);
+
+		
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(16, HexComponent.RoadPosition.southeast);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(16,HexComponent.StructurePosition.southeast);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(9, HexComponent.RoadPosition.northwest);
+		game.processBuildRoadClick(9, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(9, HexComponent.RoadPosition.northeast);
+		game.processBuildRoadClick(9, HexComponent.RoadPosition.southeast);
+		game.processBuildRoadClick(9, HexComponent.RoadPosition.south);
+		assertEquals(game.getVictoryPointsForPlayer(0),1);
+		assertEquals(game.getRoadCountForPlayer(0),2);
+
+		
+		
+		
+		
+	
+
+	}
+	
+	
 
 	// Tests for buying things
 	// TODO add tests for buying development cards
