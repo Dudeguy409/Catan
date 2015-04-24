@@ -1,12 +1,13 @@
 package client.Model;
 
+import client.Controller.Game;
+
 /**
  * this class manages all of the individual player's data.
  * 
  * @author Andrew Davidson. Created May 28, 2010.
  */
 public class Player {
-	// TODO implement an enumeration for resource cards
 	// TODO add port and bank trade rates
 	private int wheatCount;
 	private int woodCount;
@@ -16,10 +17,11 @@ public class Player {
 	private int playedSoldierCount;
 	private int victoryPoints;
 	private int totalResourceCards;
-	//TODO remove or implement
-//	private int playerIndex;
-//	private int[] unplayedDevCardCount;
-//	private Color color;
+
+	// TODO remove or implement
+	// private int playerIndex;
+	// private int[] unplayedDevCardCount;
+	// private Color color;
 
 	/**
 	 * returns all of the player's cards in a convenient array.
@@ -49,14 +51,37 @@ public class Player {
 		this.updateTotal();
 	}
 
+	public void adjustCards(Game.Resource type, int numberToAdd) {
+		switch (type) {
+		case wood:
+			this.woodCount += numberToAdd;
+			break;
+		case wheat:
+			this.wheatCount += numberToAdd;
+			break;
+		case brick:
+			this.brickCount += numberToAdd;
+			break;
+		case ore:
+			this.oreCount += numberToAdd;
+			break;
+		case sheep:
+			this.woolCount += numberToAdd;
+			break;
+		default:
+			break;
+		}
+		this.updateTotal();
+	}
+
 	/**
 	 * calculates the total number of cards that the player holds, primarily to
 	 * determine how many cards will be lost if a seven is rolled.
 	 * 
 	 */
 	private void updateTotal() {
-		this.totalResourceCards = this.wheatCount + this.woodCount + this.woolCount
-				+ this.brickCount + this.oreCount;
+		this.totalResourceCards = this.wheatCount + this.woodCount
+				+ this.woolCount + this.brickCount + this.oreCount;
 	}
 
 	/**

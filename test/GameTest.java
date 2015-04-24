@@ -233,7 +233,7 @@ public class GameTest {
 	}
 
 	@Test
-	public void testThatNormalGameStartsAfterPreGame() {
+	public void testThatNormalGameStartsAfterPreGame() throws Exception {
 		setUpGameAndrew();
 		
 		Field field = Game.class.getDeclaredField("startingTurnsQueue");
@@ -339,7 +339,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void testThatOnlyOneRoadCanBeAddedDuringEachTurnForEachPlayerInPreGame() {
+	public void testThatOnlyOneRoadCanBeAddedDuringEachTurnForEachPlayerInPreGame() throws Exception {
 		setUpGameAndrew();
 	
 		game.setBuildType(Game.BuildType.road);

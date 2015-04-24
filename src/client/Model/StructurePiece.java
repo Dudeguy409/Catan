@@ -6,8 +6,9 @@ public class StructurePiece {
 
 	private BuildType type;
 	private int id;
+	private int playerIndex;
 
-	public StructurePiece(int id) {
+	public StructurePiece(int id, int playerIndex) {
 		this.id = id;
 		this.type = BuildType.settlement;
 	}
@@ -26,6 +27,10 @@ public class StructurePiece {
 
 	public int getStructureId() {
 		return this.id;
+	}
+	
+	public int getPlayerIndex(){
+		return this.playerIndex;
 	}
 
 }

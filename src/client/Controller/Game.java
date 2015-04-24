@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.HashSet;
-
 import java.util.Queue;
 import java.util.Stack;
 
@@ -288,93 +286,60 @@ public class Game {
 		this.userPanel.setRolls(rolls);
 
 		int roll = rolls[0] + rolls[1];
-		
-		HashSet<Integer> seenIds = new HashSet<Integer>();
-		for (Hex hex : this.hexArray) {
-			if (hex.getRollNumber() == roll) {
-				HashSet<Integer> posStruct = new HashSet<Integer>();
 
-				int hexID = this.hexArray.indexOf(hex);
+		ArrayList<Hex> rolledHexes = findRolledHexes(roll);
 
-				if (!seenIds.contains(hexID)) {
-					seenIds.add(hexID);
-					posStruct.add(this.hexMgr.getStructureId(hexID,
-							HexComponent.StructurePosition.east));
-					posStruct.add(this.hexMgr.getStructureId(hexID,
-							HexComponent.StructurePosition.northeast));
-					posStruct.add(this.hexMgr.getStructureId(hexID,
-							HexComponent.StructurePosition.northwest));
-					posStruct.add(this.hexMgr.getStructureId(hexID,
-							HexComponent.StructurePosition.southeast));
-					posStruct.add(this.hexMgr.getStructureId(hexID,
-							HexComponent.StructurePosition.southwest));
-					posStruct.add(this.hexMgr.getStructureId(hexID,
-							HexComponent.StructurePosition.west));
+		for (int i = 0; i < rolledHexes.size(); i++) {
+			Hex hex = rolledHexes.get(i);
+			int hexId = hex.getHexID();
+			Resource type = hex.getResource();
 
-					for (HashMap<Integer, StructurePiece> map : this.structMgr.structurePieceMaps) {
-						for (int pos : posStruct) {
-							if (map.containsKey(pos)) {
-								if (map.get(pos).getBuildType()
-										.equals(BuildType.settlement)) {
-									Player player = this.players[this.structMgr.structurePieceMaps
-											.indexOf(map)];
-									int resource = hex.getResource().getNumVal();
-									switch (resource) {
-									case 0:
-										int[] delta0 = { 0, 1, 0, 0, 0 };
-										player.adjustCards(delta0);
-										break;
-									case 1:
-										int[] delta1 = { 0, 0, 0, 1, 0 };
-										player.adjustCards(delta1);
-										break;
-									case 2:
-										int[] delta2 = { 0, 0, 1, 0, 0 };
-										player.adjustCards(delta2);
-										break;
-									case 3:
-										int[] delta3 = { 0, 0, 0, 0, 1 };
-										player.adjustCards(delta3);
-										break;
-									case 4:
-										int[] delta4 = { 1, 0, 0, 0, 0 };
-										player.adjustCards(delta4);
-									}
-								}
-								if (map.get(pos).getBuildType()
-										.equals(BuildType.city)) {
-									Player player = this.players[this.structMgr.structurePieceMaps
-											.indexOf(map)];
-									int resource = hex.getResource().getNumVal();
-									switch (resource) {
-									case 0:
-										int[] delta0 = { 0, 2, 0, 0, 0 };
-										player.adjustCards(delta0);
-										break;
-									case 1:
-										int[] delta1 = { 0, 0, 0, 2, 0 };
-										player.adjustCards(delta1);
-										break;
-									case 2:
-										int[] delta2 = { 0, 0, 2, 0, 0 };
-										player.adjustCards(delta2);
-										break;
-									case 3:
-										int[] delta3 = { 0, 0, 0, 0, 2 };
-										player.adjustCards(delta3);
-										break;
-									case 4:
-										int[] delta4 = { 2, 0, 0, 0, 0 };
-										player.adjustCards(delta4);
-									}
-								}
-							}
-						}
+			int[] structPositions = {
+					this.hexMgr.getStructureId(hexId,
+							HexComponent.StructurePosition.east),
+					this.hexMgr.getStructureId(hexId,
+							HexComponent.StructurePosition.northeast),
+					this.hexMgr.getStructureId(hexId,
+							HexComponent.StructurePosition.northwest),
+					this.hexMgr.getStructureId(hexId,
+							HexComponent.StructurePosition.southeast),
+					this.hexMgr.getStructureId(hexId,
+							HexComponent.StructurePosition.southwest),
+					this.hexMgr.getStructureId(hexId,
+							HexComponent.StructurePosition.west) };
+
+			for (int j = 0; j < structPositions.length; j++) {
+
+				StructurePiece p = this.structMgr
+						.getStructurePiece(structPositions[j]);
+
+				if (p != null) {
+					int cardsToAdd = 0;
+					if (p.getBuildType() == BuildType.city) {
+						cardsToAdd = 2;
+					} else if (p.getBuildType() == BuildType.settlement) {
+						cardsToAdd = 1;
+					} else {
+						System.out.println("Critical Error!!!");
 					}
+					this.players[p.getPlayerIndex()].adjustCards(type,
+							cardsToAdd);
 				}
 			}
 		}
 
+		updateUserPanelCards();
+
+	}
+
+	private ArrayList<Hex> findRolledHexes(int rollNumber) {
+		ArrayList<Hex> rolledHexes = new ArrayList<Hex>();
+		for (Hex hex : this.hexArray) {
+			if (hex.getRollNumber() == rollNumber) {
+				rolledHexes.add(hex);
+			}
+		}
+		return rolledHexes;
 	}
 
 	public void drawDevCard() {
@@ -390,6 +355,7 @@ public class Game {
 		this.currentPlayer = (this.currentPlayer + 1) % this.numberOfPlayers;
 		this.userPanel.setCurrentPlayer(this.currentPlayer);
 		this.userPanel.setTurnPhase(TurnPhase.preroll);
+		this.updateUserPanelCards();
 
 		if (checkVictory() >= 0) {
 			JOptionPane.showMessageDialog(null, "Congratulations! Player "
@@ -532,7 +498,8 @@ public class Game {
 		if (this.startingTurnsQueue.isEmpty()) {
 			this.preGameMode = false;
 			this.currentBuildType = BuildType.none;
-			this.userPanel.setupNormalGame();
+			this.userPanel.setUpNormalGame();
+			this.updateUserPanelCards();
 		} else {
 			int playerIndex = this.startingTurnsQueue.poll();
 			this.hasBuiltRoad = false;
@@ -583,6 +550,15 @@ public class Game {
 
 	public boolean hasBuiltRoad() {
 		return this.hasBuiltRoad;
+	}
+
+	public int getRoadCountForPlayer(int playerIndex) {
+		return this.roadMgr.getRoadCountForPlayer(playerIndex);
+	}
+	
+	private void updateUserPanelCards(){
+		this.userPanel.updateResourceCards(this.players[this.currentPlayer]
+				.getCards());
 	}
 
 }

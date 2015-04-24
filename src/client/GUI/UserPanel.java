@@ -5,10 +5,12 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import client.Controller.Game;
 
 /**
@@ -20,6 +22,8 @@ import client.Controller.Game;
  */
 public class UserPanel extends JPanel {
 
+	private static final String TOTAL_CARDS_LABEL_STRING = "Total Cards:  ";
+	private static final String QUANTITY_LABEL_PREFIX = "  X  ";
 	/**
 	 * 
 	 */
@@ -44,6 +48,8 @@ public class UserPanel extends JPanel {
 	private JButton pricesButton;
 	private JPanel turnPanel;
 	private JButton startButton;
+	private JLabel[] quantityLabel;
+	private JLabel totalLabel;
 
 	/**
 	 * creates the user panel to go alongside the board.
@@ -323,7 +329,7 @@ public class UserPanel extends JPanel {
 		String[] labelName = { "wheat", "wood", "wool", "ore", "brick",
 				"soldiers" };
 		JLabel[] nameLabel = new JLabel[6];
-		JLabel[] quantityLabel = new JLabel[6];
+		this.quantityLabel = new JLabel[6];
 		Color[] resourceColor = { Color.yellow, new Color(0, 100, 0),
 				Color.green, Color.gray, new Color(200, 70, 0), Color.white };
 		for (int i = 0; i < 5; i++) {
@@ -333,13 +339,13 @@ public class UserPanel extends JPanel {
 			resourcePanel[i].setPreferredSize(new Dimension(60, 80));
 			resourcePanel[i].setBackground(resourceColor[i]);
 			resourcePanel[i].add(nameLabel[i]);
-			quantityLabel[i] = new JLabel("  X  " + 0);
+			quantityLabel[i] = new JLabel(QUANTITY_LABEL_PREFIX + 0);
 			quantityLabel[i].setPreferredSize(new Dimension(80, 80));
 			quantityLabel[i].setFont(new Font("Times New Roman", 1, 20));
 			this.cardPanel.add(resourcePanel[i]);
 			this.cardPanel.add(quantityLabel[i]);
 		}
-		JLabel totalLabel = new JLabel("Total Cards:  " + 9);
+		this.totalLabel = new JLabel(TOTAL_CARDS_LABEL_STRING + 0);
 		totalLabel.setFont(new Font("Times New Roman", 2, 25));
 		this.cardPanel.add(totalLabel);
 		this.cardPanel.setVisible(false);
@@ -375,7 +381,7 @@ public class UserPanel extends JPanel {
 		}
 		this.add(playerPanel);
 	}
-	
+
 	public void updateVPLabel(int playerNumber, int victoryPoints) {
 		this.vPLabel[playerNumber].setText("VPs:  " + victoryPoints);
 	}
@@ -393,7 +399,7 @@ public class UserPanel extends JPanel {
 		this.setCurrentPlayer(this.game.getCurrentPlayer());
 	}
 
-	public void setupNormalGame() {
+	public void setUpNormalGame() {
 		this.endButton.setVisible(true);
 		this.rollButton.setVisible(true);
 		this.cardButton.setVisible(true);
@@ -404,6 +410,16 @@ public class UserPanel extends JPanel {
 		this.cityButton.setVisible(true);
 		this.dice.setVisible(true);
 		this.setTurnPhase(Game.TurnPhase.preroll);
+
+	}
+
+	public void updateResourceCards(int[] cards) {
+		this.quantityLabel[0].setText(QUANTITY_LABEL_PREFIX + cards[0]);
+		this.quantityLabel[1].setText(QUANTITY_LABEL_PREFIX + cards[1]);
+		this.quantityLabel[2].setText(QUANTITY_LABEL_PREFIX + cards[2]);
+		this.quantityLabel[3].setText(QUANTITY_LABEL_PREFIX + cards[4]);
+		this.quantityLabel[4].setText(QUANTITY_LABEL_PREFIX + cards[3]);
+		this.totalLabel.setText(TOTAL_CARDS_LABEL_STRING + cards[6]);
 
 	}
 

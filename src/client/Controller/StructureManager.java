@@ -22,6 +22,16 @@ public class StructureManager {
 		initializeStructureGraph();
 	}
 
+	public StructurePiece getStructurePiece(int structureId) {
+		for (int i = 0; i < structurePieceMaps.size(); i++) {
+			HashMap<Integer, StructurePiece> map = structurePieceMaps.get(i);
+			if (map.containsKey(structureId)) {
+				return map.get(structureId);
+			}
+		}
+		return null;
+	}
+
 	public void addStructure(int playerNumber, int structureId)
 			throws Exception {
 		// check to make sure playerNumber and structureId are valid
@@ -43,7 +53,7 @@ public class StructureManager {
 
 		// actually add the structure
 		this.structurePieceMaps.get(playerNumber).put(structureId,
-				new StructurePiece(structureId));
+				new StructurePiece(structureId, playerNumber));
 	}
 
 	public void updateStructure(int playerNumber, int structureId)
