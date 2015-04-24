@@ -129,7 +129,7 @@ public class Game {
 		return this.currentTurnPhase;
 	}
 
-	public BuildType getBuildType() {
+	public BuildType getCurrentBuildType() {
 		return this.currentBuildType;
 	}
 

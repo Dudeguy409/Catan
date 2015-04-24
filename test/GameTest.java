@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javax.annotation.Generated;
 import javax.swing.JFrame;
 
 import org.junit.Before;
@@ -25,9 +26,9 @@ import client.Model.Player;
 
 public class GameTest {
 	Game game;
-	
+
 	public void setUpGameEthan() throws Exception {
-		Color[] colors = { new Color(2), new Color(3), new Color(40)  };
+		Color[] colors = { new Color(2), new Color(3), new Color(40) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
 				Resource.wood, Resource.brick, Resource.wheat, Resource.ore,
@@ -38,7 +39,7 @@ public class GameTest {
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0);
 	}
-	
+
 	public void setUpGameAndrew() throws Exception {
 		Color[] colors = { new Color(2), new Color(3) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
@@ -51,9 +52,10 @@ public class GameTest {
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 1);
 	}
-	
+
 	public void setUpGameDavis() throws Exception {
-		Color[] colors = { new Color(2), new Color(3), new Color(32), new Color(55) };
+		Color[] colors = { new Color(2), new Color(3), new Color(32),
+				new Color(55) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
 				Resource.wood, Resource.brick, Resource.wheat, Resource.ore,
@@ -228,17 +230,17 @@ public class GameTest {
 
 	@Test
 	public void testThatNormalGameStartsAfterPreGame() {
-		game.processStartGameClick();
+		setUpGameAndrew();
 		assertEquals(game.getCurrentPlayer(), 1);
-		game.addRoad(playerIndex, hexId, pos);
-		game.addBuilding(playerIndex, hexId, pos);
-		game.addRoad(playerIndex, hexId, pos);
-		game.addBuilding(playerIndex, hexId, pos);
-		game.addRoad(playerIndex, hexId, pos);
-		game.addBuilding(playerIndex, hexId, pos);
-		game.addRoad(playerIndex, hexId, pos);
-		game.addBuilding(playerIndex, hexId, pos);
+		assertEquals(game.getCurrentBuildType(), Game.BuildType.none);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(12, );
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(12,);
 		
+		
+	
+
 	}
 
 	// Tests for buying things

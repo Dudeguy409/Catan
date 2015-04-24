@@ -161,7 +161,7 @@ public class BoardRenderer extends JComponent implements MouseListener {
 	public void mousePressed(MouseEvent arg0) {
 		int[] nearArray = findNearestHexes(arg0.getX(), arg0.getY());
 		if (nearArray[1] != -1) {
-			Game.BuildType buildType = this.game.getBuildType();
+			Game.BuildType buildType = this.game.getCurrentBuildType();
 			int hexId = nearArray[0];
 			if (buildType != Game.BuildType.none) {
 				if (buildType != Game.BuildType.road) {
