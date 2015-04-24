@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Queue;
 
+import javax.swing.JOptionPane;
+
 import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.StructurePosition;
@@ -265,6 +267,14 @@ public class Game {
 		this.userPanel.setCurrentPlayer(this.currentPlayer);
 		this.userPanel.setTurnPhase(TurnPhase.preroll);
 
+		if (checkVictory() >= 0) {
+			JOptionPane.showMessageDialog(null, "Congratulations! Player "
+					+ checkVictory() + 1 + " has won the game!", "Game Over",
+					JOptionPane.NO_OPTION);
+			//add one to this since player names start with 1 in GUI
+			
+			System.exit(0);
+		}
 	}
 
 	public Color[] getPlayerColors() {
@@ -375,15 +385,14 @@ public class Game {
 				addRoad(this.currentPlayer, hexID, pos);
 	}
 
-	// Returns the number of the winning player. If no player has won yet, it returns -1.
+	// Returns the number of the winning player. If no player has won yet, it
+	// returns -1.
 	public int checkVictory() {
-		for(int i = 0; i < numberOfPlayers; i++) {
-			if(getVictoryPointsForPlayer(i)>=10) {
+		for (int i = 0; i < numberOfPlayers; i++) {
+			if (getVictoryPointsForPlayer(i) >= 10) {
 				return i;
 			}
 		}
 		return -1;
 	}
 }
-
-
