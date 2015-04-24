@@ -157,14 +157,14 @@ public class GameTest {
 		woolField.set(player, 1);
 		wheatField.set(player, 1);
 
-		Player[] players = { new Player(), player };
+		Player[] players = { player, new Player() };
 		field.set(game, players);
-		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
-		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		game.processBuildSettlementClick(3, HexComponent.StructurePosition.northwest);
 		game.roll();
 
-		assertEquals(1, player.getCards()[2]);
+		assertEquals(1, player.getCards()[4]);
 	}
 
 	@Test
@@ -194,15 +194,15 @@ public class GameTest {
 		wheatField.set(player, 3);
 		oreField.set(player, 3);
 
-		Player[] players = { new Player(), player };
+		Player[] players = { player, new Player() };
 		field.set(game, players);
-		game.addRoad(1, 15, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
-		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		game.processBuildSettlementClick(3, HexComponent.StructurePosition.northwest);
 		game.setBuildType(Game.BuildType.city);
-		game.addBuilding(1, 15, HexComponent.StructurePosition.northwest);
+		game.processBuildCityClick(3, HexComponent.StructurePosition.northwest);
 		game.roll();
-		assertEquals(2, player.getCards()[2]);
+		assertEquals(2, player.getCards()[4]);
 	}
 
 	@Test
@@ -221,7 +221,11 @@ public class GameTest {
 
 		Player[] players = (Player[]) (field.get(game));
 		Player player = players[game.getCurrentPlayer()];
-		assertEquals(0, player.getCards()[6]);
+		assertEquals(0, player.getCards()[0]);
+		assertEquals(0, player.getCards()[1]);
+		assertEquals(0, player.getCards()[2]);
+		assertEquals(0, player.getCards()[3]);
+		assertEquals(0, player.getCards()[4]);
 	}
 
 	@Test
