@@ -324,19 +324,31 @@ public class Game {
 		// TODO Auto-generated method stub
 	}
 
-	public void processBuildClick(int hexID, HexComponent.StructurePosition pos) {
+	public void processBuildSettlementClick(int hexID, HexComponent.StructurePosition pos) {
 		if (this.preGameMode != true) {
 			if (this.currentTurnPhase == Game.TurnPhase.build)
 				checkCards(hexID, pos);
 		}
+	}
+	
+	public void processBuildCityClick(int hexID, HexComponent.StructurePosition pos) {
+		Player cp = players[this.currentPlayer];
+		if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1 && cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1)
+			addBuilding(this.currentPlayer, hexID, pos);
+	}
+	
+	public void processBuildRoadClick(int hexID, HexComponent.StructurePosition pos) {
+		
 	}
 
 	private void checkCards(int hexID, HexComponent.StructurePosition pos) {
 		Player cp = players[this.currentPlayer];
 		switch (this.currentBuildType) {
 		case city:
-			if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3)
+			if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3) {
+				
 				addBuilding(this.currentPlayer, hexID, pos);
+			}
 		case settlement:
 			if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1 && cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1)
 				addBuilding(this.currentPlayer, hexID, pos);
