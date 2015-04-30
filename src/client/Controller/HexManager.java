@@ -1,6 +1,8 @@
 package client.Controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import client.GUI.HexComponent;
 import client.Model.LocationKey;
@@ -24,6 +26,19 @@ public class HexManager {
 
 	public int getStructureId(int hexIndex, HexComponent.StructurePosition pos) {
 		return this.structureMap.get(new StructureLocationKey(hexIndex, pos));
+	}
+
+	public ArrayList<Integer> getAdjacentHexesForSettlement(int structureId) {
+		ArrayList<Integer> rslts = new ArrayList<>();
+
+		for (Entry<StructureLocationKey, Integer> e : this.structureMap
+				.entrySet()) {
+			if (e.getValue().intValue() == structureId) {
+				rslts.add(e.getKey().getHexIndex());
+			}
+		}
+
+		return rslts;
 	}
 
 	private void initializeRoadMap() {

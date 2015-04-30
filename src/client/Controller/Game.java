@@ -75,25 +75,21 @@ public class Game {
 	 * The number of hexes on the field.
 	 */
 	public static final int boardSize = 19;
-	private static int[] randomNumberArray = new int[boardSize];
-	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
-			int startingPlayer, IUserPanel userPanel, IBoardRenderer board, int[] randomNumberArray ) {
+			int startingPlayer, IUserPanel userPanel, IBoardRenderer board,
+			int[] randomNumberArray) {
 
 		this.currentPlayer = startingPlayer;
-		this.randomColorArray = hexResources;
 		this.dice = dice;
 		this.colorArray = pColors;
 		this.numberOfPlayers = pColors.length;
 
 		generateStartingTurnsQueue();
 
-		
-
 		this.hexArray = new ArrayList<Hex>();
 		for (int j = 0; j < boardSize; j++) {
-			hexArray.add(new Hex(randomNumberArray[j], randomColorArray[j], j));
+			hexArray.add(new Hex(randomNumberArray[j], hexResources[j], j));
 		}
 
 		this.players = new Player[this.numberOfPlayers];
@@ -103,7 +99,7 @@ public class Game {
 		this.roadMgr = new RoadManager(this.numberOfPlayers);
 		this.hexMgr = new HexManager();
 		this.structMgr = new StructureManager(this.numberOfPlayers);
-		this.userPanel= userPanel;
+		this.userPanel = userPanel;
 		this.userPanel.configureUserPanel(this);
 		this.board = board;
 		this.board.setGame(this);
@@ -154,6 +150,7 @@ public class Game {
 			roadAdded = true;
 			this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
 					BuildType.road);
+			updateUserPanelCards();
 		}
 
 		// TODO keep track of longest road
@@ -161,6 +158,8 @@ public class Game {
 			maxRoadLength = roadMgr.findLongestRoadForPlayer(playerIndex);
 			playerWithLongestRoad = playerIndex;
 		}
+		
+		
 		return roadAdded;
 	}
 
@@ -177,7 +176,7 @@ public class Game {
 
 	public boolean addBuilding(int playerIndex, int hexId,
 			HexComponent.StructurePosition pos) {
-		//System.out.println("current Player: "+(playerIndex+1));
+		// System.out.println("current Player: "+(playerIndex+1));
 		// TODO throw exceptions
 
 		// Check for adjacent road not returned by
@@ -247,6 +246,15 @@ public class Game {
 							this.colorArray[playerIndex], BuildType.city);
 				}
 
+				int settleCount = this.structMgr
+						.getSettlementCountForPlayer(playerIndex);
+				int cityCount = this.structMgr
+						.getCityCountForPlayer(playerIndex);
+
+				if (settleCount == 2 && cityCount == 0) {
+					addResourcesForSecondSettlement(playerIndex, structureId);
+				}
+				updateUserPanelCards();
 				return true;
 
 			} catch (Exception e) {
@@ -255,6 +263,17 @@ public class Game {
 
 		}
 		return false;
+	}
+
+	private void addResourcesForSecondSettlement(int playerIndex,
+			int structureId) {
+		ArrayList<Integer> adjacentHexIds = this.hexMgr
+				.getAdjacentHexesForSettlement(structureId);
+
+		for (int i = 0; i < adjacentHexIds.size(); i++) {
+			this.players[playerIndex].adjustCards(
+					this.hexArray.get(adjacentHexIds.get(i)).getResource(), 1);
+		}
 	}
 
 	public void roll() {
@@ -289,13 +308,13 @@ public class Game {
 						.getStructurePiece(structPositions[j]);
 
 				if (p != null) {
-//					System.out.println("Structure: player "
-//							+ (1 + p.getPlayerIndex()) + ", buildType: "
-//							+ p.getBuildType() + "resource: "
-//							+ hex.getResource() + ", structure id: "
-//							+ p.getStructureId() + ", hex id: "
-//							+ hex.getHexID() + ", hex roll number: "
-//							+ hex.getRollNumber());
+					// System.out.println("Structure: player "
+					// + (1 + p.getPlayerIndex()) + ", buildType: "
+					// + p.getBuildType() + "resource: "
+					// + hex.getResource() + ", structure id: "
+					// + p.getStructureId() + ", hex id: "
+					// + hex.getHexID() + ", hex roll number: "
+					// + hex.getRollNumber());
 					int cardsToAdd = 0;
 					if (p.getBuildType() == BuildType.city) {
 						cardsToAdd = 2;
@@ -445,7 +464,7 @@ public class Game {
 	public int getVictoryPointsForPlayer(int playerNumber) {
 		int points = 0;
 		if (maxRoadLength >= 5 && playerWithLongestRoad == playerNumber) {
-			points+=2;
+			points += 2;
 		}
 		points += structMgr
 				.calculateStructureVictoyPointsForPlayer(playerNumber);
