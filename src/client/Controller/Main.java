@@ -139,7 +139,7 @@ public class Main {
 				options1, -1) + 2;
 	}
 
-	private static int[] configureRandomNumberArray(Resource[] hexResources) {
+	public static int[] configureRandomNumberArray(Resource[] hexResources) {
 		// This array contains all of the roll numbers in the order that they
 		// are always supposed to appear. These are placed in a clockwise inward
 		// spiral starting at the bottom hex.

@@ -1,4 +1,6 @@
-package client.Controller;
+
+
+import client.Controller.IDice;
 
 public class FakeDice implements IDice {
 
