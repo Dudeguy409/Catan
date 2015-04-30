@@ -53,16 +53,14 @@ public class BoardRenderer extends JComponent implements MouseListener {
 	 * @param randomNumberArray
 	 * @param myPanel
 	 */
-	public BoardRenderer(Game game) {
-
+	public BoardRenderer() {
 		this.setPreferredSize(new Dimension(800, 800));
-		this.game = game;
-		this.game.setBoardRenderer(this);
 		this.addMouseListener(this);
 	}
 
 	public void setBoard(Game.Resource[] randomColorArray,
-			int[] randomNumberArray) {
+			int[] randomNumberArray, Game game) {
+		this.game = game;
 		this.colorNumberArray = randomColorArray;
 		this.rollNumberArray = randomNumberArray;
 

@@ -41,13 +41,14 @@ public class Main {
 		frame.setLayout(new FlowLayout());
 		Game.Resource[] hexResources = HexResourceTypeGenerator
 				.getHexColors(new Random().nextLong());
+		BoardRenderer myBoard = new BoardRenderer();
 		UserPanel myPanel = new UserPanel();
 		Game game = new Game(colors, hexResources, new Dice(),
-				new Random().nextInt(colors.length), myPanel);
+				new Random().nextInt(colors.length), myPanel, myBoard);
 		
 
 		frame.add(myPanel, FlowLayout.LEFT);
-		BoardRenderer myBoard = new BoardRenderer(game);
+		
 		frame.add(myBoard, FlowLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);

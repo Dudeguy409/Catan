@@ -55,36 +55,6 @@ public class UserPanel extends JPanel {
 	public UserPanel(){
 		
 	}
-//	/**
-//	 * creates the user panel to go alongside the board.
-//	 * 
-//	 */
-//	public UserPanel(Game game) {
-//		this.game = game;
-//
-//		this.setPreferredSize(new Dimension(300, 800));
-//		this.setBackground(Color.red);
-//
-//		addCurrentPlayerLabel();
-//		addPlayerStatsPanel();
-//
-//		addStartGameButton();
-//
-//		addTurnPanel();
-//		addBuildPanel();
-//
-//		this.dice = new DiceRenderer();
-//		this.dice.setVisible(false);
-//		this.add(this.dice);
-//
-//		addCardButton();
-//		addCardPanel();
-//
-//		addPricesButton();
-//
-//		this.game.setUserPanel(this);
-//
-//	}
 	
 	public void configureUserPanel(Game game){
 		this.game = game;
@@ -109,7 +79,6 @@ public class UserPanel extends JPanel {
 
 		addPricesButton();
 
-		//this.game.setUserPanel(this);
 	}
 
 	public void setCurrentPlayer(int playerIndex) {

@@ -79,7 +79,7 @@ public class Game {
 	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
-			int startingPlayer, UserPanel userPanel) {
+			int startingPlayer, UserPanel userPanel, BoardRenderer board) {
 
 		this.currentPlayer = startingPlayer;
 		this.randomColorArray = hexResources;
@@ -125,6 +125,9 @@ public class Game {
 		this.structMgr = new StructureManager(this.numberOfPlayers);
 		this.userPanel= userPanel;
 		this.userPanel.configureUserPanel(this);
+		this.board = board;
+		this.board.setBoard(randomColorArray, randomNumberArray, this);
+		this.board.setBoard();
 	}
 
 	private void generateStartingTurnsQueue() {
@@ -140,16 +143,6 @@ public class Game {
 			this.startingTurnsQueue.add(reverseOrder.pop());
 		}
 		this.startingTurnsQueue.poll();
-	}
-
-//	public void setUserPanel(UserPanel panel) {
-//		this.userPanel = panel;
-//	}
-
-	public void setBoardRenderer(BoardRenderer board) {
-		this.board = board;
-		this.board.setBoard(randomColorArray, randomNumberArray);
-		this.board.setBoard();
 	}
 
 	public TurnPhase getCurrentTurnPhase() {
