@@ -132,6 +132,10 @@ public class Game {
 	public int getCurrentPlayer() {
 		return this.currentPlayer;
 	}
+	
+	public boolean trade(int playerToTradeIndex, int[] resourcesOffered, int[] resourcesRequested){
+		return false;
+	}
 
 	public boolean addRoad(int playerIndex, int hexId,
 			HexComponent.RoadPosition pos) {
