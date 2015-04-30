@@ -20,7 +20,7 @@ import client.Controller.Game;
  * 
  * @author Andrew Davidson. Created May 8, 2010.
  */
-public class UserPanel extends JPanel {
+public class UserPanel extends JPanel implements IUserPanel {
 
 	private static final String TOTAL_CARDS_LABEL_STRING = "Total Cards:  ";
 	private static final String QUANTITY_LABEL_PREFIX = "  X  ";

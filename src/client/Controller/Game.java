@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+
 import javax.swing.JOptionPane;
+
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.RoadPosition;
 import client.GUI.HexComponent.StructurePosition;
 import client.GUI.IBoardRenderer;
-import client.GUI.UserPanel;
+import client.GUI.IUserPanel;
 import client.Model.Hex;
 import client.Model.Player;
 import client.Model.RoadPiece;
@@ -51,7 +53,7 @@ public class Game {
 	}
 
 	private IBoardRenderer board;
-	private UserPanel userPanel;
+	private IUserPanel userPanel;
 	private TurnPhase currentTurnPhase = TurnPhase.build;
 	private BuildType currentBuildType = BuildType.none;
 	private int currentPlayer;
@@ -77,7 +79,7 @@ public class Game {
 	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
-			int startingPlayer, UserPanel userPanel, IBoardRenderer board, int[] randomNumberArray ) {
+			int startingPlayer, IUserPanel userPanel, IBoardRenderer board, int[] randomNumberArray ) {
 
 		this.currentPlayer = startingPlayer;
 		this.randomColorArray = hexResources;
