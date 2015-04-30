@@ -260,8 +260,6 @@ public class RoadManager {
 					}
 				}
 			}
-
-			// System.out.println(roadPieceDependencyMaps.get(playerIndex));
 		}
 	}
 

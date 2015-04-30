@@ -106,6 +106,33 @@ public class StructureManager {
 		}
 		return cityCount;
 	}
+	
+	
+	protected boolean isAdjacentToOtherSettlements(int structureId) {
+		for (int structId : this.structureDependencyMap.get(structureId)
+				.getAdjacentSettlements()) {
+			for (HashMap<Integer, StructurePiece> hash : structurePieceMaps) {
+				if (hash.containsKey(structId)) {// check if road exists
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean settlementAlreadyExistsThere(int structureId) {
+		for (HashMap<Integer, StructurePiece> hash : structurePieceMaps) {
+			if (hash.containsKey(structureId)) {// check if road exists
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected boolean isValidBeginningSettlementPosition(int structureId) {
+		return !(isAdjacentToOtherSettlements(structureId) || settlementAlreadyExistsThere(structureId));
+	}
+	
 
 	private void initializeStructureGraph() {
 		structureDependencyMap = new HashMap<Integer, Structure>();
@@ -202,29 +229,6 @@ public class StructureManager {
 
 	}
 
-	protected boolean isAdjacentToOtherSettlements(int structureId) {
-		for (int structId : this.structureDependencyMap.get(structureId)
-				.getAdjacentSettlements()) {
-			for (HashMap<Integer, StructurePiece> hash : structurePieceMaps) {
-				if (hash.containsKey(structId)) {// check if road exists
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private boolean settlementAlreadyExistsThere(int structureId) {
-		for (HashMap<Integer, StructurePiece> hash : structurePieceMaps) {
-			if (hash.containsKey(structureId)) {// check if road exists
-				return true;
-			}
-		}
-		return false;
-	}
-
-	protected boolean isValidBeginningSettlementPosition(int structureId) {
-		return !(isAdjacentToOtherSettlements(structureId) || settlementAlreadyExistsThere(structureId));
-	}
+	
 
 }

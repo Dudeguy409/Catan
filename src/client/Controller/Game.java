@@ -150,6 +150,10 @@ public class Game {
 			roadAdded = true;
 			this.board.addRoad(hexId, pos, this.colorArray[playerIndex],
 					BuildType.road);
+			if (!this.preGameMode) {
+				int[] delta = { 0, -1, 0, -1, 0, 0, 0 };
+				this.players[playerIndex].adjustCards(delta);
+			}
 			updateUserPanelCards();
 		}
 
@@ -158,8 +162,7 @@ public class Game {
 			maxRoadLength = roadMgr.findLongestRoadForPlayer(playerIndex);
 			playerWithLongestRoad = playerIndex;
 		}
-		
-		
+
 		return roadAdded;
 	}
 
@@ -240,10 +243,19 @@ public class Game {
 					this.structMgr.addStructure(playerIndex, structureId);
 					this.board.addBuilding(hexId, pos,
 							this.colorArray[playerIndex], BuildType.settlement);
+					if (!this.preGameMode) {
+						int[] delta = { -1, -1, -1, -1, 0, 0, 0 };
+						this.players[playerIndex].adjustCards(delta);
+					}
+
 				} else {
 					this.structMgr.updateStructure(playerIndex, structureId);
 					this.board.addBuilding(hexId, pos,
 							this.colorArray[playerIndex], BuildType.city);
+					if (!this.preGameMode) {
+						int[] delta = { -2, 0, 0, 0, -3, 0, 0 };
+						this.players[playerIndex].adjustCards(delta);
+					}
 				}
 
 				int settleCount = this.structMgr
@@ -479,14 +491,10 @@ public class Game {
 			if (this.currentBuildType == BuildType.settlement) {
 				if (cp.getCards()[0] >= 1 && cp.getCards()[1] >= 1
 						&& cp.getCards()[2] >= 1 && cp.getCards()[3] >= 1) {
-					int[] delta = { -1, -1, -1, -1, 0, 0, 0 };
-					cp.adjustCards(delta);
 					addBuilding(this.currentPlayer, hexID, pos);
 				}
 			} else {
 				if (cp.getCards()[0] >= 2 && cp.getCards()[4] >= 3) {
-					int[] delta = { -2, 0, 0, 0, -3, 0, 0 };
-					cp.adjustCards(delta);
 					addBuilding(this.currentPlayer, hexID, pos);
 				}
 			}
@@ -515,8 +523,6 @@ public class Game {
 		Player cp = players[this.currentPlayer];
 		if (this.preGameMode != true) {
 			if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1) {
-				int[] delta = { 0, -1, 0, -1, 0, 0, 0 };
-				cp.adjustCards(delta);
 				addRoad(this.currentPlayer, hexID, pos);
 			}
 
