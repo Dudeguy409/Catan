@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import org.junit.Before;
 import org.junit.Test;
 
-import client.Controller.FakeDice;
 import client.Controller.Game;
 import client.Controller.StructureManager;
 import client.Controller.Game.BuildType;
@@ -38,20 +37,19 @@ public class DevelopmentCardTest {
 				Resource.sheep };
 		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0);
+		
+		// Game is not setup right
+		
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0, new UserPanel(), new BoardRenderer(resources, arrayB), arrayB);
 		Field field = Game.class.getDeclaredField("preGameMode");
 		field.setAccessible(true);
 		field.set(game, false);
 	}
 	
 	@Test
-	public void TestBuyYearOfPlenty() throws Exception {
+	public void TestBuyDevelopmentCard() throws Exception {
 		setUpGameEthan();
-		ArrayList<Integer> cards = new ArrayList<Integer>();
-		cards.add(0);
-		cards.add(1);
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
+		
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 
@@ -61,11 +59,81 @@ public class DevelopmentCardTest {
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
-		game.processBuildYearOfPlenty(cards);
+		game.processBuildDevCard();
+		assertEquals(0, player.getCards()[0]);
+		assertEquals(0, player.getCards()[2]);
+		assertEquals(0, player.getCards()[4]);
+	}
+	
+	@Test
+	public void TestUseYearOfPlenty() throws Exception {
+		setUpGameEthan();
+		ArrayList<Integer> cards = new ArrayList<Integer>();
+		cards.add(0);
+		cards.add(1);
+		
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Player player = new Player();
+		int[] delta = { 1, 0, 1, 0, 1, 0 };
+		player.adjustCards(delta);
+
+		Player[] players = { player, new Player() };
+		field.set(game, players);
+		game.processBuildDevCard();
+		game.useYearOfPlenty(cards);
 		assertEquals(1, player.getCards()[0]);
 		assertEquals(1, player.getCards()[1]);
 		assertEquals(0, player.getCards()[2]);
 		assertEquals(0, player.getCards()[4]);
 	}
+	
+	@Test
+	public void TestGetVictoryDevCard() throws Exception {
+		setUpGameEthan();
+		
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
 
+		Player player = new Player();
+		int[] delta = { 1, 0, 1, 0, 1, 0 };
+		player.adjustCards(delta);
+
+		Player[] players = { player, new Player() };
+		field.set(game, players);
+		game.processBuildDevCard();
+		assertEquals(1, player.getVPs());
+		assertEquals(1, player.getCards()[0]);
+		assertEquals(1, player.getCards()[1]);
+		assertEquals(0, player.getCards()[2]);
+		assertEquals(0, player.getCards()[4]);
+	}
+	
+	@Test
+	public void TestUseMonopolyDevCard() throws Exception {
+		setUpGameEthan();
+		int card = 0;
+		
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Player player = new Player();
+		int[] delta = { 1, 0, 1, 0, 1, 0 };
+		player.adjustCards(delta);
+		
+		Player player2 = new Player();
+		int[] delta2 = { 1, 0, 0, 0, 0, 0 };
+		player2.adjustCards(delta2);
+
+		Player[] players = { player, player2 };
+		field.set(game, players);
+		game.processBuildDevCard();
+		game.useMonopoly(card);
+		
+		assertEquals(0, player2.getCards()[0]);
+		assertEquals(1, player.getCards()[0]);
+		assertEquals(0, player.getCards()[2]);
+		assertEquals(0, player.getCards()[4]);
+	}
 }
