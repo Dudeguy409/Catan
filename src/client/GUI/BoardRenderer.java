@@ -21,7 +21,8 @@ import client.Controller.Game;
  * 
  * @author Andrew Davidson. Created May 7, 2010.
  */
-public class BoardRenderer extends JComponent implements MouseListener {
+public class BoardRenderer extends JComponent implements MouseListener,
+		IBoardRenderer {
 	private int startingX = 380;
 	private int startingY = 640;
 	private HexComponent[] boardArray = new HexComponent[Game.boardSize];
@@ -53,14 +54,10 @@ public class BoardRenderer extends JComponent implements MouseListener {
 	 * @param randomNumberArray
 	 * @param myPanel
 	 */
-	public BoardRenderer() {
+	public BoardRenderer(Game.Resource[] randomColorArray,
+			int[] randomNumberArray) {
 		this.setPreferredSize(new Dimension(800, 800));
-		this.addMouseListener(this);
-	}
-
-	public void setBoard(Game.Resource[] randomColorArray,
-			int[] randomNumberArray, Game game) {
-		this.game = game;
+		
 		this.colorNumberArray = randomColorArray;
 		this.rollNumberArray = randomNumberArray;
 
@@ -71,6 +68,12 @@ public class BoardRenderer extends JComponent implements MouseListener {
 				break;
 			}
 		}
+		
+		this.addMouseListener(this);
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
 	}
 
 	@Override
@@ -165,7 +168,8 @@ public class BoardRenderer extends JComponent implements MouseListener {
 				if (buildType != Game.BuildType.road) {
 					HexComponent.StructurePosition pos = this
 							.determineStructurePosition(nearArray);
-					this.game.processBuildStructureClick(this.hexIndexToGUITranslator[hexId], pos);
+					this.game.processBuildStructureClick(
+							this.hexIndexToGUITranslator[hexId], pos);
 				} else {
 					HexComponent.RoadPosition pos = this
 							.determineRoadPosition(nearArray);

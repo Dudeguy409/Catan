@@ -8,6 +8,7 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import client.Controller.Game.Resource;
 import client.GUI.BoardRenderer;
 import client.GUI.UserPanel;
 
@@ -41,14 +42,18 @@ public class Main {
 		frame.setLayout(new FlowLayout());
 		Game.Resource[] hexResources = HexResourceTypeGenerator
 				.getHexColors(new Random().nextLong());
-		BoardRenderer myBoard = new BoardRenderer();
+		int[] randomNumberArray = configureRandomNumberArray(hexResources);
+		BoardRenderer myBoard = new BoardRenderer(hexResources,randomNumberArray);
 		UserPanel myPanel = new UserPanel();
-		Game game = new Game(colors, hexResources, new Dice(),
-				new Random().nextInt(colors.length), myPanel, myBoard);
+
 		
 
+		new Game(colors, hexResources, new Dice(),
+				new Random().nextInt(colors.length), myPanel, myBoard,
+				randomNumberArray);
+
 		frame.add(myPanel, FlowLayout.LEFT);
-		
+
 		frame.add(myBoard, FlowLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -132,6 +137,33 @@ public class Main {
 				"How many players are there?", "Setup",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
 				options1, -1) + 2;
+	}
+
+	private static int[] configureRandomNumberArray(Resource[] hexResources) {
+		// This array contains all of the roll numbers in the order that they
+		// are always supposed to appear. These are placed in a clockwise inward
+		// spiral starting at the bottom hex.
+		int[] rollNumberArray = { 5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4,
+				5, 6, 3, 11 };
+		int[] randomNumberArray = new int[hexResources.length];
+
+		// adjusts the rollNumberArray to include a -1 in the right spot to
+		// represent a desert.
+		int desertColorIndex = -1;
+		for (int i = 0; i < hexResources.length; i++) {
+			if (hexResources[i] == Resource.desert) {
+				desertColorIndex = i;
+				randomNumberArray[i] = -1;
+			} else {
+				if (desertColorIndex < 0) {
+					randomNumberArray[i] = rollNumberArray[i];
+				} else {
+					randomNumberArray[i] = rollNumberArray[i - 1];
+				}
+			}
+		}
+
+		return randomNumberArray;
 	}
 
 }

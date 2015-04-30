@@ -6,13 +6,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
-
 import javax.swing.JOptionPane;
-
-import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.RoadPosition;
 import client.GUI.HexComponent.StructurePosition;
+import client.GUI.IBoardRenderer;
 import client.GUI.UserPanel;
 import client.Model.Hex;
 import client.Model.Player;
@@ -52,7 +50,7 @@ public class Game {
 		road, settlement, city, none
 	}
 
-	private BoardRenderer board;
+	private IBoardRenderer board;
 	private UserPanel userPanel;
 	private TurnPhase currentTurnPhase = TurnPhase.build;
 	private BuildType currentBuildType = BuildType.none;
@@ -79,7 +77,7 @@ public class Game {
 	private static Game.Resource[] randomColorArray = new Game.Resource[boardSize];
 
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
-			int startingPlayer, UserPanel userPanel, BoardRenderer board) {
+			int startingPlayer, UserPanel userPanel, IBoardRenderer board, int[] randomNumberArray ) {
 
 		this.currentPlayer = startingPlayer;
 		this.randomColorArray = hexResources;
@@ -89,27 +87,7 @@ public class Game {
 
 		generateStartingTurnsQueue();
 
-		// This array contains all of the roll numbers in the order that they
-		// are always supposed to appear. These are placed in a clockwise inward
-		// spiral starting at the bottom hex.
-		int[] rollNumberArray = { 5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4,
-				5, 6, 3, 11 };
-
-		// adjusts the rollNumberArray to include a -1 in the right spot to
-		// represent a desert.
-		int desertColorIndex = -1;
-		for (int i = 0; i < hexResources.length; i++) {
-			if (randomColorArray[i] == Resource.desert) {
-				desertColorIndex = i;
-				randomNumberArray[i] = -1;
-			} else {
-				if (desertColorIndex < 0) {
-					randomNumberArray[i] = rollNumberArray[i];
-				} else {
-					randomNumberArray[i] = rollNumberArray[i - 1];
-				}
-			}
-		}
+		
 
 		this.hexArray = new ArrayList<Hex>();
 		for (int j = 0; j < boardSize; j++) {
@@ -126,7 +104,7 @@ public class Game {
 		this.userPanel= userPanel;
 		this.userPanel.configureUserPanel(this);
 		this.board = board;
-		this.board.setBoard(randomColorArray, randomNumberArray, this);
+		this.board.setGame(this);
 		this.board.setBoard();
 	}
 
