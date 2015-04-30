@@ -41,10 +41,10 @@ public class Main {
 		frame.setLayout(new FlowLayout());
 		Game.Resource[] hexResources = HexResourceTypeGenerator
 				.getHexColors(new Random().nextLong());
-
+		UserPanel myPanel = new UserPanel();
 		Game game = new Game(colors, hexResources, new Dice(),
-				new Random().nextInt(colors.length));
-		UserPanel myPanel = new UserPanel(game);
+				new Random().nextInt(colors.length), myPanel);
+		
 
 		frame.add(myPanel, FlowLayout.LEFT);
 		BoardRenderer myBoard = new BoardRenderer(game);
