@@ -1,11 +1,7 @@
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import org.junit.Test;
 
@@ -63,47 +59,130 @@ public class GameTradeTest {
 	}
 
 	@Test
-	public void testInsufficientBalanceBounces() throws Exception {
+	public void testDoubleInsufficientBalanceBounces() throws Exception {
 		setUpGameAndrew();
-		int[] offer = {0,0,0,1,0};
-		int[] request = {0,1,0,0,0};
+		System.out.println(Arrays.toString(this.game.getCardsForPlayer(0)));
+		System.out.println(Arrays.toString(this.game.getCardsForPlayer(1)));
+		System.out.println(this.game.isBeginningOfGame());
+		System.out.println(this.game.getCurrentPlayer());
+
+		int[] offer = { 1, 0, 0, 0, 0 };
+		int[] request = { 0, 0, 0, 1, 0 };
 		boolean rslt = game.trade(1, offer, request);
 		assertEquals(rslt, false);
-		
-		int[] expected = { 0, 0, 0, 0, 0 };
-		assertEquals(
-				this.userPanel.resourceCardHistory.get(this.userPanel.resourceCardHistory
-						.size() - 1), expected);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
+
+	}
+
+	@Test
+	public void testOfferInsufficientBalanceBounces() throws Exception {
+		setUpGameAndrew();
+
+		int[] offer = { 1, 0, 0, 0, 0 };
+		int[] request = { 0, 0, 0, 0, 1 };
+		boolean rslt = game.trade(1, offer, request);
+		assertEquals(rslt, false);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
+
+	}
+
+	@Test
+	public void testRequestInsufficientBalanceBounces() throws Exception {
+		setUpGameAndrew();
+
+		int[] offer = { 0, 0, 1, 0, 0 };
+		int[] request = { 0, 1, 0, 0, 0 };
+		boolean rslt = game.trade(1, offer, request);
+		assertEquals(rslt, false);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
+
+	}
+
+	@Test
+	public void testOfferVeryInsufficientBalanceBounces() throws Exception {
+		setUpGameAndrew();
+
+		int[] offer = { 0, 0, 4, 0, 0 };
+		int[] request = { 1, 0, 0, 0, 0 };
+		boolean rslt = game.trade(1, offer, request);
+		assertEquals(rslt, false);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
 
 	}
 
 	@Test
 	public void testCantTradeNothing() throws Exception {
 		setUpGameAndrew();
-		int[] offer = {0,0,0,0,0};
-		int[] request = {0,1,0,0,0};
-		boolean rslt = game.trade(1,offer, request);
+		int[] offer = { 0, 0, 0, 0, 0 };
+		int[] request = { 0, 1, 0, 0, 0 };
+		boolean rslt = game.trade(1, offer, request);
 		assertEquals(rslt, false);
-		
-		int[] expected = { 0, 0, 0, 0, 0 };
-		assertEquals(
-				this.userPanel.resourceCardHistory.get(this.userPanel.resourceCardHistory
-						.size() - 1), expected);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
 
 	}
 
 	@Test
 	public void testCantTradeForNothing() throws Exception {
 		setUpGameAndrew();
-		int[] offer = {0,0,0,1,0};
-		int[] request = {0,0,0,0,0};
+		int[] offer = { 0, 0, 0, 1, 0 };
+		int[] request = { 0, 0, 0, 0, 0 };
 		boolean rslt = game.trade(1, offer, request);
 		assertEquals(rslt, false);
-		
-		int[] expected = { 0, 0, 0, 0, 0 };
-		assertEquals(
-				this.userPanel.resourceCardHistory.get(this.userPanel.resourceCardHistory
-						.size() - 1), expected);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
 
 	}
 
@@ -113,58 +192,77 @@ public class GameTradeTest {
 		int[] offer = { 0, 0, 0, 1, 0 };
 		int[] request = { 0, 1, 0, 0, 0 };
 		boolean rslt = game.trade(1, offer, request);
-		int[] expected = { 0, 0, 0, 0, 0 };
-		assertEquals(
-				this.userPanel.resourceCardHistory.get(this.userPanel.resourceCardHistory
-						.size() - 1), expected);
 		assertEquals(rslt, true);
-		
-		
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
 
 	}
 
 	@Test
 	public void testCantTradeWithSelf() throws Exception {
 		setUpGameAndrew();
-		int[] offer = {0,0,0,1,0};
-		int[] request = {0,1,0,0,0};
+		int[] offer = { 0, 0, 0, 1, 0 };
+		int[] request = { 0, 1, 0, 0, 0 };
 		boolean rslt = game.trade(0, offer, request);
 		assertEquals(rslt, false);
-		
-		int[] expected = { 0, 0, 0, 0, 0 };
-		assertEquals(
-				this.userPanel.resourceCardHistory.get(this.userPanel.resourceCardHistory
-						.size() - 1), expected);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
 
 	}
 
 	@Test
 	public void testLargerTradeOne() throws Exception {
 		setUpGameAndrew();
-		int[] offer = {0,0,0,1,0};
-		int[] request ={0,1,0,0,0};
+		int[] offer = { 0, 0, 0, 1, 0 };
+		int[] request = { 0, 1, 0, 0, 0 };
 		boolean rslt = game.trade(1, offer, request);
 		assertEquals(rslt, true);
-		
-		int[] expected = { 0, 0, 0, 0, 0 };
-		assertEquals(
-				this.userPanel.resourceCardHistory.get(this.userPanel.resourceCardHistory
-						.size() - 1), expected);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
 
 	}
 
 	@Test
 	public void testLargerTradeTwo() throws Exception {
 		setUpGameAndrew();
-		int[] offer = {0,0,0,1,0};
-		int[] request = {0,1,0,0,0};
+		int[] offer = { 0, 0, 0, 1, 0 };
+		int[] request = { 0, 1, 0, 0, 0 };
 		boolean rslt = game.trade(1, offer, request);
 		assertEquals(rslt, true);
-		
-		int[] expected = { 0, 0, 0, 0, 0 };
-		assertEquals(
-				this.userPanel.resourceCardHistory.get(this.userPanel.resourceCardHistory
-						.size() - 1), expected);
+
+		int[] expectedAArray = { 0, 0, 2, 0, 1 };
+		String expectedA = Arrays.toString(expectedAArray);
+		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
+		int[] expectedBArray = { 1, 0, 0, 0, 1 };
+		String expectedB = Arrays.toString(expectedBArray);
+		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
+
+		assertEquals(expectedA, actualA);
+		assertEquals(expectedB, actualB);
 
 	}
 }

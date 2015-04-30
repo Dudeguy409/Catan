@@ -132,8 +132,9 @@ public class Game {
 	public int getCurrentPlayer() {
 		return this.currentPlayer;
 	}
-	
-	public boolean trade(int playerToTradeIndex, int[] resourcesOffered, int[] resourcesRequested){
+
+	public boolean trade(int playerToTradeIndex, int[] resourcesOffered,
+			int[] resourcesRequested) {
 		return false;
 	}
 
@@ -570,6 +571,10 @@ public class Game {
 	private void updateUserPanelCards() {
 		this.userPanel.updateResourceCards(this.players[this.currentPlayer]
 				.getCards());
+	}
+
+	public int[] getCardsForPlayer(int playerIndex) {
+		return this.players[playerIndex].getCards();
 	}
 
 }
