@@ -1,7 +1,5 @@
 package client.Model;
 
-import java.util.LinkedList;
-
 import client.Controller.Game;
 
 /**
@@ -11,19 +9,19 @@ import client.Controller.Game;
  */
 public class Player {
 	// TODO add port and bank trade rates
-	private int wheatCount;
-	private int woodCount;
-	private int woolCount;
-	private int brickCount;
-	private int oreCount;
-	private int playedSoldierCount;
-	private int devVictoryPoints;
-	private int totalResourceCards;
-	private int yearOfPlenty;
-	private int monopoly;
-	private int knight;
-	private int roadBuilder;
-	private int victory;
+	private int wheatCount = 0;
+	private int woodCount = 0;
+	private int woolCount = 0;
+	private int brickCount = 0;
+	private int oreCount = 0;
+	private int playedSoldierCount = 0;
+	private int devVictoryPoints = 0;
+	private int totalResourceCards = 0;
+	private int yearOfPlenty = 0;
+	private int monopoly = 0;
+	private int knight = 0;
+	private int roadBuilder = 0;
+	private int victory = 0;
 
 	// TODO remove or implement
 	// private int playerIndex;

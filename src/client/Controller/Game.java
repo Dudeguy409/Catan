@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 
 import javax.swing.JOptionPane;
@@ -75,6 +76,8 @@ public class Game {
 	private boolean hasBuiltRoad = false;
 	private ArrayList<Hex> hexArray;
 	private LinkedList<DevCard> devCardDeck;
+	private int robberLocation = 14;
+
 
 	/**
 	 * The number of hexes on the field.
@@ -346,51 +349,54 @@ public class Game {
 		for (int i = 0; i < rolledHexes.size(); i++) {
 			Hex hex = rolledHexes.get(i);
 			int hexId = hex.getHexID();
-			Resource type = hex.getResource();
 
-			int[] structPositions = {
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.east),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.northeast),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.northwest),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.southeast),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.southwest),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.west) };
+			if (robberLocation != hexId) {
+				Resource type = hex.getResource();
 
-			for (int j = 0; j < structPositions.length; j++) {
+				int[] structPositions = {
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.east),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.northeast),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.northwest),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.southeast),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.southwest),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.west) };
 
-				StructurePiece p = this.structMgr
-						.getStructurePiece(structPositions[j]);
+				for (int j = 0; j < structPositions.length; j++) {
 
-				if (p != null) {
-					// System.out.println("Structure: player "
-					// + (1 + p.getPlayerIndex()) + ", buildType: "
-					// + p.getBuildType() + "resource: "
-					// + hex.getResource() + ", structure id: "
-					// + p.getStructureId() + ", hex id: "
-					// + hex.getHexID() + ", hex roll number: "
-					// + hex.getRollNumber());
-					int cardsToAdd = 0;
-					if (p.getBuildType() == BuildType.city) {
-						cardsToAdd = 2;
-					} else if (p.getBuildType() == BuildType.settlement) {
-						cardsToAdd = 1;
-					} else {
-						System.out.println("Critical Error!!!");
+					StructurePiece p = this.structMgr
+							.getStructurePiece(structPositions[j]);
+
+					if (p != null) {
+						// System.out.println("Structure: player "
+						// + (1 + p.getPlayerIndex()) + ", buildType: "
+						// + p.getBuildType() + "resource: "
+						// + hex.getResource() + ", structure id: "
+						// + p.getStructureId() + ", hex id: "
+						// + hex.getHexID() + ", hex roll number: "
+						// + hex.getRollNumber());
+						int cardsToAdd = 0;
+
+						if (p.getBuildType() == BuildType.city) {
+							cardsToAdd = 2;
+						} else if (p.getBuildType() == BuildType.settlement) {
+							cardsToAdd = 1;
+						} else {
+							System.out.println("Critical Error!!!");
+						}
+						this.players[p.getPlayerIndex()].adjustCards(type,
+								cardsToAdd);
 					}
-					this.players[p.getPlayerIndex()].adjustCards(type,
-							cardsToAdd);
 				}
+
+				updateUserPanelCards();
 			}
 		}
-
-		updateUserPanelCards();
-
 	}
 
 	private ArrayList<Hex> findRolledHexes(int rollNumber) {
@@ -692,7 +698,7 @@ public class Game {
 	}
 
 	public int selectPlayerToStealFrom() {
-		String message = "Please select a player to trade with";
+		String message = "Please select a player to steal from.";
 		String title = "Steal";
 
 		String[] options = new String[this.numberOfPlayers - 1];
@@ -712,7 +718,7 @@ public class Game {
 	}
 
 	public int selectPlayerToTradeWith() {
-		String message = "Please select a player to steal from";
+		String message = "Please select a player to trade with.";
 		String title = "Trade";
 
 		String[] options = new String[this.numberOfPlayers];
@@ -727,11 +733,46 @@ public class Game {
 		}
 
 		options[options.length - 1] = "Bank";
-
-		return JOptionPane.showOptionDialog(null, message, title,
+		int selection = JOptionPane.showOptionDialog(null, message, title,
 				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
 				options, -1);
 
+		try {
+			return Integer.parseInt(options[selection]) - 1;
+		} catch (Exception e) {
+			return -18;
+		}
+
+	}
+
+	public void processTradeClick() {
+		int rslt = selectPlayerToTradeWith();
+
+		int[][] rslts = selectCardsToTrade();
+
+		if (rslt == -18) {
+			System.out.println("Bank selected!");
+			tradeWithBank(rslts[0], rslts[1]);
+		} else {
+			System.out.printf("Player %d selected!\n", (rslt + 1));
+			// trade(rslt, rslts[0], rslts[1]);
+		}
+
+	}
+
+	private void tradeWithBank(int[] rslts, int[] rslts2) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private int[][] selectCardsToTrade() {
+		int[][] rslts = new int[2][5];
+		// TODO
+		return rslts;
+	}
+
+	public void setRobberLocation(int robberLoc) {
+		this.robberLocation = robberLoc;
 	}
 
 }
