@@ -164,7 +164,10 @@ public class BoardRenderer extends JComponent implements MouseListener,
 		if (nearArray[1] != -1) {
 			Game.BuildType buildType = this.game.getCurrentBuildType();
 			int hexId = nearArray[0];
-			if (buildType != Game.BuildType.none) {
+			if (buildType == Game.BuildType.robber) {
+				this.game.setRobberLocation(this.hexIndexToGameTranslator[hexId]);
+				System.out.println("robber moved to "+hexId);
+			} else if (buildType != Game.BuildType.none) {
 				if (buildType != Game.BuildType.road) {
 					HexComponent.StructurePosition pos = this
 							.determineStructurePosition(nearArray);
@@ -315,8 +318,9 @@ public class BoardRenderer extends JComponent implements MouseListener,
 
 		// if the mouse click was in the center of the hex, the neighbor is set
 		// to -1 to signal that the mouse click was not valid.
-		if (distanceRecordA < HexComponent.RADIUS / 2)
+		if (distanceRecordA < HexComponent.RADIUS / 2 && this.game.getCurrentBuildType() != Game.BuildType.robber) {
 			nearArray[1] = -1;
+		}
 		return nearArray;
 	}
 

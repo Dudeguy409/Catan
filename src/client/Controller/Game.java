@@ -54,7 +54,7 @@ public class Game {
 	// development cards aren't built, they are drawn, so they aren't included
 	// in this.
 	public static enum BuildType {
-		road, settlement, city, none
+		road, settlement, city, none, robber
 	}
 
 	private IBoardRenderer board;
@@ -76,7 +76,7 @@ public class Game {
 	private boolean hasBuiltRoad = false;
 	private ArrayList<Hex> hexArray;
 	private LinkedList<DevCard> devCardDeck;
-	private int robberLocation = 14;
+	private int robberLocation = -1; //TODO set to desert
 
 
 	/**
@@ -346,11 +346,17 @@ public class Game {
 		int roll = rolls[0];
 
 		if (roll == 7) {
-			// TODO implement robber
+			this.currentBuildType = BuildType.robber;
+			//TODO display message
+			
+			
+			
 
-			// function for discarding from hand
+			// TODO function for discarding from hand
 
 			// function for moving robber
+			
+			// TODO make processRobberClick
 
 		} else {
 			ArrayList<Hex> rolledHexes = findRolledHexes(roll);
@@ -787,6 +793,8 @@ public class Game {
 					"Robber must move to a different hex.");
 		}
 		this.robberLocation = robberLoc;
+		board.moveRobber(robberLoc);
+		this.currentBuildType = BuildType.none;
 	}
 
 }
