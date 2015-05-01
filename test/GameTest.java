@@ -679,6 +679,18 @@ public class GameTest {
 		assertEquals(1, player.getCards()[1]);
 	}
 	
+	@Test
+	public void testThatBuildTypeIsSetToNoneAfterRobberIsMoved() throws Exception{
+		setUpGameDavis();
+		
+		game.setRobberLocation(14);
+
+		Field buildTypeField = Game.class.getDeclaredField("currentBuildType");
+		buildTypeField.setAccessible(true);
+		
+		assertEquals(Game.BuildType.none, buildTypeField.get(game));
+	}
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void testThatMoveRobberToSameHexThrowsException() throws Exception {
 		setUpGameDavis();
