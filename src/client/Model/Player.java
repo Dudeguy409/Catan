@@ -47,7 +47,6 @@ public class Player {
 		this.woolCount += delta[2];
 		this.brickCount += delta[3];
 		this.oreCount += delta[4];
-		this.playedSoldierCount += delta[5];
 		this.updateTotal();
 	}
 

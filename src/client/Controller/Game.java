@@ -135,7 +135,44 @@ public class Game {
 
 	public boolean trade(int playerToTradeIndex, int[] resourcesOffered,
 			int[] resourcesRequested) {
-		return false;
+		if (playerToTradeIndex == this.currentPlayer) {
+			return false;
+		}
+
+		int[] currentCardsA = this.players[this.currentPlayer].getCards();
+		int[] currentCardsB = this.players[playerToTradeIndex].getCards();
+
+		boolean isSomethingOffered = false;
+		boolean isSomethingRequested = false;
+		for (int i = 0; i < resourcesOffered.length; i++) {
+			if (resourcesOffered[i] > currentCardsA[i]
+					|| resourcesRequested[i] > currentCardsB[i]) {
+				return false;
+			}
+			if (resourcesOffered[i] > 0) {
+				isSomethingOffered = true;
+			}
+			if (resourcesRequested[i] > 0) {
+				isSomethingRequested = true;
+			}
+		}
+
+		if (!(isSomethingOffered && isSomethingRequested)) {
+			return false;
+		}
+
+		this.players[this.currentPlayer].adjustCards(resourcesRequested);
+		this.players[playerToTradeIndex].adjustCards(resourcesOffered);
+		for (int i = 0; i < resourcesOffered.length; i++) {
+			resourcesOffered[i] *= -1;
+			resourcesRequested[i] *= -1;
+		}
+
+		this.players[this.currentPlayer].adjustCards(resourcesOffered);
+		this.players[playerToTradeIndex].adjustCards(resourcesRequested);
+
+		updateUserPanelCards();
+		return true;
 	}
 
 	public boolean addRoad(int playerIndex, int hexId,
