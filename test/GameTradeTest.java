@@ -61,10 +61,6 @@ public class GameTradeTest {
 	@Test
 	public void testDoubleInsufficientBalanceBounces() throws Exception {
 		setUpGameAndrew();
-		System.out.println(Arrays.toString(this.game.getCardsForPlayer(0)));
-		System.out.println(Arrays.toString(this.game.getCardsForPlayer(1)));
-		System.out.println(this.game.isBeginningOfGame());
-		System.out.println(this.game.getCurrentPlayer());
 
 		int[] offer = { 1, 0, 0, 0, 0 };
 		int[] request = { 0, 0, 0, 1, 0 };
@@ -229,6 +225,20 @@ public class GameTradeTest {
 	@Test
 	public void testLargerTradeOne() throws Exception {
 		setUpGameAndrew();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		
+		
 		int[] offer = { 0, 0, 0, 1, 0 };
 		int[] request = { 0, 1, 0, 0, 0 };
 		boolean rslt = game.trade(1, offer, request);
@@ -249,6 +259,25 @@ public class GameTradeTest {
 	@Test
 	public void testLargerTradeTwo() throws Exception {
 		setUpGameAndrew();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		this.game.roll();
+		this.game.endTurn();
+		System.out.println(Arrays.toString(this.game.getCardsForPlayer(0)));
+		System.out.println(Arrays.toString(this.game.getCardsForPlayer(1)));
+		System.out.println(this.game.isBeginningOfGame());
+		System.out.println(this.game.getCurrentPlayer());
+		
 		int[] offer = { 0, 0, 0, 1, 0 };
 		int[] request = { 0, 1, 0, 0, 0 };
 		boolean rslt = game.trade(1, offer, request);
