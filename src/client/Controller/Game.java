@@ -752,6 +752,9 @@ public class Game {
 				options, -1);
 
 		try {
+			if (selection < 0) {
+				return selection;
+			}
 			return Integer.parseInt(options[selection]) - 1;
 		} catch (Exception e) {
 			return -18;
@@ -763,13 +766,14 @@ public class Game {
 		int rslt = selectPlayerToTradeWith();
 
 		int[][] rslts = selectCardsToTrade();
-
-		if (rslt == -18) {
-			System.out.println("Bank selected!");
-			tradeWithBank(rslts[0], rslts[1]);
-		} else {
-			System.out.printf("Player %d selected!\n", (rslt + 1));
-			// trade(rslt, rslts[0], rslts[1]);
+		if (rslt != -1) {
+			if (rslt == -18) {
+				System.out.println("Bank selected!");
+				tradeWithBank(rslts[0], rslts[1]);
+			} else {
+				System.out.printf("Player %d selected!\n", (rslt + 1));
+				// trade(rslt, rslts[0], rslts[1]);
+			}
 		}
 
 	}
