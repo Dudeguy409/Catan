@@ -67,4 +67,13 @@ public class FakeUserPanel implements IUserPanel {
 		this.resourceCardHistory.add(cards);
 	}
 
+	@Override
+	public void beginRobber() {
+		
+	}
+	
+	@Override
+	public void endRobber() {
+		
+	}
 }

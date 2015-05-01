@@ -346,17 +346,13 @@ public class Game {
 		int roll = rolls[0];
 
 		if (roll == 7) {
+			this.userPanel.beginRobber();
 			this.currentBuildType = BuildType.robber;
 			//TODO display message
-			
-			
-			
+				
 
 			// TODO function for discarding from hand
 
-			// function for moving robber
-			
-			// TODO make processRobberClick
 
 		} else {
 			ArrayList<Hex> rolledHexes = findRolledHexes(roll);
@@ -795,6 +791,7 @@ public class Game {
 		this.robberLocation = robberLoc;
 		board.moveRobber(robberLoc);
 		this.currentBuildType = BuildType.none;
+		this.userPanel.endRobber();
 	}
 
 }

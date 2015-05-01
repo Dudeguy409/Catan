@@ -92,13 +92,8 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			g2.draw(hex.getHexShape());
 			int rollNumber = hex.getRollNumber();
 
-			if (rollNumber > 0 || i == this.robberIndex) {
-				if (i == this.robberIndex) {
-					g2.setColor(Color.cyan);
-				} else {
-					g2.setColor(Color.white);
-				}
-
+			if (rollNumber > 0) {
+				g2.setColor(Color.white);
 				g2.fill(hex.getRollNumberShape());
 				g2.setColor(Color.black);
 				g2.draw(hex.getRollNumberShape());
@@ -116,6 +111,14 @@ public class BoardRenderer extends JComponent implements MouseListener,
 				g2.drawString(rollString, (int) hex.getX() - 5,
 						(int) hex.getY() + 5);
 			}
+			
+			if (i == this.robberIndex) {
+				g2.setColor(Color.cyan);
+				g2.fill(hex.getRollNumberShape());
+				g2.setColor(Color.black);
+				g2.draw(hex.getRollNumberShape());
+			}
+
 
 		}
 
