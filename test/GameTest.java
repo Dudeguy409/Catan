@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.Controller.FakeDice;
 import client.Controller.Game;
 import client.Controller.Main;
 import client.Controller.StructureManager;
