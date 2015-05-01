@@ -640,7 +640,24 @@ public class GameTest {
 	}
 
 	@Test
-	public void testThatRobberPreventsResourseGathering() {
+	public void testThatRobberPreventsResourceGathering() throws Exception{
+		// player index 1 should have only 1 wood because of the robber on hex 14.
+		setUpGameDavis();
+		
+		game.setRobberLocation(14);
 
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+		
+		Field hexfield = Game.class.getDeclaredField("hexArray");
+		hexfield.setAccessible(true);
+		
+		ArrayList<Hex> hex = (ArrayList<Hex>) hexfield.get(game);
+
+		Player[] players = (Player[]) (field.get(game));
+		Player player = players[game.getCurrentPlayer()];
+		
+		game.roll();
+		assertEquals(1, player.getCards()[1]);
 	}
 }
