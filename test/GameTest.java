@@ -638,7 +638,7 @@ public class GameTest {
 
 		assertEquals(0, game.checkVictory());
 	}
-
+	
 	@Test
 	public void testThatRobberPreventsResourceGathering() throws Exception{
 		// player index 1 should have only 1 wood because of the robber on hex 14.
@@ -660,5 +660,14 @@ public class GameTest {
 		
 		game.roll();
 		assertEquals(1, player.getCards()[1]);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testThatMoveRobberToSameHexThrowsException() throws Exception {
+		setUpGameDavis();
+		
+		game.setRobberLocation(14);
+		
+		game.setRobberLocation(14);
 	}
 }
