@@ -8,9 +8,9 @@ public class FakeDice implements IDice {
 	private int[] riggedDiceRollArrayB;
 	private int numberOfRolls;
 
-	public FakeDice(int[] rollArrayA, int[] RollArrayB) {
+	public FakeDice(int[] rollArrayA, int[] rollArrayB) {
 		this.riggedDiceRollArrayA = rollArrayA;
-		this.riggedDiceRollArrayB = rollArrayA;
+		this.riggedDiceRollArrayB = rollArrayB;
 		this.numberOfRolls = 0;
 	}
 
