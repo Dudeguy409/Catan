@@ -3,6 +3,7 @@ package client.Controller;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -47,11 +48,26 @@ public class Main {
 		BoardRenderer myBoard = new BoardRenderer(hexResources,
 				randomNumberArray);
 		UserPanel myPanel = new UserPanel();
-
-		Game game = new Game(colors, hexResources, new Dice(),
-				new Random().nextInt(colors.length), myPanel, myBoard,
-				randomNumberArray);
 		
+		LinkedList<Game.DevCard> devCards = new LinkedList<Game.DevCard>();
+		Random place = new Random();
+		for (int i = 0; i < 14; i++) {
+			devCards.add(Game.DevCard.knight);
+		}
+		
+		for (int i = 0; i < 5; i++) {
+			devCards.add(place.nextInt(14), Game.DevCard.victory);
+		}
+		
+		for (int i = 2; i < 2; i++) {
+			devCards.add(place.nextInt(19), Game.DevCard.monopoly);
+			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
+			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
+		}
+
+		Game game =new Game(colors, hexResources, new Dice(),
+				new Random().nextInt(colors.length), myPanel, myBoard,
+				randomNumberArray, devCards);
 
 		frame.add(myPanel, FlowLayout.LEFT);
 		

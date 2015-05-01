@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import org.junit.Test;
 
@@ -24,6 +25,7 @@ public class GameTest {
 	Game game;
 	private FakeBoardRenderer board;
 	private FakeUserPanel userPanel;
+	LinkedList<Game.DevCard> devCards;
 
 	public void setUpGameEthan() throws Exception {
 		Color[] colors = { new Color(2), new Color(3) };
@@ -38,10 +40,25 @@ public class GameTest {
 
 		this.userPanel = new FakeUserPanel();
 		this.board = new FakeBoardRenderer();
-
+		this.devCards = new LinkedList<Game.DevCard>();
+		Random place = new Random();
+		for (int i = 0; i < 14; i++) {
+			devCards.add(Game.DevCard.knight);
+		}
+		
+		for (int i = 0; i < 5; i++) {
+			devCards.add(place.nextInt(14), Game.DevCard.victory);
+		}
+		
+		for (int i = 2; i < 2; i++) {
+			devCards.add(place.nextInt(19), Game.DevCard.monopoly);
+			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
+			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
+		}
+		
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
 				this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources));
+				Main.configureRandomNumberArray(resources), devCards);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);
@@ -84,15 +101,14 @@ public class GameTest {
 		// 5, 6, 3, 11 };
 		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
-				userPanel, board, randomNumberArray);
+				userPanel, board, randomNumberArray, this.devCards);
 	}
 
 	public void setUpGameDavis() throws Exception {
 		this.userPanel = new FakeUserPanel();
 		this.board = new FakeBoardRenderer();
 
-		Color[] colors = { new Color(2), new Color(3), new Color(32),
-				new Color(55) };
+		Color[] colors = { new Color(2), new Color(3)};
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
 				Resource.wood, Resource.brick, Resource.wheat, Resource.ore,
@@ -105,15 +121,35 @@ public class GameTest {
 		// int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9,
 		// 4,
 		// 5, 6, 3, 11 };
-		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
-				userPanel, board, randomNumberArray);
+
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0, userPanel, board, Main.configureRandomNumberArray(resources), this.devCards);
+		
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(16, HexComponent.RoadPosition.north);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(16,
+				HexComponent.StructurePosition.northwest);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(14, HexComponent.RoadPosition.north);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(14,
+				HexComponent.StructurePosition.northwest);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(11, HexComponent.RoadPosition.northeast);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(11,
+				HexComponent.StructurePosition.east);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(13, HexComponent.RoadPosition.northeast);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(13, HexComponent.StructurePosition.east);
+
 	}
 
 	@Test
 	public void getDiceRollTest() {
 		// TODO
-		// assertTrue(false);
+		assertTrue(false);
 	}
 
 	@Test
@@ -131,7 +167,9 @@ public class GameTest {
 	}
 
 	@Test
-	public void getAdjacentRoadsForStructureTest() {
+	public void getAdjacentRoadsForStructureTest() throws Exception{
+		setUpGameDavis();
+		
 		List<HexComponent.RoadPosition> poses = Arrays
 				.asList(game
 						.getAdjacentRoadPositionsForStructure(HexComponent.StructurePosition.west));
@@ -411,58 +449,62 @@ public class GameTest {
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
+		assertEquals(1, game.getVictoryPointsForPlayer(0));
 
 		game.setBuildType(Game.BuildType.city);
 		game.processBuildStructureClick(3,
 				HexComponent.StructurePosition.southwest);
 		assertEquals(0, player.getCards()[1]);
 		assertEquals(0, player.getCards()[4]);
+		
+		assertEquals(1, game.getVictoryPointsForPlayer(0));
 	}
 
 	@Test
-	public void testVictoryPointForLongestRoad() throws Exception {
+	public void testTwoVictoryPointsForLongestRoad() throws Exception {
 		setUpGameDavis();
-		assertEquals(0, game.getVictoryPointsForPlayer(0));
+		assertEquals(2, game.getVictoryPointsForPlayer(0));
 
-		game.addRoad(0, 18, HexComponent.RoadPosition.north);
-		game.addRoad(0, 18, HexComponent.RoadPosition.northeast);
-		game.addRoad(0, 18, HexComponent.RoadPosition.southeast);
-		game.addRoad(0, 18, HexComponent.RoadPosition.south);
+		game.addRoad(0, 16, HexComponent.RoadPosition.northeast);
+		game.addRoad(0, 16, HexComponent.RoadPosition.southeast);
+		game.addRoad(0, 16, HexComponent.RoadPosition.south);
 
-		assertEquals(0, game.getVictoryPointsForPlayer(0));
-
-		game.addRoad(0, 18, HexComponent.RoadPosition.southwest);
 
 		assertEquals(2, game.getVictoryPointsForPlayer(0));
+
+		game.addRoad(0, 17, HexComponent.RoadPosition.northwest);
+
+		assertEquals(4, game.getVictoryPointsForPlayer(0));
 	}
 
 	@Test
 	public void testAddOneVictoryPointForOneSettlement() throws Exception {
 		setUpGameDavis();
-		game.addRoad(0, 0, HexComponent.RoadPosition.northeast);
-		assertEquals(0, game.getVictoryPointsForPlayer(0));
-
+		
+		assertEquals(2, game.getVictoryPointsForPlayer(0));
+		
+		game.setBuildType(BuildType.road);
+		System.out.println(game.addRoad(0, 16, HexComponent.RoadPosition.northeast));
 		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 0, HexComponent.StructurePosition.northeast);
-
-		assertEquals(1, game.getVictoryPointsForPlayer(0));
+		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
+	
+		assertEquals(3, game.getVictoryPointsForPlayer(0));
 	}
 
 	@Test
 	public void testAddTwoVictoryPointsForOneCity() throws Exception {
 		// TODO
 		setUpGameDavis();
-		assertEquals(0, game.getVictoryPointsForPlayer(3));
 
-		game.addRoad(3, 3, HexComponent.RoadPosition.northeast);
+		game.setBuildType(BuildType.road);
+		System.out.println(game.addRoad(0, 16, HexComponent.RoadPosition.northeast));
 		game.setBuildType(BuildType.settlement);
-		game.addBuilding(3, 3, HexComponent.StructurePosition.northeast);
-		assertEquals(1, game.getVictoryPointsForPlayer(3));
+		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
 
 		game.setBuildType(BuildType.city);
-		game.addBuilding(3, 3, HexComponent.StructurePosition.northeast);
+		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
 
-		assertEquals(2, game.getVictoryPointsForPlayer(3));
+		assertEquals(4, game.getVictoryPointsForPlayer(0));
 	}
 
 	@Test
@@ -517,71 +559,53 @@ public class GameTest {
 		// The player with older road should win if roads are the same length.
 
 		setUpGameDavis();
-		assertEquals(null, game.getPlayerWithLongestRoad());
-
-		game.addRoad(0, 0, HexComponent.RoadPosition.south);
 		assertEquals(0, game.getPlayerWithLongestRoad());
 
-		game.endTurn();
-
-		game.addRoad(1, 0, HexComponent.RoadPosition.northeast);
-		assertEquals(0, game.getPlayerWithLongestRoad());
-		game.addRoad(1, 0, HexComponent.RoadPosition.southeast);
+		game.addRoad(1, 14, HexComponent.RoadPosition.northeast);
 		assertEquals(1, game.getPlayerWithLongestRoad());
 
-		game.addRoad(0, 0, HexComponent.RoadPosition.southwest);
+		game.addRoad(0, 16, HexComponent.RoadPosition.northeast);
 		assertEquals(1, game.getPlayerWithLongestRoad());
 	}
 
 	@Test
 	public void testGameEndsAfterPlayerHas10Points() throws Exception {
 		setUpGameDavis();
-		game.addRoad(0, 18, HexComponent.RoadPosition.north);
-		game.addRoad(0, 18, HexComponent.RoadPosition.northeast);
-		game.addRoad(0, 18, HexComponent.RoadPosition.southeast);
-		game.addRoad(0, 18, HexComponent.RoadPosition.south);
-		game.addRoad(0, 18, HexComponent.RoadPosition.southwest);
+
+		game.addRoad(0, 16, HexComponent.RoadPosition.northeast);
+		game.addRoad(0, 16, HexComponent.RoadPosition.southeast);
 		game.addRoad(0, 17, HexComponent.RoadPosition.north);
 		game.addRoad(0, 17, HexComponent.RoadPosition.northwest);
 		game.addRoad(0, 17, HexComponent.RoadPosition.southwest);
-		game.addRoad(0, 11, HexComponent.RoadPosition.northwest);
-		game.addRoad(0, 11, HexComponent.RoadPosition.southwest);
 
-		assertEquals(2, game.getVictoryPointsForPlayer(0));
+		//assertEquals(4, game.getVictoryPointsForPlayer(0));
 
+		//assertEquals(-1, game.checkVictory());
+		
+		game.setBuildType(BuildType.city);
+		game.addBuilding(0, 16, HexComponent.StructurePosition.northwest);
+		//assertEquals(5, game.getVictoryPointsForPlayer(0));
+
+		game.setBuildType(BuildType.settlement);
+		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
+		//assertEquals(6, game.getVictoryPointsForPlayer(0));
+		game.setBuildType(BuildType.city);
+		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
+		//assertEquals(7, game.getVictoryPointsForPlayer(0));
+
+		game.setBuildType(BuildType.settlement);
+		game.addBuilding(0, 16, HexComponent.StructurePosition.southwest);
+		//assertEquals(8, game.getVictoryPointsForPlayer(0));
+		game.setBuildType(BuildType.city);
+		game.addBuilding(0, 16, HexComponent.StructurePosition.southwest);
+		//assertEquals(9, game.getVictoryPointsForPlayer(0));
+		
 		assertEquals(-1, game.checkVictory());
 
 		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 18, HexComponent.StructurePosition.northeast);
-		assertEquals(3, game.getVictoryPointsForPlayer(0));
-		game.setBuildType(BuildType.city);
-		game.addBuilding(0, 18, HexComponent.StructurePosition.northeast);
-		assertEquals(4, game.getVictoryPointsForPlayer(0));
-
-		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 18, HexComponent.StructurePosition.southwest);
-		assertEquals(5, game.getVictoryPointsForPlayer(0));
-		game.setBuildType(BuildType.city);
-		game.addBuilding(0, 18, HexComponent.StructurePosition.southwest);
-		assertEquals(6, game.getVictoryPointsForPlayer(0));
-
-		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 17, HexComponent.StructurePosition.northwest);
-		assertEquals(7, game.getVictoryPointsForPlayer(0));
-		game.setBuildType(BuildType.city);
-		game.addBuilding(0, 17, HexComponent.StructurePosition.northwest);
-		assertEquals(8, game.getVictoryPointsForPlayer(0));
-
-		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 11, HexComponent.StructurePosition.northwest);
-		assertEquals(9, game.getVictoryPointsForPlayer(0));
-
-		assertEquals(-1, game.checkVictory());
-
-		game.setBuildType(BuildType.city);
-		game.addBuilding(0, 11, HexComponent.StructurePosition.northwest);
+		game.addBuilding(0, 17, HexComponent.StructurePosition.southwest);
 		assertEquals(10, game.getVictoryPointsForPlayer(0));
-
+		
 		assertEquals(0, game.checkVictory());
 	}
 
@@ -589,63 +613,90 @@ public class GameTest {
 	public void testGameEndsAfterPlayerHas11Points() throws Exception {
 		setUpGameDavis();
 
-		game.addRoad(0, 18, HexComponent.RoadPosition.north);
-		game.addRoad(0, 18, HexComponent.RoadPosition.northeast);
-		game.addRoad(0, 18, HexComponent.RoadPosition.southeast);
-		game.addRoad(0, 18, HexComponent.RoadPosition.south);
-		game.addRoad(0, 18, HexComponent.RoadPosition.southwest);
+		game.addRoad(0, 16, HexComponent.RoadPosition.northeast);
+		game.addRoad(0, 16, HexComponent.RoadPosition.southeast);
 		game.addRoad(0, 17, HexComponent.RoadPosition.north);
 		game.addRoad(0, 17, HexComponent.RoadPosition.northwest);
 		game.addRoad(0, 17, HexComponent.RoadPosition.southwest);
-		game.addRoad(0, 11, HexComponent.RoadPosition.northwest);
-		game.addRoad(0, 11, HexComponent.RoadPosition.southwest);
 
-		assertEquals(2, game.getVictoryPointsForPlayer(0));
+		//assertEquals(4, game.getVictoryPointsForPlayer(0));
 
-		assertEquals(-1, game.checkVictory());
-
-		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 18, HexComponent.StructurePosition.northeast);
-		assertEquals(3, game.getVictoryPointsForPlayer(0));
+		//assertEquals(-1, game.checkVictory());
+		
 		game.setBuildType(BuildType.city);
-		game.addBuilding(0, 18, HexComponent.StructurePosition.northeast);
-		assertEquals(4, game.getVictoryPointsForPlayer(0));
+		game.addBuilding(0, 16, HexComponent.StructurePosition.northwest);
+		//assertEquals(5, game.getVictoryPointsForPlayer(0));
 
 		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 18, HexComponent.StructurePosition.southwest);
-		assertEquals(5, game.getVictoryPointsForPlayer(0));
+		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
+		//assertEquals(6, game.getVictoryPointsForPlayer(0));
 		game.setBuildType(BuildType.city);
-		game.addBuilding(0, 18, HexComponent.StructurePosition.southwest);
-		assertEquals(6, game.getVictoryPointsForPlayer(0));
+		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
+		//assertEquals(7, game.getVictoryPointsForPlayer(0));
 
 		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 17, HexComponent.StructurePosition.northwest);
-		assertEquals(7, game.getVictoryPointsForPlayer(0));
+		game.addBuilding(0, 16, HexComponent.StructurePosition.southwest);
+		//assertEquals(8, game.getVictoryPointsForPlayer(0));
 		game.setBuildType(BuildType.city);
-		game.addBuilding(0, 17, HexComponent.StructurePosition.northwest);
-		assertEquals(8, game.getVictoryPointsForPlayer(0));
+		game.addBuilding(0, 16, HexComponent.StructurePosition.southwest);
+		//assertEquals(9, game.getVictoryPointsForPlayer(0));
+		
+		//assertEquals(-1, game.checkVictory());
 
 		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 11, HexComponent.StructurePosition.northwest);
-		assertEquals(9, game.getVictoryPointsForPlayer(0));
-
-		assertEquals(-1, game.checkVictory());
-
+		game.addBuilding(0, 17, HexComponent.StructurePosition.southwest);
+		//assertEquals(10, game.getVictoryPointsForPlayer(0));
+		
+		//assertEquals(0, game.checkVictory());
+		
 		game.setBuildType(BuildType.city);
-		game.addBuilding(0, 11, HexComponent.StructurePosition.northwest);
-		assertEquals(10, game.getVictoryPointsForPlayer(0));
-
-		assertEquals(0, game.checkVictory());
-
-		game.setBuildType(BuildType.settlement);
-		game.addBuilding(0, 11, HexComponent.StructurePosition.southwest);
+		game.addBuilding(0, 17, HexComponent.StructurePosition.southwest);
 		assertEquals(11, game.getVictoryPointsForPlayer(0));
 
 		assertEquals(0, game.checkVictory());
 	}
-
+	
 	@Test
-	public void testThatRobberPreventsResourseGathering() {
+	public void testThatRobberPreventsResourceGathering() throws Exception{
+		// player index 1 should have only 1 wood because of the robber on hex 14.
+		setUpGameDavis();
+		
+		game.endTurn(); // Change to player index 1's turn.
+		game.setRobberLocation(14);
 
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+		
+		Field hexfield = Game.class.getDeclaredField("hexArray");
+		hexfield.setAccessible(true);
+		
+		ArrayList<Hex> hex = (ArrayList<Hex>) hexfield.get(game);
+
+		Player[] players = (Player[]) (field.get(game));
+		Player player = players[game.getCurrentPlayer()];
+		
+		game.roll();
+		assertEquals(1, player.getCards()[1]);
+	}
+	
+	@Test
+	public void testThatBuildTypeIsSetToNoneAfterRobberIsMoved() throws Exception{
+		setUpGameDavis();
+		
+		game.setRobberLocation(14);
+
+		Field buildTypeField = Game.class.getDeclaredField("currentBuildType");
+		buildTypeField.setAccessible(true);
+		
+		assertEquals(Game.BuildType.none, buildTypeField.get(game));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testThatMoveRobberToSameHexThrowsException() throws Exception {
+		setUpGameDavis();
+		
+		game.setRobberLocation(14);
+		
+		game.setRobberLocation(14);
 	}
 }

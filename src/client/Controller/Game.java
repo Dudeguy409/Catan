@@ -45,6 +45,10 @@ public class Game {
 		}
 	}
 
+	public static enum DevCard {
+		yearOfPlenty, monopoly, knight, victory, roadBuilder
+	}
+
 	public static enum TurnPhase {
 		preroll, pretrade, trade, prebuild, build, end
 	}
@@ -52,7 +56,7 @@ public class Game {
 	// development cards aren't built, they are drawn, so they aren't included
 	// in this.
 	public static enum BuildType {
-		road, settlement, city, none
+		road, settlement, city, none, robber
 	}
 
 	private IBoardRenderer board;
@@ -73,6 +77,8 @@ public class Game {
 	private boolean preGameMode = true;
 	private boolean hasBuiltRoad = false;
 	private ArrayList<Hex> hexArray;
+	private LinkedList<DevCard> devCardDeck;
+	private int robberLocation = -1; // TODO set to desert
 
 	/**
 	 * The number of hexes on the field.
@@ -81,12 +87,13 @@ public class Game {
 
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
 			int startingPlayer, IUserPanel userPanel, IBoardRenderer board,
-			int[] randomNumberArray) {
+			int[] randomNumberArray, LinkedList<DevCard> devCardDeck) {
 
 		this.currentPlayer = startingPlayer;
 		this.dice = dice;
 		this.colorArray = pColors;
 		this.numberOfPlayers = pColors.length;
+		this.devCardDeck = devCardDeck;
 
 		generateStartingTurnsQueue();
 
@@ -338,56 +345,69 @@ public class Game {
 		this.userPanel.setRolls(rolls);
 
 		int roll = rolls[0];
-		ArrayList<Hex> rolledHexes = findRolledHexes(roll);
 
-		for (int i = 0; i < rolledHexes.size(); i++) {
-			Hex hex = rolledHexes.get(i);
-			int hexId = hex.getHexID();
-			Resource type = hex.getResource();
+		if (roll == 7) {
+			this.userPanel.beginRobber();
+			this.currentBuildType = BuildType.robber;
+			// TODO display message
 
-			int[] structPositions = {
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.east),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.northeast),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.northwest),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.southeast),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.southwest),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.west) };
+			// TODO function for discarding from hand
 
-			for (int j = 0; j < structPositions.length; j++) {
+		} else {
+			ArrayList<Hex> rolledHexes = findRolledHexes(roll);
 
-				StructurePiece p = this.structMgr
-						.getStructurePiece(structPositions[j]);
+			for (int i = 0; i < rolledHexes.size(); i++) {
+				Hex hex = rolledHexes.get(i);
+				int hexId = hex.getHexID();
 
-				if (p != null) {
-					// System.out.println("Structure: player "
-					// + (1 + p.getPlayerIndex()) + ", buildType: "
-					// + p.getBuildType() + "resource: "
-					// + hex.getResource() + ", structure id: "
-					// + p.getStructureId() + ", hex id: "
-					// + hex.getHexID() + ", hex roll number: "
-					// + hex.getRollNumber());
-					int cardsToAdd = 0;
-					if (p.getBuildType() == BuildType.city) {
-						cardsToAdd = 2;
-					} else if (p.getBuildType() == BuildType.settlement) {
-						cardsToAdd = 1;
-					} else {
-						System.out.println("Critical Error!!!");
+				if (robberLocation != hexId) {
+					Resource type = hex.getResource();
+
+					int[] structPositions = {
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.east),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.northeast),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.northwest),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.southeast),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.southwest),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.west) };
+
+					for (int j = 0; j < structPositions.length; j++) {
+
+						StructurePiece p = this.structMgr
+								.getStructurePiece(structPositions[j]);
+
+						if (p != null) {
+							// System.out.println("Structure: player "
+							// + (1 + p.getPlayerIndex()) + ", buildType: "
+							// + p.getBuildType() + "resource: "
+							// + hex.getResource() + ", structure id: "
+							// + p.getStructureId() + ", hex id: "
+							// + hex.getHexID() + ", hex roll number: "
+							// + hex.getRollNumber());
+							int cardsToAdd = 0;
+
+							if (p.getBuildType() == BuildType.city) {
+								cardsToAdd = 2;
+							} else if (p.getBuildType() == BuildType.settlement) {
+								cardsToAdd = 1;
+							} else {
+								System.out.println("Critical Error!!!");
+							}
+							this.players[p.getPlayerIndex()].adjustCards(type,
+									cardsToAdd);
+						}
 					}
-					this.players[p.getPlayerIndex()].adjustCards(type,
-							cardsToAdd);
+
+					updateUserPanelCards();
 				}
 			}
 		}
-
-		updateUserPanelCards();
-
 	}
 
 	private ArrayList<Hex> findRolledHexes(int rollNumber) {
@@ -401,8 +421,47 @@ public class Game {
 	}
 
 	public void drawDevCard() {
-		// TODO Auto-generated method stub
+		int[] cards = players[this.currentPlayer].getCards();
+		if (cards[0] >= 1 && cards[2] >= 1 && cards[4] >= 1) {
+			this.players[this.currentPlayer].changeDevCardCount(
+					this.devCardDeck.poll(), 1);
+			int[] delta = { -1, 0, -1, 0, -1 };
+			this.players[this.currentPlayer].adjustCards(delta);
+		}
 
+	}
+
+	public void useYearOfPlenty() {
+		Resource[] resources = new Resource[2];
+		resources[0] = selectResourceForYearOfPlenty(true);
+		resources[1] = selectResourceForYearOfPlenty(false);
+		adjustForYearOfPlenty(resources);
+	}
+
+	public void adjustForYearOfPlenty(Resource[] resources) {
+		players[this.currentPlayer].adjustCards(resources[0], 1);
+		players[this.currentPlayer].adjustCards(resources[1], 1);
+		players[this.currentPlayer]
+				.changeDevCardCount(DevCard.yearOfPlenty, -1);
+	}
+
+	public void useMonopoly() {
+		Resource resource = selectResourceForMonopoly();
+		adjustForMonopoly(resource);
+	}
+
+	public void adjustForMonopoly(Resource resource) {
+		for (int i = 0; i < players.length; i++) {
+			if (i != this.currentPlayer) {
+				if (players[i].getCard(resource) > 0) {
+					players[this.currentPlayer].adjustCards(resource,
+							players[i].getCard(resource));
+					players[i].adjustCards(resource,
+							-players[i].getCard(resource));
+				}
+			}
+		}
+		players[this.currentPlayer].changeDevCardCount(DevCard.monopoly, -1);
 	}
 
 	public void setBuildType(BuildType type) {
@@ -728,6 +787,18 @@ public class Game {
 
 	public void adjustCardsForPlayer(int playerIndex, int[] delta) {
 		this.players[playerIndex].adjustCards(delta);
+	}
+
+	public void setRobberLocation(int robberLoc) {
+		if (this.robberLocation == robberLoc) {
+			throw new IllegalArgumentException(
+					"Robber must move to a different hex.");
+		}
+		this.robberLocation = robberLoc;
+		board.moveRobber(robberLoc);
+		this.currentBuildType = BuildType.none;
+		this.userPanel.endRobber();
+
 	}
 
 }

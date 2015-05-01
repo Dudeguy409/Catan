@@ -2,6 +2,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Random;
 
 import org.junit.Test;
 
@@ -15,6 +17,7 @@ public class GameTradeTest {
 	private Game game;
 	private FakeBoardRenderer board;
 	private FakeUserPanel userPanel;
+	private LinkedList<Game.DevCard> devCards;
 
 	public void setUpGameAndrew() throws Exception {
 		Color[] colors = { new Color(2), new Color(3) };
@@ -29,10 +32,26 @@ public class GameTradeTest {
 
 		this.userPanel = new FakeUserPanel();
 		this.board = new FakeBoardRenderer();
+		
+		this.devCards = new LinkedList<Game.DevCard>();
+		Random place = new Random();
+		for (int i = 0; i < 14; i++) {
+			devCards.add(Game.DevCard.knight);
+		}
+		
+		for (int i = 0; i < 5; i++) {
+			devCards.add(place.nextInt(14), Game.DevCard.victory);
+		}
+		
+		for (int i = 2; i < 2; i++) {
+			devCards.add(place.nextInt(19), Game.DevCard.monopoly);
+			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
+			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
+		}
 
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
 				this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources));
+				Main.configureRandomNumberArray(resources), this.devCards);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);

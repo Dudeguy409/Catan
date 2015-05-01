@@ -22,5 +22,9 @@ public interface IUserPanel {
 	void setBeginningBuildSettlement();
 
 	void updateResourceCards(int[] cards);
+	
+	void beginRobber();
+	
+	void endRobber();
 
 }

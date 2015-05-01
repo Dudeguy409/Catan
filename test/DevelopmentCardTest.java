@@ -1,34 +1,25 @@
 import static org.junit.Assert.*;
 
-import java.awt.FlowLayout;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.Random;
 
-import javax.annotation.Generated;
-import javax.swing.JFrame;
-
-import org.junit.Before;
 import org.junit.Test;
 
 import client.Controller.Game;
+import client.Controller.Game.DevCard;
 import client.Controller.Main;
-import client.Controller.StructureManager;
-import client.Controller.Game.BuildType;
 import client.Controller.Game.Resource;
-import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
-import client.GUI.UserPanel;
 import client.Model.Player;
 
 public class DevelopmentCardTest {
 	Game game;
 	private FakeBoardRenderer board;
 	private FakeUserPanel userPanel;
+	private LinkedList<Game.DevCard> devCards;
 
 	public void setUpGameEthan() throws Exception {
 		Color[] colors = { new Color(2), new Color(3) };
@@ -44,9 +35,25 @@ public class DevelopmentCardTest {
 		this.userPanel = new FakeUserPanel();
 		this.board = new FakeBoardRenderer();
 
+		this.devCards = new LinkedList<Game.DevCard>();
+		Random place = new Random();
+		for (int i = 0; i < 14; i++) {
+			devCards.add(Game.DevCard.knight);
+		}
+
+		for (int i = 0; i < 5; i++) {
+			devCards.add(place.nextInt(14), Game.DevCard.victory);
+		}
+
+		for (int i = 2; i < 2; i++) {
+			devCards.add(place.nextInt(19), Game.DevCard.monopoly);
+			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
+			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
+		}
+
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
 				this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources));
+				Main.configureRandomNumberArray(resources), devCards);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);
@@ -70,11 +77,11 @@ public class DevelopmentCardTest {
 		game.processBuildStructureClick(14,
 				HexComponent.StructurePosition.northwest);
 	}
-	
+
 	@Test
 	public void TestBuyDevelopmentCard() throws Exception {
 		setUpGameEthan();
-		
+
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 
@@ -84,78 +91,99 @@ public class DevelopmentCardTest {
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
-		game.processBuildDevCard();
+		game.drawDevCard();
 		assertEquals(0, player.getCards()[0]);
 		assertEquals(0, player.getCards()[2]);
 		assertEquals(0, player.getCards()[4]);
 	}
-	
+
 	@Test
 	public void TestUseYearOfPlenty() throws Exception {
 		setUpGameEthan();
 		ArrayList<Integer> cards = new ArrayList<Integer>();
 		cards.add(0);
 		cards.add(1);
-		
+
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
+
+		Field devField = Game.class.getDeclaredField("devCardDeck");
+		devField.setAccessible(true);
 
 		Player player = new Player();
 		int[] delta = { 1, 0, 1, 0, 1, 0 };
 		player.adjustCards(delta);
 
+		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
+				.get(game);
+		devCardDeck.addFirst(Game.DevCard.yearOfPlenty);
+
 		Player[] players = { player, new Player() };
 		field.set(game, players);
-		game.processBuildDevCard();
-		game.useYearOfPlenty(cards);
+		Resource[] resources = { Game.Resource.wheat, Game.Resource.wood };
+
+		game.drawDevCard();
+		game.adjustForYearOfPlenty(resources);
 		assertEquals(1, player.getCards()[0]);
 		assertEquals(1, player.getCards()[1]);
 		assertEquals(0, player.getCards()[2]);
 		assertEquals(0, player.getCards()[4]);
 	}
-	
+
 	@Test
 	public void TestGetVictoryDevCard() throws Exception {
 		setUpGameEthan();
-		
+
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
+
+		Field devField = Game.class.getDeclaredField("devCardDeck");
+		devField.setAccessible(true);
 
 		Player player = new Player();
 		int[] delta = { 1, 0, 1, 0, 1, 0 };
 		player.adjustCards(delta);
+
+		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
+				.get(game);
+		devCardDeck.addFirst(Game.DevCard.victory);
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
-		game.processBuildDevCard();
+		game.drawDevCard();
 		assertEquals(1, player.getVPs());
-		assertEquals(1, player.getCards()[0]);
-		assertEquals(1, player.getCards()[1]);
+		assertEquals(0, player.getCards()[0]);
 		assertEquals(0, player.getCards()[2]);
 		assertEquals(0, player.getCards()[4]);
 	}
-	
+
 	@Test
 	public void TestUseMonopolyDevCard() throws Exception {
 		setUpGameEthan();
-		int card = 0;
-		
+
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
+
+		Field devField = Game.class.getDeclaredField("devCardDeck");
+		devField.setAccessible(true);
 
 		Player player = new Player();
 		int[] delta = { 1, 0, 1, 0, 1, 0 };
 		player.adjustCards(delta);
-		
+
+		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
+				.get(game);
+		devCardDeck.addFirst(Game.DevCard.monopoly);
+
 		Player player2 = new Player();
 		int[] delta2 = { 1, 0, 0, 0, 0, 0 };
 		player2.adjustCards(delta2);
 
 		Player[] players = { player, player2 };
 		field.set(game, players);
-		game.processBuildDevCard();
-		game.useMonopoly(card);
-		
+		game.drawDevCard();
+		game.adjustForMonopoly(Game.Resource.wheat);
+
 		assertEquals(0, player2.getCards()[0]);
 		assertEquals(1, player.getCards()[0]);
 		assertEquals(0, player.getCards()[2]);

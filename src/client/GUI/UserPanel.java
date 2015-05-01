@@ -438,5 +438,17 @@ public class UserPanel extends JPanel implements IUserPanel {
 		this.totalLabel.setText(TOTAL_CARDS_LABEL_STRING + cards[6]);
 
 	}
+	
+	public void beginRobber() {
+		this.tradeButton.setEnabled(false);
+		this.buildButton.setEnabled(false);
+		this.endButton.setEnabled(false);
+	}
+	
+	public void endRobber() {
+		this.tradeButton.setEnabled(true);
+		this.buildButton.setEnabled(true);
+		this.endButton.setEnabled(true);
+	}
 
 }
