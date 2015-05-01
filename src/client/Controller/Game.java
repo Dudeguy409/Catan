@@ -71,6 +71,7 @@ public class Game {
 	private boolean preGameMode = true;
 	private boolean hasBuiltRoad = false;
 	private ArrayList<Hex> hexArray;
+	private int robberLocation = 14;
 
 	/**
 	 * The number of hexes on the field.
@@ -341,51 +342,54 @@ public class Game {
 		for (int i = 0; i < rolledHexes.size(); i++) {
 			Hex hex = rolledHexes.get(i);
 			int hexId = hex.getHexID();
-			Resource type = hex.getResource();
 
-			int[] structPositions = {
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.east),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.northeast),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.northwest),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.southeast),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.southwest),
-					this.hexMgr.getStructureId(hexId,
-							HexComponent.StructurePosition.west) };
+			if (robberLocation != hexId) {
+				Resource type = hex.getResource();
 
-			for (int j = 0; j < structPositions.length; j++) {
+				int[] structPositions = {
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.east),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.northeast),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.northwest),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.southeast),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.southwest),
+						this.hexMgr.getStructureId(hexId,
+								HexComponent.StructurePosition.west) };
 
-				StructurePiece p = this.structMgr
-						.getStructurePiece(structPositions[j]);
+				for (int j = 0; j < structPositions.length; j++) {
 
-				if (p != null) {
-					// System.out.println("Structure: player "
-					// + (1 + p.getPlayerIndex()) + ", buildType: "
-					// + p.getBuildType() + "resource: "
-					// + hex.getResource() + ", structure id: "
-					// + p.getStructureId() + ", hex id: "
-					// + hex.getHexID() + ", hex roll number: "
-					// + hex.getRollNumber());
-					int cardsToAdd = 0;
-					if (p.getBuildType() == BuildType.city) {
-						cardsToAdd = 2;
-					} else if (p.getBuildType() == BuildType.settlement) {
-						cardsToAdd = 1;
-					} else {
-						System.out.println("Critical Error!!!");
+					StructurePiece p = this.structMgr
+							.getStructurePiece(structPositions[j]);
+
+					if (p != null) {
+						// System.out.println("Structure: player "
+						// + (1 + p.getPlayerIndex()) + ", buildType: "
+						// + p.getBuildType() + "resource: "
+						// + hex.getResource() + ", structure id: "
+						// + p.getStructureId() + ", hex id: "
+						// + hex.getHexID() + ", hex roll number: "
+						// + hex.getRollNumber());
+						int cardsToAdd = 0;
+
+						if (p.getBuildType() == BuildType.city) {
+							cardsToAdd = 2;
+						} else if (p.getBuildType() == BuildType.settlement) {
+							cardsToAdd = 1;
+						} else {
+							System.out.println("Critical Error!!!");
+						}
+						this.players[p.getPlayerIndex()].adjustCards(type,
+								cardsToAdd);
 					}
-					this.players[p.getPlayerIndex()].adjustCards(type,
-							cardsToAdd);
 				}
+
+				updateUserPanelCards();
 			}
 		}
-
-		updateUserPanelCards();
-
 	}
 
 	private ArrayList<Hex> findRolledHexes(int rollNumber) {
@@ -691,7 +695,7 @@ public class Game {
 				options, -1);
 
 		try {
-			return Integer.parseInt(options[selection])-1;
+			return Integer.parseInt(options[selection]) - 1;
 		} catch (Exception e) {
 			return -18;
 		}
@@ -708,7 +712,7 @@ public class Game {
 			tradeWithBank(rslts[0], rslts[1]);
 		} else {
 			System.out.printf("Player %d selected!\n", (rslt + 1));
-			//trade(rslt, rslts[0], rslts[1]);
+			// trade(rslt, rslts[0], rslts[1]);
 		}
 
 	}
@@ -722,6 +726,10 @@ public class Game {
 		int[][] rslts = new int[2][5];
 		// TODO
 		return rslts;
+	}
+
+	public void setRobberLocation(int robberLoc) {
+		this.robberLocation = robberLoc;
 	}
 
 }

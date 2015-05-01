@@ -644,6 +644,7 @@ public class GameTest {
 		// player index 1 should have only 1 wood because of the robber on hex 14.
 		setUpGameDavis();
 		
+		game.endTurn(); // Change to player index 1's turn.
 		game.setRobberLocation(14);
 
 		Field field = Game.class.getDeclaredField("players");
