@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import client.Controller.Game;
+import client.Controller.Main;
 import client.Controller.StructureManager;
 import client.Controller.Game.BuildType;
 import client.Controller.Game.Resource;
@@ -26,8 +27,14 @@ import client.Model.Player;
 
 public class GameTest {
 	Game game;
+	private FakeBoardRenderer board;
+	private FakeUserPanel userPanel;
+	
 
 	public void setUpGameEthan() throws Exception {
+		this.userPanel = new FakeUserPanel();
+		this.board = new FakeBoardRenderer();
+		
 		Color[] colors = { new Color(2), new Color(3), new Color(40) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
@@ -37,13 +44,19 @@ public class GameTest {
 				Resource.sheep };
 		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0);
+//		int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9, 4,
+//				5, 6, 3, 11 };
+		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0, userPanel, board, randomNumberArray);
 		Field field = Game.class.getDeclaredField("preGameMode");
 		field.setAccessible(true);
 		field.set(game, false);
 	}
 
 	public void setUpGameAndrew() throws Exception {
+		this.userPanel = new FakeUserPanel();
+		this.board = new FakeBoardRenderer();
+		
 		Color[] colors = { new Color(2), new Color(3) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
@@ -53,10 +66,16 @@ public class GameTest {
 				Resource.sheep };
 		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0);
+//		int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9, 4,
+//				5, 6, 3, 11 };
+		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0, userPanel, board, randomNumberArray);
 	}
 
 	public void setUpGameDavis() throws Exception {
+		this.userPanel = new FakeUserPanel();
+		this.board = new FakeBoardRenderer();
+		
 		Color[] colors = { new Color(2), new Color(3), new Color(32),
 				new Color(55) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
@@ -67,7 +86,11 @@ public class GameTest {
 				Resource.sheep };
 		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 2);
+		
+//		int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9, 4,
+//				5, 6, 3, 11 };
+		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0, userPanel, board, randomNumberArray);
 	}
 
 	@Test
@@ -139,8 +162,6 @@ public class GameTest {
 	@Test
 	public void testThatOneRollAddsResources() throws Exception {
 		setUpGameEthan();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 
@@ -161,9 +182,6 @@ public class GameTest {
 	@Test
 	public void testAddResourcesOneCity() throws Exception {
 		setUpGameEthan();
-		game.setUserPanel(new UserPanel(game));
-		
-		game.setBoardRenderer(new BoardRenderer(game));
 		game.roll();
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
@@ -192,7 +210,6 @@ public class GameTest {
 	public void testThatNoSettlementsAddsNoResources()
 			throws Exception {
 		setUpGameEthan();
-		game.setUserPanel(new UserPanel(game));
 		game.roll();
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
@@ -356,8 +373,6 @@ public class GameTest {
 	@Test
 	public void testBuyAndBuildRoad() throws Exception {
 		setUpGameEthan();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 
@@ -375,8 +390,6 @@ public class GameTest {
 	@Test
 	public void testBuyAndBuildSettlement() throws Exception {
 		setUpGameEthan();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 
@@ -398,8 +411,6 @@ public class GameTest {
 	@Test
 	public void testBuyAndBuildCity() throws Exception {
 		setUpGameEthan();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
 		game.roll();
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
@@ -424,10 +435,7 @@ public class GameTest {
 
 	@Test
 	public void testVictoryPointForLongestRoad() throws Exception {
-		setUpGameDavis();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
-		
+		setUpGameDavis();		
 		assertEquals(0, game.getVictoryPointsForPlayer(0));
 		
 		game.addRoad(0, 18, HexComponent.RoadPosition.north);
@@ -444,10 +452,7 @@ public class GameTest {
 
 	@Test
 	public void testAddOneVictoryPointForOneSettlement() throws Exception {
-		setUpGameDavis();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
-		
+		setUpGameDavis();	
 		game.addRoad(0, 0, HexComponent.RoadPosition.northeast);
 		assertEquals(0, game.getVictoryPointsForPlayer(0));
 		
@@ -461,9 +466,6 @@ public class GameTest {
 	public void testAddTwoVictoryPointsForOneCity() throws Exception {
 		// TODO
 		setUpGameDavis();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
-		
 		assertEquals(0, game.getVictoryPointsForPlayer(3));
 		
 		game.addRoad(3, 3, HexComponent.RoadPosition.northeast);
@@ -529,9 +531,6 @@ public class GameTest {
 		// The player with older road should win if roads are the same length.
 		
 		setUpGameDavis();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
-		
 		assertEquals(null, game.getPlayerWithLongestRoad());
 		
 		game.addRoad(0, 0, HexComponent.RoadPosition.south);
@@ -551,9 +550,6 @@ public class GameTest {
 	@Test
 	public void testGameEndsAfterPlayerHas10Points() throws Exception {
 		setUpGameDavis();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
-		
 		game.addRoad(0, 18, HexComponent.RoadPosition.north);
 		game.addRoad(0, 18, HexComponent.RoadPosition.northeast);
 		game.addRoad(0, 18, HexComponent.RoadPosition.southeast);
@@ -606,9 +602,7 @@ public class GameTest {
 	@Test
 	public void testGameEndsAfterPlayerHas11Points() throws Exception {
 		setUpGameDavis();
-		game.setUserPanel(new UserPanel(game));
-		game.setBoardRenderer(new BoardRenderer(game));
-		
+
 		game.addRoad(0, 18, HexComponent.RoadPosition.north);
 		game.addRoad(0, 18, HexComponent.RoadPosition.northeast);
 		game.addRoad(0, 18, HexComponent.RoadPosition.southeast);
@@ -664,4 +658,8 @@ public class GameTest {
 		assertEquals(0, game.checkVictory());
 	}
 
+	@Test 
+	public void testThatRobberPreventsResourseGathering() {
+		
+	}
 }

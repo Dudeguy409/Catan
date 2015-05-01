@@ -13,7 +13,7 @@ public class FakeUserPanel implements IUserPanel {
 	protected int setCurrentPlayerCount = 0;
 	protected TurnPhase turnPhase = null;
 	protected int setTurnPhaseCount = 0;
-	protected int[] vpCounts = null;
+	protected int[] vpCounts = { 0, 0, 0, 0 };
 	protected boolean hasCalledSetUpNormalGame = false;
 	protected boolean hasCalledResetBeginningMode = false;
 	protected boolean hasCalledSetBeginningBuildSettlement = false;
