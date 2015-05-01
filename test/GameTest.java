@@ -191,14 +191,7 @@ public class GameTest {
 		Player[] players = (Player[]) (field.get(game));
 		Player player = players[game.getCurrentPlayer()];
 		
-		System.out.println(hex.get(3).getRollNumber() + " " + hex.get(3).getResource());
-		System.out.println(hex.get(14).getRollNumber() + " " + hex.get(14).getResource());
-		
-		System.out.println(Arrays.toString(game.getCardsForPlayer(0)));
-		
 		game.roll();
-		System.out.println(Arrays.toString(userPanel.rollHistory.get(0)));
-		System.out.println(Arrays.toString(game.getCardsForPlayer(0)));
 		assertEquals(2, player.getCards()[4]);
 	}
 
