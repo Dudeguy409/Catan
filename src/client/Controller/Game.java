@@ -344,57 +344,67 @@ public class Game {
 		this.userPanel.setRolls(rolls);
 
 		int roll = rolls[0];
-		ArrayList<Hex> rolledHexes = findRolledHexes(roll);
 
-		for (int i = 0; i < rolledHexes.size(); i++) {
-			Hex hex = rolledHexes.get(i);
-			int hexId = hex.getHexID();
+		if (roll == 7) {
+			// TODO implement robber
 
-			if (robberLocation != hexId) {
-				Resource type = hex.getResource();
+			// function for discarding from hand
 
-				int[] structPositions = {
-						this.hexMgr.getStructureId(hexId,
-								HexComponent.StructurePosition.east),
-						this.hexMgr.getStructureId(hexId,
-								HexComponent.StructurePosition.northeast),
-						this.hexMgr.getStructureId(hexId,
-								HexComponent.StructurePosition.northwest),
-						this.hexMgr.getStructureId(hexId,
-								HexComponent.StructurePosition.southeast),
-						this.hexMgr.getStructureId(hexId,
-								HexComponent.StructurePosition.southwest),
-						this.hexMgr.getStructureId(hexId,
-								HexComponent.StructurePosition.west) };
+			// function for moving robber
 
-				for (int j = 0; j < structPositions.length; j++) {
+		} else {
+			ArrayList<Hex> rolledHexes = findRolledHexes(roll);
 
-					StructurePiece p = this.structMgr
-							.getStructurePiece(structPositions[j]);
+			for (int i = 0; i < rolledHexes.size(); i++) {
+				Hex hex = rolledHexes.get(i);
+				int hexId = hex.getHexID();
 
-					if (p != null) {
-						// System.out.println("Structure: player "
-						// + (1 + p.getPlayerIndex()) + ", buildType: "
-						// + p.getBuildType() + "resource: "
-						// + hex.getResource() + ", structure id: "
-						// + p.getStructureId() + ", hex id: "
-						// + hex.getHexID() + ", hex roll number: "
-						// + hex.getRollNumber());
-						int cardsToAdd = 0;
+				if (robberLocation != hexId) {
+					Resource type = hex.getResource();
 
-						if (p.getBuildType() == BuildType.city) {
-							cardsToAdd = 2;
-						} else if (p.getBuildType() == BuildType.settlement) {
-							cardsToAdd = 1;
-						} else {
-							System.out.println("Critical Error!!!");
+					int[] structPositions = {
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.east),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.northeast),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.northwest),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.southeast),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.southwest),
+							this.hexMgr.getStructureId(hexId,
+									HexComponent.StructurePosition.west) };
+
+					for (int j = 0; j < structPositions.length; j++) {
+
+						StructurePiece p = this.structMgr
+								.getStructurePiece(structPositions[j]);
+
+						if (p != null) {
+							// System.out.println("Structure: player "
+							// + (1 + p.getPlayerIndex()) + ", buildType: "
+							// + p.getBuildType() + "resource: "
+							// + hex.getResource() + ", structure id: "
+							// + p.getStructureId() + ", hex id: "
+							// + hex.getHexID() + ", hex roll number: "
+							// + hex.getRollNumber());
+							int cardsToAdd = 0;
+
+							if (p.getBuildType() == BuildType.city) {
+								cardsToAdd = 2;
+							} else if (p.getBuildType() == BuildType.settlement) {
+								cardsToAdd = 1;
+							} else {
+								System.out.println("Critical Error!!!");
+							}
+							this.players[p.getPlayerIndex()].adjustCards(type,
+									cardsToAdd);
 						}
-						this.players[p.getPlayerIndex()].adjustCards(type,
-								cardsToAdd);
 					}
-				}
 
-				updateUserPanelCards();
+					updateUserPanelCards();
+				}
 			}
 		}
 	}
@@ -772,6 +782,10 @@ public class Game {
 	}
 
 	public void setRobberLocation(int robberLoc) {
+		if (this.robberLocation == robberLoc) {
+			throw new IllegalArgumentException(
+					"Robber must move to a different hex.");
+		}
 		this.robberLocation = robberLoc;
 	}
 
