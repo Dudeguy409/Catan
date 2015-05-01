@@ -1,29 +1,20 @@
 import static org.junit.Assert.*;
 
-import java.awt.FlowLayout;
 import java.awt.Color;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import javax.annotation.Generated;
-import javax.swing.JFrame;
-
-import org.junit.Before;
 import org.junit.Test;
 
-import client.Controller.FakeDice;
 import client.Controller.Game;
 import client.Controller.Main;
 import client.Controller.StructureManager;
 import client.Controller.Game.BuildType;
 import client.Controller.Game.Resource;
-import client.GUI.BoardRenderer;
 import client.GUI.HexComponent;
-import client.GUI.UserPanel;
 import client.Model.Player;
 
 public class GameTest {
@@ -33,10 +24,7 @@ public class GameTest {
 	
 
 	public void setUpGameEthan() throws Exception {
-		this.userPanel = new FakeUserPanel();
-		this.board = new FakeBoardRenderer();
-		
-		Color[] colors = { new Color(2), new Color(3), new Color(40) };
+		Color[] colors = { new Color(2), new Color(3) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
 				Resource.wood, Resource.brick, Resource.wheat, Resource.ore,
@@ -45,13 +33,35 @@ public class GameTest {
 				Resource.sheep };
 		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
-//		int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9, 4,
-//				5, 6, 3, 11 };
-		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0, userPanel, board, randomNumberArray);
-		Field field = Game.class.getDeclaredField("preGameMode");
-		field.setAccessible(true);
-		field.set(game, false);
+
+		this.userPanel = new FakeUserPanel();
+		this.board = new FakeBoardRenderer();
+
+		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
+				this.userPanel, this.board,
+				Main.configureRandomNumberArray(resources));
+
+		// gets the game out of the Pre-game set-up phase
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.south);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(3,
+				HexComponent.StructurePosition.southwest);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(16, HexComponent.RoadPosition.southeast);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(16,
+				HexComponent.StructurePosition.southeast);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(9, HexComponent.RoadPosition.northwest);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(9,
+				HexComponent.StructurePosition.northwest);
+		game.setBuildType(Game.BuildType.road);
+		game.processBuildRoadClick(14, HexComponent.RoadPosition.northwest);
+		game.setBuildType(Game.BuildType.settlement);
+		game.processBuildStructureClick(14,
+				HexComponent.StructurePosition.northwest);
 	}
 
 	public void setUpGameAndrew() throws Exception {
@@ -163,18 +173,15 @@ public class GameTest {
 	@Test
 	public void testThatOneRollAddsResources() throws Exception {
 		setUpGameEthan();
+		
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 
 		Player player = new Player();
-		int[] delta = { 1, 2, 1, 2, 0, 0 };
-		player.adjustCards(delta);
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
-		game.processBuildRoadClick(15, HexComponent.RoadPosition.north);
-		game.setBuildType(Game.BuildType.settlement);
-		game.processBuildStructureClick(3, HexComponent.StructurePosition.northwest);
+		
 		game.roll();
 
 		assertEquals(1, player.getCards()[4]);
