@@ -9,14 +9,14 @@ import client.Controller.Game;
  */
 public class Player {
 	// TODO add port and bank trade rates
-	private int wheatCount;
-	private int woodCount;
-	private int woolCount;
-	private int brickCount;
-	private int oreCount;
-	private int playedSoldierCount;
-	private int victoryPoints;
-	private int totalResourceCards;
+	private int wheatCount=0;
+	private int woodCount=0;
+	private int woolCount=0;
+	private int brickCount=0;
+	private int oreCount=0;
+	private int playedSoldierCount=0;
+	private int victoryPoints=0;
+	private int totalResourceCards=0;
 
 	// TODO remove or implement
 	// private int playerIndex;

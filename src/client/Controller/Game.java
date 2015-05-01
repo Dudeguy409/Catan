@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 
 import javax.swing.JOptionPane;
@@ -650,7 +651,7 @@ public class Game {
 	}
 
 	public int selectPlayerToStealFrom() {
-		String message = "Please select a player to trade with";
+		String message = "Please select a player to steal from.";
 		String title = "Steal";
 
 		String[] options = new String[this.numberOfPlayers - 1];
@@ -670,7 +671,7 @@ public class Game {
 	}
 
 	public int selectPlayerToTradeWith() {
-		String message = "Please select a player to steal from";
+		String message = "Please select a player to trade with.";
 		String title = "Trade";
 
 		String[] options = new String[this.numberOfPlayers];
@@ -685,11 +686,42 @@ public class Game {
 		}
 
 		options[options.length - 1] = "Bank";
-
-		return JOptionPane.showOptionDialog(null, message, title,
+		int selection = JOptionPane.showOptionDialog(null, message, title,
 				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
 				options, -1);
 
+		try {
+			return Integer.parseInt(options[selection])-1;
+		} catch (Exception e) {
+			return -18;
+		}
+
+	}
+
+	public void processTradeClick() {
+		int rslt = selectPlayerToTradeWith();
+
+		int[][] rslts = selectCardsToTrade();
+
+		if (rslt == -18) {
+			System.out.println("Bank selected!");
+			tradeWithBank(rslts[0], rslts[1]);
+		} else {
+			System.out.printf("Player %d selected!\n", (rslt + 1));
+			//trade(rslt, rslts[0], rslts[1]);
+		}
+
+	}
+
+	private void tradeWithBank(int[] rslts, int[] rslts2) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private int[][] selectCardsToTrade() {
+		int[][] rslts = new int[2][5];
+		// TODO
+		return rslts;
 	}
 
 }

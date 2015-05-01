@@ -37,6 +37,7 @@ public class UserPanel extends JPanel implements IUserPanel {
 	private DiceRenderer dice;
 	private JButton endButton;
 	private JButton buildButton;
+	private JButton tradeButton;
 	private int numberOfPlayers;
 	private JPanel buildPanel;
 	private JLabel[] vPLabel;
@@ -51,12 +52,11 @@ public class UserPanel extends JPanel implements IUserPanel {
 	private JLabel[] quantityLabel;
 	private JLabel totalLabel;
 
-	
-	public UserPanel(){
-		
+	public UserPanel() {
+
 	}
-	
-	public void configureUserPanel(Game game){
+
+	public void configureUserPanel(Game game) {
 		this.game = game;
 
 		this.setPreferredSize(new Dimension(300, 800));
@@ -136,6 +136,7 @@ public class UserPanel extends JPanel implements IUserPanel {
 		case preroll:
 			this.rollButton.setEnabled(true);
 			this.buildButton.setEnabled(false);
+			this.tradeButton.setEnabled(false);
 			this.endButton.setEnabled(false);
 			this.buildPanel.setVisible(false);
 			break;
@@ -161,6 +162,7 @@ public class UserPanel extends JPanel implements IUserPanel {
 	public void setRolls(int[] rolls) {
 		this.dice.setDice(rolls[1], rolls[2]);
 		this.rollButton.setEnabled(false);
+		this.tradeButton.setEnabled(true);
 		this.buildButton.setEnabled(true);
 		this.endButton.setEnabled(true);
 	}
@@ -249,7 +251,6 @@ public class UserPanel extends JPanel implements IUserPanel {
 		// must roll. Afterwards, you can build or end your turn.
 		// TODO don't allow people the option to build or end their turn before
 		// they roll. Disable build button after they already click it.
-		// TODO add trade button.
 		this.turnPanel = new JPanel();
 		turnPanel.setPreferredSize(new Dimension(300, 30));
 		turnPanel.setBackground(Color.red);
@@ -259,6 +260,14 @@ public class UserPanel extends JPanel implements IUserPanel {
 				roll();
 			}
 		});
+
+		this.tradeButton = new JButton("Trade");
+		this.tradeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				initializeTrade();
+			}
+		});
+
 		this.buildButton = new JButton("Build");
 		this.buildButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -273,19 +282,26 @@ public class UserPanel extends JPanel implements IUserPanel {
 			}
 		});
 		turnPanel.add(this.rollButton);
+		turnPanel.add(this.tradeButton);
 		turnPanel.add(this.buildButton);
 		turnPanel.add(this.endButton);
 
 		this.buildButton.setVisible(false);
 		this.rollButton.setVisible(false);
 		this.endButton.setVisible(false);
+		this.tradeButton.setVisible(false);
 		this.add(turnPanel);
 
+	}
+
+	protected void initializeTrade() {
+		this.game.processTradeClick();
 	}
 
 	protected void enableBuild() {
 		this.buildPanel.setVisible(true);
 		this.buildButton.setEnabled(false);
+		this.tradeButton.setEnabled(false);
 		if (game.isBeginningOfGame()) {
 			if (game.hasBuiltRoad()) {
 				this.settlementButton.setVisible(true);
@@ -401,6 +417,7 @@ public class UserPanel extends JPanel implements IUserPanel {
 	public void setUpNormalGame() {
 		this.endButton.setVisible(true);
 		this.rollButton.setVisible(true);
+		this.tradeButton.setVisible(true);
 		this.cardButton.setVisible(true);
 		this.pricesButton.setVisible(true);
 		this.settlementButton.setVisible(true);
