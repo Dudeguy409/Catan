@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import client.Controller.Game.Resource;
 import client.GUI.BoardRenderer;
+import client.GUI.DiscardFrame;
 import client.GUI.UserPanel;
 
 /**
@@ -43,20 +44,25 @@ public class Main {
 		Game.Resource[] hexResources = HexResourceTypeGenerator
 				.getHexColors(new Random().nextLong());
 		int[] randomNumberArray = configureRandomNumberArray(hexResources);
-		BoardRenderer myBoard = new BoardRenderer(hexResources,randomNumberArray);
+		BoardRenderer myBoard = new BoardRenderer(hexResources,
+				randomNumberArray);
 		UserPanel myPanel = new UserPanel();
 
-		
-
-		new Game(colors, hexResources, new Dice(),
+		Game game = new Game(colors, hexResources, new Dice(),
 				new Random().nextInt(colors.length), myPanel, myBoard,
 				randomNumberArray);
+		
 
 		frame.add(myPanel, FlowLayout.LEFT);
+		
+		frame.setLocation(200, 200);
 
 		frame.add(myBoard, FlowLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		
+		int[] cards = { 0, 0, 4, 5, 3, 0, 12 };
+		new DiscardFrame(game, 0, cards);
 	}
 
 	private static Color[] configurePlayerColors(int numberOfPlayers) {

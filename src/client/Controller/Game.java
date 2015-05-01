@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Stack;
 
 import javax.swing.JOptionPane;
@@ -28,6 +27,9 @@ public class Game {
 	public static final Color woodColor = new Color(0, 100, 0);
 	public static final Color oreColor = new Color(170, 170, 170);
 	public static final Color brickColor = new Color(200, 70, 0);
+
+	public static final Color[] resourceColors = { wheatColor, woodColor,
+			sheepColor, oreColor, brickColor };
 
 	public static enum Resource {
 		wood(0), brick(1), sheep(2), ore(3), wheat(4), desert(-1);
@@ -691,7 +693,7 @@ public class Game {
 				options, -1);
 
 		try {
-			return Integer.parseInt(options[selection])-1;
+			return Integer.parseInt(options[selection]) - 1;
 		} catch (Exception e) {
 			return -18;
 		}
@@ -708,7 +710,7 @@ public class Game {
 			tradeWithBank(rslts[0], rslts[1]);
 		} else {
 			System.out.printf("Player %d selected!\n", (rslt + 1));
-			//trade(rslt, rslts[0], rslts[1]);
+			// trade(rslt, rslts[0], rslts[1]);
 		}
 
 	}
@@ -722,6 +724,10 @@ public class Game {
 		int[][] rslts = new int[2][5];
 		// TODO
 		return rslts;
+	}
+
+	public void adjustCardsForPlayer(int playerIndex, int[] delta) {
+		this.players[playerIndex].adjustCards(delta);
 	}
 
 }
