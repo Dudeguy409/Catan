@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import org.junit.Test;
 
@@ -24,6 +25,7 @@ public class GameTest {
 	Game game;
 	private FakeBoardRenderer board;
 	private FakeUserPanel userPanel;
+	LinkedList<Game.DevCard> devCards;
 
 	public void setUpGameEthan() throws Exception {
 		Color[] colors = { new Color(2), new Color(3) };
@@ -38,10 +40,25 @@ public class GameTest {
 
 		this.userPanel = new FakeUserPanel();
 		this.board = new FakeBoardRenderer();
-
+		this.devCards = new LinkedList<Game.DevCard>();
+		Random place = new Random();
+		for (int i = 0; i < 14; i++) {
+			devCards.add(Game.DevCard.knight);
+		}
+		
+		for (int i = 0; i < 5; i++) {
+			devCards.add(place.nextInt(14), Game.DevCard.victory);
+		}
+		
+		for (int i = 2; i < 2; i++) {
+			devCards.add(place.nextInt(19), Game.DevCard.monopoly);
+			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
+			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
+		}
+		
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
 				this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources));
+				Main.configureRandomNumberArray(resources), devCards);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);
@@ -84,7 +101,7 @@ public class GameTest {
 		// 5, 6, 3, 11 };
 		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
-				userPanel, board, randomNumberArray);
+				userPanel, board, randomNumberArray, this.devCards);
 	}
 
 	public void setUpGameDavis() throws Exception {
@@ -107,7 +124,7 @@ public class GameTest {
 		// 5, 6, 3, 11 };
 		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
 		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
-				userPanel, board, randomNumberArray);
+				userPanel, board, randomNumberArray, this.devCards);
 	}
 
 	@Test

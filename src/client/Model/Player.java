@@ -1,5 +1,7 @@
 package client.Model;
 
+import java.util.LinkedList;
+
 import client.Controller.Game;
 
 /**
@@ -15,8 +17,13 @@ public class Player {
 	private int brickCount;
 	private int oreCount;
 	private int playedSoldierCount;
-	private int victoryPoints;
+	private int devVictoryPoints;
 	private int totalResourceCards;
+	private int yearOfPlenty;
+	private int monopoly;
+	private int knight;
+	private int roadBuilder;
+	private int victory;
 
 	// TODO remove or implement
 	// private int playerIndex;
@@ -48,6 +55,23 @@ public class Player {
 		this.brickCount += delta[3];
 		this.oreCount += delta[4];
 		this.updateTotal();
+	}
+	
+	public int getCard(Game.Resource type) {
+		switch (type) {
+		case wood:
+			return this.woodCount;
+		case wheat:
+			return this.wheatCount;
+		case brick:
+			return this.brickCount;
+		case ore:
+			return this.oreCount;
+		case sheep:
+			return this.woolCount;
+		default:
+			return -1;
+		}
 	}
 
 	public void adjustCards(Game.Resource type, int numberToAdd) {
@@ -90,6 +114,35 @@ public class Player {
 	 * @return number of victory points
 	 */
 	public int getVPs() {
-		return this.victoryPoints;
+		return this.devVictoryPoints;
 	}
+
+	private void addVP() {
+		this.devVictoryPoints++;
+	}
+
+	public void changeDevCardCount(Game.DevCard devCard, int delta) {
+		switch (devCard) {
+		case yearOfPlenty:
+			this.yearOfPlenty += delta;
+			break;
+		case knight:
+			this.knight += delta;
+			break;
+		case monopoly:
+			this.monopoly += delta;
+			break;
+		case roadBuilder:
+			this.roadBuilder += delta;
+			break;
+		case victory:
+			this.victory += delta;
+			addVP();
+			break;
+		default:
+			break;
+
+		}
+	}
+
 }

@@ -42,6 +42,10 @@ public class Game {
 		}
 	}
 
+	public static enum DevCard {
+		yearOfPlenty, monopoly, knight, victory, roadBuilder
+	}
+
 	public static enum TurnPhase {
 		preroll, pretrade, trade, prebuild, build, end
 	}
@@ -70,6 +74,7 @@ public class Game {
 	private boolean preGameMode = true;
 	private boolean hasBuiltRoad = false;
 	private ArrayList<Hex> hexArray;
+	private LinkedList<DevCard> devCardDeck;
 
 	/**
 	 * The number of hexes on the field.
@@ -78,12 +83,13 @@ public class Game {
 
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
 			int startingPlayer, IUserPanel userPanel, IBoardRenderer board,
-			int[] randomNumberArray) {
+			int[] randomNumberArray, LinkedList<DevCard> devCardDeck) {
 
 		this.currentPlayer = startingPlayer;
 		this.dice = dice;
 		this.colorArray = pColors;
 		this.numberOfPlayers = pColors.length;
+		this.devCardDeck = devCardDeck;
 
 		generateStartingTurnsQueue();
 
@@ -398,8 +404,44 @@ public class Game {
 	}
 
 	public void drawDevCard() {
-		// TODO Auto-generated method stub
+		int[] cards = players[this.currentPlayer].getCards();
+		if (cards[0] >= 1 && cards[2] >= 1 && cards[4] >= 1) {
+			this.players[this.currentPlayer]
+					.changeDevCardCount(this.devCardDeck.poll(), 1);
+			int[] delta = { -1, 0, -1, 0, -1 };
+			this.players[this.currentPlayer].adjustCards(delta);
+		}
 
+	}
+	
+	public void useYearOfPlenty() {
+		Resource[] resources = new Resource[2];
+		resources[0] = selectResourceForYearOfPlenty(true);
+		resources[1] = selectResourceForYearOfPlenty(false);
+		adjustForYearOfPlenty(resources);
+	}
+	
+	public void adjustForYearOfPlenty(Resource[] resources) {
+		players[this.currentPlayer].adjustCards(resources[0], 1);
+		players[this.currentPlayer].adjustCards(resources[1], 1);
+		players[this.currentPlayer].changeDevCardCount(DevCard.yearOfPlenty, -1);
+	}
+	
+	public void useMonopoly() {
+		Resource resource = selectResourceForMonopoly();
+		adjustForMonopoly(resource);
+	}
+	
+	public void adjustForMonopoly(Resource resource) {
+		for (int i = 0; i < players.length; i++) {
+			if (i != this.currentPlayer) {
+				if (players[i].getCard(resource) > 0) {
+					players[this.currentPlayer].adjustCards(resource, players[i].getCard(resource));
+					players[i].adjustCards(resource, -players[i].getCard(resource));
+				}
+			}
+		}
+		players[this.currentPlayer].changeDevCardCount(DevCard.monopoly, -1);
 	}
 
 	public void setBuildType(BuildType type) {
