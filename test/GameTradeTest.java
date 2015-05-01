@@ -238,16 +238,15 @@ public class GameTradeTest {
 		this.game.roll();
 		this.game.endTurn();
 		
-		
-		int[] offer = { 0, 0, 0, 1, 0 };
-		int[] request = { 0, 1, 0, 0, 0 };
+		int[] offer = { 0, 1, 2, 0, 0 };
+		int[] request = { 2, 0, 0, 0, 1 };
 		boolean rslt = game.trade(1, offer, request);
 		assertEquals(rslt, true);
 
-		int[] expectedAArray = { 0, 0, 2, 0, 1, 0, 3 };
+		int[] expectedAArray = { 3, 0, 2, 0, 2, 0, 7 };
 		String expectedA = Arrays.toString(expectedAArray);
 		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
-		int[] expectedBArray = { 1, 0, 0, 0, 1, 0, 2 };
+		int[] expectedBArray = { 0, 2, 2, 0, 0, 0, 4 };
 		String expectedB = Arrays.toString(expectedBArray);
 		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
 
@@ -273,23 +272,22 @@ public class GameTradeTest {
 		this.game.endTurn();
 		this.game.roll();
 		this.game.endTurn();
-		System.out.println(Arrays.toString(this.game.getCardsForPlayer(0)));
-		System.out.println(Arrays.toString(this.game.getCardsForPlayer(1)));
-		System.out.println(this.game.isBeginningOfGame());
-		System.out.println(this.game.getCurrentPlayer());
 		
-		int[] offer = { 0, 0, 0, 1, 0 };
-		int[] request = { 0, 1, 0, 0, 0 };
-		boolean rslt = game.trade(1, offer, request);
+		
+		int[] offer = { 2, 1, 0, 0, 0 };
+		int[] request = { 0, 0, 3, 0, 1 };
+		boolean rslt = game.trade(0, offer, request);
 		assertEquals(rslt, true);
-
-		int[] expectedAArray = { 0, 0, 2, 0, 1, 0, 3 };
+		
+		int[] expectedAArray = { 3, 2, 1, 0, 0, 0, 6 };
 		String expectedA = Arrays.toString(expectedAArray);
 		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
-		int[] expectedBArray = { 1, 0, 0, 0, 1, 0, 2 };
+
+		int[] expectedBArray = { 0, 0, 3, 0, 2, 0, 5 };
 		String expectedB = Arrays.toString(expectedBArray);
 		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
-
+	
+		
 		assertEquals(expectedA, actualA);
 		assertEquals(expectedB, actualB);
 
