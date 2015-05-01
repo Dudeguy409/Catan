@@ -17,5 +17,7 @@ public interface IBoardRenderer {
 
 	void addBuilding(int hexId, StructurePosition pos, Color color,
 			BuildType settlement);
+	
+	void moveRobber(int hexId);
 
 }

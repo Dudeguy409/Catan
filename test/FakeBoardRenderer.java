@@ -36,4 +36,8 @@ public class FakeBoardRenderer implements IBoardRenderer {
 		this.buildingsAddedCount++;
 	}
 
+	@Override
+	public void moveRobber(int hexId){
+		
+	}
 }
