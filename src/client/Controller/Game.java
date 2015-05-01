@@ -614,4 +614,82 @@ public class Game {
 		return this.players[playerIndex].getCards();
 	}
 
+	public Resource selectResourceForMonopoly() {
+		String message = "Please select a resource to monopolize.";
+
+		String title = "Monopoly";
+
+		Resource[] options = { Resource.wheat, Resource.wood, Resource.sheep,
+				Resource.ore, Resource.brick };
+		int selected = JOptionPane.showOptionDialog(null, message, title,
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+				options, -1);
+
+		return options[selected];
+	}
+
+	public Resource selectResourceForYearOfPlenty(boolean first) {
+		String message = "Please select your ";
+		if (first) {
+			message += "first ";
+		} else {
+			message += "second ";
+		}
+		message += "resource for your year of plenty.";
+
+		String title = "Year of Plenty";
+
+		Resource[] options = { Resource.wheat, Resource.wood, Resource.sheep,
+				Resource.ore, Resource.brick };
+		int selected = JOptionPane.showOptionDialog(null, message, title,
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+				options, -1);
+
+		return options[selected];
+
+	}
+
+	public int selectPlayerToStealFrom() {
+		String message = "Please select a player to trade with";
+		String title = "Steal";
+
+		String[] options = new String[this.numberOfPlayers - 1];
+
+		for (int i = 0, j = 0; i < this.numberOfPlayers; i++) {
+			if (i == this.currentPlayer) {
+
+			} else {
+				options[j] = Integer.toString(i + 1);
+				j++;
+			}
+		}
+
+		return JOptionPane.showOptionDialog(null, message, title,
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+				options, -1);
+	}
+
+	public int selectPlayerToTradeWith() {
+		String message = "Please select a player to steal from";
+		String title = "Trade";
+
+		String[] options = new String[this.numberOfPlayers];
+
+		for (int i = 0, j = 0; i < this.numberOfPlayers; i++) {
+			if (i == this.currentPlayer) {
+
+			} else {
+				options[j] = Integer.toString(i + 1);
+				j++;
+			}
+		}
+
+		options[options.length - 1] = "Bank";
+
+		return JOptionPane.showOptionDialog(null, message, title,
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+				options, -1);
+
+	}
+
 }
