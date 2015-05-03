@@ -18,14 +18,15 @@ public class TradeFrame extends CardSelectorFrame {
 	private Font mainFont = new Font(null, Font.PLAIN, 24);
 	private JButton okButton;
 	private int[][] delta = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 } };
-	private int[] cardCounts;
+	private int[][] cardCounts = new int[2][5];
 	private TradeCardPanel cardPanelA;
 	private TradeCardPanel cardPanelB;
+	private int[] tradeOfferCount = { 0, 0 };
 	private int currentPlayerIndex;
 	private int destPlayerIndex;
 
 	public TradeFrame(Game game, int currentPlayerIndex, int destPlayerIndex,
-			int[] cardCounts) {
+			int[] cardCountsA, int[] cardCountsB) {
 		super();
 		this.game = game;
 		this.setResizable(false);
@@ -33,7 +34,8 @@ public class TradeFrame extends CardSelectorFrame {
 		this.destPlayerIndex = destPlayerIndex;
 		String title = "Player " + (this.currentPlayerIndex + 1)
 				+ ", please select your trade offer and request.";
-		this.cardCounts = cardCounts;
+		this.cardCounts[0] = cardCountsA;
+		this.cardCounts[1] = cardCountsB;
 
 		String message = "<html>Your Offer: </html>";
 		this.setSize(new Dimension(600, 900));
@@ -41,9 +43,9 @@ public class TradeFrame extends CardSelectorFrame {
 		this.setTitle(title);
 
 		this.cardPanelA = new TradeCardPanel(this.currentPlayerIndex, this,
-				cardCounts);
+				cardCounts[0]);
 		this.cardPanelB = new TradeCardPanel(this.destPlayerIndex, this,
-				cardCounts);
+				cardCounts[1]);
 
 		JLabel messageField = new JLabel(message);
 		messageField.setFont(mainFont);
@@ -89,8 +91,33 @@ public class TradeFrame extends CardSelectorFrame {
 	}
 
 	public boolean adjustCards(int playerIndex, int resourceIndex, boolean add) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
+		int arrayIndex = -1;
+		if (playerIndex == currentPlayerIndex) {
+			arrayIndex = 0;
+		} else {
+			arrayIndex = 1;
+		}
+
+		if (add) {
+			if (delta[arrayIndex][resourceIndex] == cardCounts[arrayIndex][resourceIndex]) {
+				return false;
+			}
+			delta[arrayIndex][resourceIndex]++;
+			tradeOfferCount[arrayIndex]++;
+		} else {
+			if (delta[arrayIndex][resourceIndex] == 0) {
+				return false;
+			}
+			delta[arrayIndex][resourceIndex]--;
+			tradeOfferCount[arrayIndex]--;
+		}
+
+		if (tradeOfferCount[0] > 0 && tradeOfferCount[1] > 0) {
+			this.okButton.setEnabled(true);
+		} else {
+			this.okButton.setEnabled(false);
+		}
+		return true;
+	}
 }
