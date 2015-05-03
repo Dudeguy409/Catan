@@ -21,9 +21,9 @@ public abstract class CardSelectorPanel extends JPanel {
 	protected JLabel[] resourceLabels = new JLabel[5];
 	private JButton[][] buttons;
 	protected int[] delta = { 0, 0, 0, 0, 0 };
-	protected TradeFrame frame;
+	protected CardSelectorFrame frame;
 
-	public CardSelectorPanel(TradeFrame frame, int[] cardCounts) {
+	public CardSelectorPanel(CardSelectorFrame frame, int[] cardCounts) {
 		super();
 		this.frame = frame;
 		this.cardCounts = cardCounts;

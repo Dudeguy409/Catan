@@ -2,12 +2,12 @@ package client.GUI;
 
 public class DiscardCardPanel extends CardSelectorPanel {
 
-	public DiscardCardPanel(TradeFrame frame, int[] cardCounts) {
+	public DiscardCardPanel(CardSelectorFrame frame, int[] cardCounts) {
 		super(frame, cardCounts);
 	}
 
-	protected boolean adjustCards(int i, boolean b) {
-		return ((DiscardFrame) this.frame).adjustCards(i, b);
+	protected boolean adjustCards(int resourceIndex, boolean add) {
+		return ((DiscardFrame) this.frame).adjustCards(resourceIndex, add);
 	}
 
 	protected void updateLabel(int i) {

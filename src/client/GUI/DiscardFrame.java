@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 
 import client.Controller.Game;
 
-public class DiscardFrame extends TradeFrame{
+public class DiscardFrame extends CardSelectorFrame {
 
 	private static final String TOTAL_CARDS = "Total Cards :  ";
 	private static final String CARDS_TO_DISCARD = "Cards to discard :  ";
@@ -60,6 +60,7 @@ public class DiscardFrame extends TradeFrame{
 
 		this.okButton = new JButton("OK");
 		this.okButton.setFont(mainFont);
+		this.okButton.setEnabled(false);
 		this.okButton.addActionListener(new ActionListener() {
 
 			@Override
