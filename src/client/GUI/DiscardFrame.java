@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 
 import client.Controller.Game;
 
-public class DiscardFrame extends JFrame {
+public class DiscardFrame extends TradeFrame{
 
 	private static final String TOTAL_CARDS = "Total Cards :  ";
 	private static final String CARDS_TO_DISCARD = "Cards to discard :  ";
