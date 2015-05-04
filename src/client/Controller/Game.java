@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import javax.swing.JOptionPane;
 
+import client.GUI.DiscardFrame;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.RoadPosition;
 import client.GUI.HexComponent.StructurePosition;
@@ -353,9 +354,29 @@ public class Game {
 		if (roll == 7) {
 			this.userPanel.beginRobber();
 			this.currentBuildType = BuildType.robber;
-			// TODO display message
 
-			// TODO function for discarding from hand
+			String message = "A seven has been rolled.  Player "
+					+ (this.currentPlayer + 1)
+					+ ", please select a new hex for the robber.";
+			JOptionPane.showMessageDialog(null, message);
+
+			for (int i = 0; i < this.players.length; i++) {
+				if (this.players[i].getCards()[6] > 7) {
+					new DiscardFrame(this, i, this.players[i].getCards());
+				}
+			}
+
+			int playerToStealFrom = selectPlayerToStealFrom();
+
+			drawRandomCardFromOpponent(playerToStealFrom);
+			// TODO then only allow to steal from players with settlements on
+			// the hex moved to.
+			// TODO update user panel to have right amount of cards after every
+			// event.
+			// TODO handle if they x out discard window.
+			// TODO only let people move the robber to hex with all players with
+			// less than 3 points
+			// TODO handle drawing a random card from someone's hand.
 
 		} else {
 			ArrayList<Hex> rolledHexes = findRolledHexes(roll);
@@ -412,6 +433,11 @@ public class Game {
 				}
 			}
 		}
+	}
+
+	private void drawRandomCardFromOpponent(int playerToStealFrom) {
+		// TODO Auto-generated method stub
+
 	}
 
 	private ArrayList<Hex> findRolledHexes(int rollNumber) {
