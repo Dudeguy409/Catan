@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -61,14 +62,20 @@ public class TradeFrame extends CardSelectorFrame {
 			}
 		});
 
+		// TODO update userPanel when submitted
+
 		JPanel labelPanel = new JPanel();
 		labelPanel.add(this.okButton);
+
+		JPanel cardPanels = new JPanel();
+		cardPanels.setLayout(new GridLayout(2, 1));
+		cardPanels.add(cardPanelA);
+		cardPanels.add(cardPanelB);
 
 		this.setLayout(new BorderLayout());
 
 		this.add(messageField, BorderLayout.NORTH);
-		this.add(cardPanelA, BorderLayout.CENTER);
-		this.add(cardPanelB, BorderLayout.CENTER);
+		this.add(cardPanels, BorderLayout.CENTER);
 		this.add(labelPanel, BorderLayout.SOUTH);
 		this.setVisible(true);
 	}
