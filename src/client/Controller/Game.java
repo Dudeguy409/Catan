@@ -14,6 +14,7 @@ import client.GUI.HexComponent.RoadPosition;
 import client.GUI.HexComponent.StructurePosition;
 import client.GUI.IBoardRenderer;
 import client.GUI.IUserPanel;
+import client.GUI.TradeFrame;
 import client.Model.Hex;
 import client.Model.Player;
 import client.Model.RoadPiece;
@@ -78,7 +79,7 @@ public class Game {
 	private boolean hasBuiltRoad = false;
 	private ArrayList<Hex> hexArray;
 	private LinkedList<DevCard> devCardDeck;
-	private int robberLocation = -1; // TODO set to desert
+	private int robberLocation = -1;
 
 	/**
 	 * The number of hexes on the field.
@@ -100,6 +101,9 @@ public class Game {
 		this.hexArray = new ArrayList<Hex>();
 		for (int j = 0; j < boardSize; j++) {
 			hexArray.add(new Hex(randomNumberArray[j], hexResources[j], j));
+			if (hexResources[j] == Resource.desert) {
+				this.robberLocation = j;
+			}
 		}
 
 		this.players = new Player[this.numberOfPlayers];
@@ -765,28 +769,23 @@ public class Game {
 	public void processTradeClick() {
 		int rslt = selectPlayerToTradeWith();
 
-		int[][] rslts = selectCardsToTrade();
 		if (rslt != -1) {
 			if (rslt == -18) {
 				System.out.println("Bank selected!");
-				tradeWithBank(rslts[0], rslts[1]);
+				// TODO
+				// tradeWithBank(rslts[0], rslts[1]);
 			} else {
 				System.out.printf("Player %d selected!\n", (rslt + 1));
-				// trade(rslt, rslts[0], rslts[1]);
+				new TradeFrame(this, this.currentPlayer, rslt,
+						this.players[this.currentPlayer].getCards(),
+						this.players[rslt].getCards());
 			}
 		}
-
 	}
 
 	private void tradeWithBank(int[] rslts, int[] rslts2) {
 		// TODO Auto-generated method stub
 
-	}
-
-	private int[][] selectCardsToTrade() {
-		int[][] rslts = new int[2][5];
-		// TODO
-		return rslts;
 	}
 
 	public void adjustCardsForPlayer(int playerIndex, int[] delta) {
