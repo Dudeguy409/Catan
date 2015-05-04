@@ -30,7 +30,7 @@ public class Game {
 	public static final Color brickColor = new Color(200, 70, 0);
 
 	public static final Color[] resourceColors = { wheatColor, woodColor,
-			sheepColor, oreColor, brickColor };
+			sheepColor, brickColor, oreColor };
 
 	public static enum Resource {
 		wood(0), brick(1), sheep(2), ore(3), wheat(4), desert(-1);

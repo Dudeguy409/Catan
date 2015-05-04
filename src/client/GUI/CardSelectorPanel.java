@@ -14,7 +14,7 @@ import client.Controller.Game;
 public abstract class CardSelectorPanel extends JPanel {
 
 	protected static final String[] labels = { "Wheat: ", "Wood: ", "Wool: ",
-			"Ore: ", "Brick: " };
+			"Brick: ", "Ore: " };
 
 	protected int[] cardCounts;
 	private Font mainFont = new Font(null, Font.PLAIN, 24);
