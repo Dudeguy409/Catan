@@ -40,18 +40,9 @@ public class PlayerTradeFrame extends CardSelectorFrame {
 		this.cardCounts[0] = cardCountsA;
 		this.cardCounts[1] = cardCountsB;
 
-		String message = "<html>Your Offer: </html>";
-		this.setSize(new Dimension(600, 900));
+		this.setSize(new Dimension(600, 650));
 		this.setLocation(700, 150);
 		this.setTitle(title);
-
-		this.cardPanelA = new TradeCardPanel(this.currentPlayerIndex, this,
-				cardCounts[0]);
-		this.cardPanelB = new TradeCardPanel(this.destPlayerIndex, this,
-				cardCounts[1]);
-
-		JLabel messageField = new JLabel(message);
-		messageField.setFont(mainFont);
 
 		this.okButton = new JButton("OK");
 		this.okButton.setFont(mainFont);
@@ -64,20 +55,42 @@ public class PlayerTradeFrame extends CardSelectorFrame {
 			}
 		});
 
-		// TODO update userPanel when submitted
+		String offerMessage = "<html>Your Offer: </html>";
+		JLabel offerMessageField = new JLabel(offerMessage);
+		offerMessageField.setFont(mainFont);
+
+		String requestMessage = "<html>Your Request: </html>";
+		JLabel requestMessageField = new JLabel(requestMessage);
+		requestMessageField.setFont(mainFont);
+
+		JPanel panelA = new JPanel();
+		panelA.setLayout(new BorderLayout());
+		panelA.add(offerMessageField, BorderLayout.NORTH);
+
+		JPanel panelB = new JPanel();
+		panelB.setLayout(new BorderLayout());
+		panelB.add(requestMessageField, BorderLayout.NORTH);
+
+		this.cardPanelA = new TradeCardPanel(this.currentPlayerIndex, this,
+				cardCounts[0]);
+		this.cardPanelB = new TradeCardPanel(this.destPlayerIndex, this,
+				cardCounts[1]);
+
+		panelA.add(cardPanelA, BorderLayout.CENTER);
+		panelB.add(cardPanelB, BorderLayout.CENTER);
 
 		JPanel labelPanel = new JPanel();
 		labelPanel.add(this.okButton);
 
-		JPanel cardPanels = new JPanel();
-		cardPanels.setLayout(new GridLayout(2, 1));
-		cardPanels.add(cardPanelA);
-		cardPanels.add(cardPanelB);
+		JPanel mainCardPanel = new JPanel();
+		mainCardPanel.setLayout(new GridLayout(2, 1));
+		mainCardPanel.add(panelA);
+		mainCardPanel.add(panelB);
 
 		this.setLayout(new BorderLayout());
 
-		this.add(messageField, BorderLayout.NORTH);
-		this.add(cardPanels, BorderLayout.CENTER);
+		// this.add(messageField, BorderLayout.NORTH);
+		this.add(mainCardPanel, BorderLayout.CENTER);
 		this.add(labelPanel, BorderLayout.SOUTH);
 		this.setVisible(true);
 	}

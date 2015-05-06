@@ -834,6 +834,7 @@ public class Game {
 
 	public void adjustCardsForPlayer(int playerIndex, int[] delta) {
 		this.players[playerIndex].adjustCards(delta);
+		updateUserPanelCards();
 	}
 
 	public void setRobberLocation(int robberLoc) {

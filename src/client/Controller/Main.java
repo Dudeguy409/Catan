@@ -62,6 +62,10 @@ public class Main {
 		frame.add(myBoard, FlowLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		//TODO remove
+//		int[] a = { 2, 2, 2, 2, 2 };
+//		int[] b = { 2, 2, 2, 2, 2 };
+//		new PlayerTradeFrame(game, 0, 1, a, b);
 	}
 
 	private static Color[] configurePlayerColors(int numberOfPlayers) {
