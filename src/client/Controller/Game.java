@@ -81,6 +81,7 @@ public class Game {
 	private ArrayList<Hex> hexArray;
 	private LinkedList<DevCard> devCardDeck;
 	private int robberLocation = -1;
+	private int roadBuild = 0;
 
 	/**
 	 * The number of hexes on the field.
@@ -661,7 +662,7 @@ public class Game {
 	public void processBuildRoadClick(int hexID, HexComponent.RoadPosition pos) {
 		Player cp = players[this.currentPlayer];
 		if (this.preGameMode != true) {
-			if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1) {
+			if ((cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1) || this.roadBuild > 0) {
 				addRoad(this.currentPlayer, hexID, pos);
 			}
 
@@ -847,6 +848,15 @@ public class Game {
 		// event.
 		// TODO only let people move the robber to a hex where all players
 		// touching it have more than 3 points
+	}
+	
+	public void playRoadBuilder() {
+		setBuildType(BuildType.road);
+		int roadCount = this.roadMgr.getRoadCountForPlayer(this.currentPlayer);
+		if (roadCount < 14)
+			this.roadBuild = 2;
+		else if (roadCount == 14)
+			this.roadBuild = 1;
 	}
 
 }
