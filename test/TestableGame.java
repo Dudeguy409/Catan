@@ -56,7 +56,7 @@ public class TestableGame extends Game {
 	}
 
 	@Override
-	protected void displaySevenRolledMessage() {
+	protected void displayMoveRobberMessage() {
 		// TODO
 	}
 

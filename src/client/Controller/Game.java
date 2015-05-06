@@ -192,7 +192,7 @@ public class Game {
 
 	public boolean addRoad(int playerIndex, int hexId,
 			HexComponent.RoadPosition pos) {
-		// TODO throw exceptions
+
 		boolean roadAdded = false;
 		int roadId = this.hexMgr.getRoadId(hexId, pos);
 		int currentRoadCount = this.roadMgr.getRoadCountForPlayer(playerIndex);
@@ -214,7 +214,6 @@ public class Game {
 			updateUserPanelCards();
 		}
 
-		// TODO keep track of longest road
 		if (roadMgr.findLongestRoadForPlayer(playerIndex) > maxRoadLength) {
 			maxRoadLength = roadMgr.findLongestRoadForPlayer(playerIndex);
 			playerWithLongestRoad = playerIndex;
@@ -236,10 +235,8 @@ public class Game {
 
 	public boolean addBuilding(int playerIndex, int hexId,
 			HexComponent.StructurePosition pos) {
-		// System.out.println("current Player: "+(playerIndex+1));
-		// TODO throw exceptions
 
-		// Check for adjacent road not returned by
+		// TODO Check for adjacent road not returned by
 		// getAdjacentRoadPositionsForStructure
 
 		int structureId = this.hexMgr.getStructureId(hexId, pos);
@@ -352,10 +349,8 @@ public class Game {
 		int roll = rolls[0];
 
 		if (roll == 7) {
-			this.userPanel.beginRobber();
-			this.currentBuildType = BuildType.robber;
 
-			displaySevenRolledMessage();
+			// TODO handle if they x out discard window.
 
 			for (int i = 0; i < this.players.length; i++) {
 				if (this.players[i].getCards()[6] > 7) {
@@ -363,17 +358,7 @@ public class Game {
 				}
 			}
 
-			int playerToStealFrom = selectPlayerToStealFrom();
-
-			drawRandomCardFromOpponent(playerToStealFrom);
-			// TODO then only allow to steal from players with settlements on
-			// the hex moved to.
-			// TODO update user panel to have right amount of cards after every
-			// event.
-			// TODO handle if they x out discard window.
-			// TODO only let people move the robber to hex with all players with
-			// less than 3 points
-			// TODO handle drawing a random card from someone's hand.
+			startMoveRobber();
 
 		} else {
 			ArrayList<Hex> rolledHexes = findRolledHexes(roll);
@@ -432,9 +417,15 @@ public class Game {
 		}
 	}
 
-	protected void displaySevenRolledMessage() {
-		String message = "A seven has been rolled.  Player "
-				+ (this.currentPlayer + 1)
+	private void startMoveRobber() {
+		displayMoveRobberMessage();
+
+		this.userPanel.beginRobber();
+		this.currentBuildType = BuildType.robber;
+	}
+
+	protected void displayMoveRobberMessage() {
+		String message = "Player " + (this.currentPlayer + 1)
 				+ ", please select a new hex for the robber.";
 
 		JOptionPane.showMessageDialog(null, message);
@@ -445,7 +436,7 @@ public class Game {
 	}
 
 	private void drawRandomCardFromOpponent(int playerToStealFrom) {
-		// TODO Auto-generated method stub
+		// TODO handle drawing a random card from someone's hand.
 
 	}
 
@@ -847,6 +838,15 @@ public class Game {
 		this.currentBuildType = BuildType.none;
 		this.userPanel.endRobber();
 
+		int playerToStealFrom = selectPlayerToStealFrom();
+
+		drawRandomCardFromOpponent(playerToStealFrom);
+		// TODO then only allow to steal from players with settlements on
+		// the hex moved to.
+		// TODO update user panel to have right amount of cards after every
+		// event.
+		// TODO only let people move the robber to a hex where all players
+		// touching it have more than 3 points
 	}
 
 }
