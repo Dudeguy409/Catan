@@ -449,7 +449,7 @@ public class GameTest {
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
-		assertEquals(1, game.getVictoryPointsForPlayer(0));
+		assertEquals(2, game.getVictoryPointsForPlayer(0));
 
 		game.setBuildType(Game.BuildType.city);
 		game.processBuildStructureClick(3,
@@ -457,7 +457,7 @@ public class GameTest {
 		assertEquals(0, player.getCards()[1]);
 		assertEquals(0, player.getCards()[4]);
 		
-		assertEquals(1, game.getVictoryPointsForPlayer(0));
+		assertEquals(3, game.getVictoryPointsForPlayer(0));
 	}
 
 	@Test
