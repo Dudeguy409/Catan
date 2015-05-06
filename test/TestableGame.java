@@ -57,7 +57,7 @@ public class TestableGame extends Game {
 
 	@Override
 	protected void displayMoveRobberMessage() {
-		// TODO
+		setRobberLocation(14);
 	}
 
 }

@@ -15,10 +15,11 @@ import client.Controller.Game.Resource;
 import client.Controller.RoadManager;
 import client.Controller.StructureManager;
 import client.GUI.HexComponent;
+import client.Model.Hex;
 import client.Model.Player;
 
 public class DevelopmentCardTest {
-	Game game;
+	TestableGame game;
 	private FakeBoardRenderer board;
 	private FakeUserPanel userPanel;
 	private LinkedList<Game.DevCard> devCards;
@@ -53,7 +54,7 @@ public class DevelopmentCardTest {
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
 
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
+		game = new TestableGame(colors, resources, new FakeDice(arrayA, arrayB), 0,
 				this.userPanel, this.board,
 				Main.configureRandomNumberArray(resources), devCards);
 
@@ -341,7 +342,6 @@ public class DevelopmentCardTest {
 
 	@Test
 	public void TestUseKnightDevCard() throws Exception {
-		GameTest gt = new GameTest();
 		setUpGameEthan();
 
 		Field field = Game.class.getDeclaredField("players");
@@ -363,8 +363,13 @@ public class DevelopmentCardTest {
 		game.drawDevCard();
 		assertEquals(1, player.getDevCard(Game.DevCard.knight));
 		game.playKnight();
-		gt.testThatRobberPreventsResourceGathering();
-		gt.testThatBuildTypeIsSetToNoneAfterRobberIsMoved();
+		game.endTurn(); // Change to player index 1's turn.
+
+		Player[] plyers = (Player[]) (field.get(game));
+		Player plyer = plyers[game.getCurrentPlayer()];
+		
+		game.roll();
+		assertEquals(1, plyer.getCards()[1]);
 	}
 
 }
