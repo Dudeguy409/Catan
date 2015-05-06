@@ -859,4 +859,7 @@ public class Game {
 			this.roadBuild = 1;
 	}
 
+	public void playKnight() {
+		startMoveRobber();
+	}
 }
