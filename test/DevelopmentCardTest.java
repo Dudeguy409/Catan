@@ -12,6 +12,8 @@ import client.Controller.Game;
 import client.Controller.Game.DevCard;
 import client.Controller.Main;
 import client.Controller.Game.Resource;
+import client.Controller.RoadManager;
+import client.Controller.StructureManager;
 import client.GUI.HexComponent;
 import client.Model.Player;
 
@@ -189,4 +191,151 @@ public class DevelopmentCardTest {
 		assertEquals(0, player.getCards()[2]);
 		assertEquals(0, player.getCards()[4]);
 	}
+	
+	@Test
+	public void TestUseRoadBuildDevCard() throws Exception {
+		setUpGameEthan();
+
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Field devField = Game.class.getDeclaredField("devCardDeck");
+		devField.setAccessible(true);
+		
+		Field roadMgrField = Game.class.getDeclaredField("roadMgr");
+		roadMgrField.setAccessible(true);
+		
+		Field roadBuildField = Game.class.getDeclaredField("roadBuild");
+		roadBuildField.setAccessible(true);
+		
+		RoadManager roadMgr = (RoadManager) roadMgrField.get(game);
+		int roadBuild = roadBuildField.getInt(game);
+
+		Player player = new Player();
+		int[] delta = { 1, 0, 1, 0, 1, 0 };
+		player.adjustCards(delta);
+
+		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
+				.get(game);
+		devCardDeck.addFirst(Game.DevCard.roadBuilder);
+
+		Player[] players = { player, new Player() };
+		field.set(game, players);
+		game.drawDevCard();
+		assertEquals(1, player.getDevCard(Game.DevCard.roadBuilder));
+		
+		game.playRoadBuilder();
+		assertEquals(2, roadBuild);
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.southwest);
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.northwest);
+
+		assertEquals(4, roadMgr.getRoadCountForPlayer(0));
+	}
+	
+	@Test
+	public void TestUseRoadBuildDevCardWith14Roads() throws Exception {
+		setUpGameEthan();
+
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Field devField = Game.class.getDeclaredField("devCardDeck");
+		devField.setAccessible(true);
+		
+		Field roadMgrField = Game.class.getDeclaredField("roadMgr");
+		roadMgrField.setAccessible(true);
+		
+		Field roadBuildField = Game.class.getDeclaredField("roadBuild");
+		roadBuildField.setAccessible(true);
+		
+		RoadManager roadMgr = (RoadManager) roadMgrField.get(game);
+		int roadBuild = roadBuildField.getInt(game);
+
+		Player player = new Player();
+		int[] delta = { 1, 0, 1, 0, 1, 0 };
+		player.adjustCards(delta);
+
+		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
+				.get(game);
+		devCardDeck.addFirst(Game.DevCard.roadBuilder);
+
+		Player[] players = { player, new Player() };
+		field.set(game, players);
+		
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.southwest);
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.northwest);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.southwest);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.northwest);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.northeast);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.southeast);
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.northeast);
+		game.processBuildRoadClick(2, HexComponent.RoadPosition.northeast);
+		game.processBuildRoadClick(2, HexComponent.RoadPosition.southeast);
+		game.processBuildRoadClick(2, HexComponent.RoadPosition.south);
+		game.processBuildRoadClick(1, HexComponent.RoadPosition.southeast);
+		
+		game.drawDevCard();
+		assertEquals(1, player.getDevCard(Game.DevCard.roadBuilder));
+		
+		game.playRoadBuilder();
+		assertEquals(1, roadBuild);
+		game.processBuildRoadClick(1, HexComponent.RoadPosition.south);
+
+		assertEquals(15, roadMgr.getRoadCountForPlayer(0));
+	}
+	
+	@Test
+	public void TestUseRoadBuildDevCardWith15Roads() throws Exception {
+		setUpGameEthan();
+
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Field devField = Game.class.getDeclaredField("devCardDeck");
+		devField.setAccessible(true);
+		
+		Field roadMgrField = Game.class.getDeclaredField("roadMgr");
+		roadMgrField.setAccessible(true);
+		
+		Field roadBuildField = Game.class.getDeclaredField("roadBuild");
+		roadBuildField.setAccessible(true);
+		
+		RoadManager roadMgr = (RoadManager) roadMgrField.get(game);
+		int roadBuild = roadBuildField.getInt(game);
+
+		Player player = new Player();
+		int[] delta = { 1, 0, 1, 0, 1, 0 };
+		player.adjustCards(delta);
+
+		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
+				.get(game);
+		devCardDeck.addFirst(Game.DevCard.roadBuilder);
+
+		Player[] players = { player, new Player() };
+		field.set(game, players);
+		
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.southwest);
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.northwest);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.southwest);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.northwest);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.north);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.northeast);
+		game.processBuildRoadClick(4, HexComponent.RoadPosition.southeast);
+		game.processBuildRoadClick(3, HexComponent.RoadPosition.northeast);
+		game.processBuildRoadClick(2, HexComponent.RoadPosition.northeast);
+		game.processBuildRoadClick(2, HexComponent.RoadPosition.southeast);
+		game.processBuildRoadClick(2, HexComponent.RoadPosition.south);
+		game.processBuildRoadClick(1, HexComponent.RoadPosition.southeast);
+		game.processBuildRoadClick(1, HexComponent.RoadPosition.south);
+		
+		game.drawDevCard();
+		assertEquals(1, player.getDevCard(Game.DevCard.roadBuilder));
+		
+		game.playRoadBuilder();
+		assertEquals(0, roadBuild);
+		
+		assertEquals(15, roadMgr.getRoadCountForPlayer(0));
+	}
+	
 }

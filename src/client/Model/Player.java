@@ -142,5 +142,22 @@ public class Player {
 
 		}
 	}
+	
+	public int getDevCard(Game.DevCard devCard) {
+		switch (devCard) {
+		case yearOfPlenty:
+			return this.yearOfPlenty;
+		case knight:
+			return this.knight;
+		case monopoly:
+			return this.monopoly;
+		case roadBuilder:
+			return this.roadBuilder;
+		case victory:
+			return this.victory;
+		default:
+			return -1;
+		}
+	}
 
 }
