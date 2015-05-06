@@ -2,6 +2,11 @@ package client.GUI;
 
 public class DiscardCardPanel extends CardSelectorPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9220543688644368098L;
+
 	public DiscardCardPanel(CardSelectorFrame frame, int[] cardCounts) {
 		super(frame, cardCounts);
 	}

@@ -22,6 +22,10 @@ import client.Controller.Game;
  */
 public class UserPanel extends JPanel implements IUserPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1928389208428904655L;
 	private static final String TOTAL_CARDS_LABEL_STRING = "Total Cards:  ";
 	private static final String QUANTITY_LABEL_PREFIX = "  X  ";
 	/**
@@ -139,6 +143,8 @@ public class UserPanel extends JPanel implements IUserPanel {
 			this.tradeButton.setEnabled(false);
 			this.endButton.setEnabled(false);
 			this.buildPanel.setVisible(false);
+			break;
+		default:
 			break;
 		}
 	}

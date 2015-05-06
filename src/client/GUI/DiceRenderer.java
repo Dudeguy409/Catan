@@ -14,6 +14,10 @@ import javax.swing.JComponent;
  * @author Andrew Davidson. Created May 23, 2010.
  */
 public class DiceRenderer extends JComponent {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2813126507213368355L;
 	private static final int horizontalOffset = 0;
 	private static final int horizontalSpacing = 70;
 	private static final int verticalOffset = 10;

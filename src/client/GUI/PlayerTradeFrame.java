@@ -2,19 +2,21 @@ package client.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import client.Controller.Game;
 
-public class TradeFrame extends CardSelectorFrame {
+public class PlayerTradeFrame extends CardSelectorFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -255155512531235849L;
 	private Game game;
 	private Font mainFont = new Font(null, Font.PLAIN, 24);
 	private JButton okButton;
@@ -26,8 +28,8 @@ public class TradeFrame extends CardSelectorFrame {
 	private int currentPlayerIndex;
 	private int destPlayerIndex;
 
-	public TradeFrame(Game game, int currentPlayerIndex, int destPlayerIndex,
-			int[] cardCountsA, int[] cardCountsB) {
+	public PlayerTradeFrame(Game game, int currentPlayerIndex,
+			int destPlayerIndex, int[] cardCountsA, int[] cardCountsB) {
 		super();
 		this.game = game;
 		this.setResizable(false);

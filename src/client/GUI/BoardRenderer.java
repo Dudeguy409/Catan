@@ -23,6 +23,10 @@ import client.Controller.Game;
  */
 public class BoardRenderer extends JComponent implements MouseListener,
 		IBoardRenderer {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8593240809395368066L;
 	private int startingX = 380;
 	private int startingY = 640;
 	private HexComponent[] boardArray = new HexComponent[Game.boardSize];

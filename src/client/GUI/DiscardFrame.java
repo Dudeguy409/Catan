@@ -4,12 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
@@ -17,6 +15,10 @@ import client.Controller.Game;
 
 public class DiscardFrame extends CardSelectorFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2651246352745812504L;
 	private static final String TOTAL_CARDS = "Total Cards :  ";
 	private static final String CARDS_TO_DISCARD = "Cards to discard :  ";
 	private Game game;

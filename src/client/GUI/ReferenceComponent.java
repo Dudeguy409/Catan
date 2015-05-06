@@ -15,6 +15,11 @@ import javax.swing.JComponent;
 public class ReferenceComponent extends JComponent {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1276337706051044624L;
+
+	/**
 	 * sets the frame size for the reference table.
 	 * 
 	 */

@@ -1,7 +1,6 @@
 package client.GUI;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -9,10 +8,11 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 
 public class CardComponent extends JComponent {
-	// private static final int WIDTH = 30;
-	// private static final int HEIGHT = 70;
-	// private static final Dimension DIM = new Dimension(WIDTH, HEIGHT);
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6994122841968897234L;
 	private Color color;
 
 	public CardComponent(Color color) {

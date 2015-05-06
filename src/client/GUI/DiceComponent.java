@@ -9,6 +9,10 @@ import javax.swing.JComponent;
 
 public class DiceComponent extends JComponent {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1626397643259896831L;
 	private static final int diceWidth = 60;
 	private ArrayList<Shape> diceArray;
 	private double horizontalOffset;

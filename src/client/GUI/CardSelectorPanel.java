@@ -13,6 +13,11 @@ import client.Controller.Game;
 
 public abstract class CardSelectorPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3904573915425407859L;
+
 	protected static final String[] labels = { "Wheat: ", "Wood: ", "Wool: ",
 			"Brick: ", "Ore: " };
 

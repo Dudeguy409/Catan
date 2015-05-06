@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import client.Controller.Game.Resource;
 import client.GUI.BoardRenderer;
-import client.GUI.DiscardFrame;
 import client.GUI.UserPanel;
 
 /**

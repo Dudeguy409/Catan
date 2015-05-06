@@ -50,7 +50,7 @@ public class StructureManager {
 			throw new Exception(
 					"a structure already exists immediately adjacent to the selected location");
 		}
-		
+
 		// actually add the structure
 		this.structurePieceMaps.get(playerNumber).put(structureId,
 				new StructurePiece(structureId, playerNumber));
@@ -106,8 +106,7 @@ public class StructureManager {
 		}
 		return cityCount;
 	}
-	
-	
+
 	protected boolean isAdjacentToOtherSettlements(int structureId) {
 		for (int structId : this.structureDependencyMap.get(structureId)
 				.getAdjacentSettlements()) {
@@ -132,7 +131,6 @@ public class StructureManager {
 	protected boolean isValidBeginningSettlementPosition(int structureId) {
 		return !(isAdjacentToOtherSettlements(structureId) || settlementAlreadyExistsThere(structureId));
 	}
-	
 
 	private void initializeStructureGraph() {
 		structureDependencyMap = new HashMap<Integer, Structure>();
@@ -228,7 +226,5 @@ public class StructureManager {
 		structureDependencyMap.put(54, new Structure(54, new int[] { 53, 51 }));
 
 	}
-
-	
 
 }

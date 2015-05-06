@@ -2,6 +2,10 @@ package client.GUI;
 
 public class TradeCardPanel extends CardSelectorPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4153382468845295936L;
 	private int playerIndex;
 
 	public TradeCardPanel(CardSelectorFrame frame, int[] cardCounts)
@@ -11,14 +15,14 @@ public class TradeCardPanel extends CardSelectorPanel {
 				"TradeCardPanels should pass in their playerIndex!!!");
 	}
 
-	public TradeCardPanel(int playerIndex, TradeFrame frame, int[] cardCounts) {
+	public TradeCardPanel(int playerIndex, PlayerTradeFrame frame, int[] cardCounts) {
 		super(frame, cardCounts);
 		this.playerIndex = playerIndex;
 	}
 
 	@Override
 	protected boolean adjustCards(int resourceIndex, boolean add) {
-		return ((TradeFrame) this.frame).adjustCards(this.playerIndex,
+		return ((PlayerTradeFrame) this.frame).adjustCards(this.playerIndex,
 				resourceIndex, add);
 	}
 

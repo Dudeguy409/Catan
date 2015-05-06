@@ -15,7 +15,7 @@ import client.GUI.HexComponent.RoadPosition;
 import client.GUI.HexComponent.StructurePosition;
 import client.GUI.IBoardRenderer;
 import client.GUI.IUserPanel;
-import client.GUI.TradeFrame;
+import client.GUI.PlayerTradeFrame;
 import client.Model.Hex;
 import client.Model.Player;
 import client.Model.RoadPiece;
@@ -355,14 +355,11 @@ public class Game {
 			this.userPanel.beginRobber();
 			this.currentBuildType = BuildType.robber;
 
-			String message = "A seven has been rolled.  Player "
-					+ (this.currentPlayer + 1)
-					+ ", please select a new hex for the robber.";
-			JOptionPane.showMessageDialog(null, message);
+			displaySevenRolledMessage();
 
 			for (int i = 0; i < this.players.length; i++) {
 				if (this.players[i].getCards()[6] > 7) {
-					new DiscardFrame(this, i, this.players[i].getCards());
+					displayDiscardFrame(i);
 				}
 			}
 
@@ -435,6 +432,18 @@ public class Game {
 		}
 	}
 
+	protected void displaySevenRolledMessage() {
+		String message = "A seven has been rolled.  Player "
+				+ (this.currentPlayer + 1)
+				+ ", please select a new hex for the robber.";
+
+		JOptionPane.showMessageDialog(null, message);
+	}
+
+	protected void displayDiscardFrame(int i) {
+		new DiscardFrame(this, i, this.players[i].getCards());
+	}
+
 	private void drawRandomCardFromOpponent(int playerToStealFrom) {
 		// TODO Auto-generated method stub
 
@@ -505,13 +514,18 @@ public class Game {
 		this.updateUserPanelCards();
 
 		if (checkVictory() >= 0) {
-			JOptionPane.showMessageDialog(null, "Congratulations! Player "
-					+ checkVictory() + 1 + " has won the game!", "Game Over",
-					JOptionPane.NO_OPTION);
-			// add one to this since player names start with 1 in GUI
+			displayVictory();
 
 			System.exit(0);
 		}
+	}
+
+	protected void displayVictory() {
+		// add one to this since player names start with 1 in GUI
+		JOptionPane.showMessageDialog(null, "Congratulations! Player "
+				+ checkVictory() + 1 + " has won the game!", "Game Over",
+				JOptionPane.NO_OPTION);
+
 	}
 
 	public Color[] getPlayerColors() {
@@ -706,7 +720,7 @@ public class Game {
 		return this.players[playerIndex].getCards();
 	}
 
-	public Resource selectResourceForMonopoly() {
+	protected Resource selectResourceForMonopoly() {
 		String message = "Please select a resource to monopolize.";
 
 		String title = "Monopoly";
@@ -802,11 +816,15 @@ public class Game {
 				// tradeWithBank(rslts[0], rslts[1]);
 			} else {
 				System.out.printf("Player %d selected!\n", (rslt + 1));
-				new TradeFrame(this, this.currentPlayer, rslt,
-						this.players[this.currentPlayer].getCards(),
-						this.players[rslt].getCards());
+				createPlayerTradeFrame(rslt);
 			}
 		}
+	}
+
+	protected void createPlayerTradeFrame(int rslt) {
+		new PlayerTradeFrame(this, this.currentPlayer, rslt,
+				this.players[this.currentPlayer].getCards(),
+				this.players[rslt].getCards());
 	}
 
 	private void tradeWithBank(int[] rslts, int[] rslts2) {
