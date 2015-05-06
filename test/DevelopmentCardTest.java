@@ -338,4 +338,32 @@ public class DevelopmentCardTest {
 		assertEquals(15, roadMgr.getRoadCountForPlayer(0));
 	}
 	
+	@Test
+	public void TestUseKnightDevCard() throws Exception {
+		GameTest gt = new GameTest();
+		setUpGameEthan();
+
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Field devField = Game.class.getDeclaredField("devCardDeck");
+		devField.setAccessible(true);
+
+		Player player = new Player();
+		int[] delta = { 1, 0, 1, 0, 1, 0 };
+		player.adjustCards(delta);
+
+		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
+				.get(game);
+		devCardDeck.addFirst(Game.DevCard.knight);
+
+		Player[] players = { player, new Player() };
+		field.set(game, players);
+		game.drawDevCard();
+		assertEquals(1, player.getDevCard(Game.DevCard.knight));
+		game.playKnight();
+		gt.testThatRobberPreventsResourceGathering();
+		gt.testThatBuildTypeIsSetToNoneAfterRobberIsMoved();
+	}
+	
 }
