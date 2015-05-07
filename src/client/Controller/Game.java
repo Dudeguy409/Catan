@@ -424,6 +424,11 @@ public class Game {
 		this.userPanel.beginRobber();
 		this.currentBuildType = BuildType.robber;
 	}
+	
+	protected Player getPlayer(int playerToStealFrom) {
+		return this.players[playerToStealFrom];
+		
+	}
 
 	protected void displayMoveRobberMessage() {
 		String message = "Player " + (this.currentPlayer + 1)
@@ -436,7 +441,7 @@ public class Game {
 		new DiscardFrame(this, i, this.players[i].getCards());
 	}
 
-	private void drawRandomCardFromOpponent(int playerToStealFrom) {
+	protected void drawRandomCardFromOpponent(int playerToStealFrom) {
 		// TODO handle drawing a random card from someone's hand.
 
 	}
@@ -662,7 +667,8 @@ public class Game {
 	public void processBuildRoadClick(int hexID, HexComponent.RoadPosition pos) {
 		Player cp = players[this.currentPlayer];
 		if (this.preGameMode != true) {
-			if ((cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1) || this.roadBuild > 0) {
+			if ((cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1)
+					|| this.roadBuild > 0) {
 				addRoad(this.currentPlayer, hexID, pos);
 			}
 
@@ -849,7 +855,7 @@ public class Game {
 		// TODO only let people move the robber to a hex where all players
 		// touching it have more than 3 points
 	}
-	
+
 	public void playRoadBuilder() {
 		setBuildType(BuildType.road);
 		int roadCount = this.roadMgr.getRoadCountForPlayer(this.currentPlayer);

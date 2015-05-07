@@ -14,7 +14,7 @@ import client.GUI.HexComponent;
 
 public class GameTradeTest {
 
-	private Game game;
+	private TestableGame game;
 	private FakeBoardRenderer board;
 	private FakeUserPanel userPanel;
 	private LinkedList<Game.DevCard> devCards;
@@ -32,26 +32,35 @@ public class GameTradeTest {
 
 		this.userPanel = new FakeUserPanel();
 		this.board = new FakeBoardRenderer();
-		
+
 		this.devCards = new LinkedList<Game.DevCard>();
 		Random place = new Random();
 		for (int i = 0; i < 14; i++) {
 			devCards.add(Game.DevCard.knight);
 		}
-		
+
 		for (int i = 0; i < 5; i++) {
 			devCards.add(place.nextInt(14), Game.DevCard.victory);
 		}
-		
+
 		for (int i = 2; i < 2; i++) {
 			devCards.add(place.nextInt(19), Game.DevCard.monopoly);
 			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
 
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
-				this.userPanel, this.board,
+		game = new TestableGame(colors, resources,
+				new FakeDice(arrayA, arrayB), 0, this.userPanel, this.board,
 				Main.configureRandomNumberArray(resources), this.devCards);
+
+		LinkedList<Integer> playerStealSelections = new LinkedList<Integer>();
+		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
+		LinkedList<Resource> resourceToStealSelections = new LinkedList<Game.Resource>();
+		
+		
+		
+		game.configureTestableGame(null, null, playerStealSelections, null,
+				robberMoveSelections, resourceToStealSelections);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);

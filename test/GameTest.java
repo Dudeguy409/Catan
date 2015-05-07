@@ -22,7 +22,7 @@ import client.Model.Hex;
 import client.Model.Player;
 
 public class GameTest {
-	Game game;
+	TestableGame game;
 	private FakeBoardRenderer board;
 	private FakeUserPanel userPanel;
 	LinkedList<Game.DevCard> devCards;
@@ -45,19 +45,19 @@ public class GameTest {
 		for (int i = 0; i < 14; i++) {
 			devCards.add(Game.DevCard.knight);
 		}
-		
+
 		for (int i = 0; i < 5; i++) {
 			devCards.add(place.nextInt(14), Game.DevCard.victory);
 		}
-		
+
 		for (int i = 2; i < 2; i++) {
 			devCards.add(place.nextInt(19), Game.DevCard.monopoly);
 			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
-		
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
-				this.userPanel, this.board,
+
+		game = new TestableGame(colors, resources,
+				new FakeDice(arrayA, arrayB), 0, this.userPanel, this.board,
 				Main.configureRandomNumberArray(resources), devCards);
 
 		// gets the game out of the Pre-game set-up phase
@@ -100,15 +100,16 @@ public class GameTest {
 		// 4,
 		// 5, 6, 3, 11 };
 		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0,
-				userPanel, board, randomNumberArray, this.devCards);
+		game = new TestableGame(colors, resources,
+				new FakeDice(arrayA, arrayB), 0, userPanel, board,
+				randomNumberArray, this.devCards);
 	}
 
 	public void setUpGameDavis() throws Exception {
 		this.userPanel = new FakeUserPanel();
 		this.board = new FakeBoardRenderer();
 
-		Color[] colors = { new Color(2), new Color(3)};
+		Color[] colors = { new Color(2), new Color(3) };
 		Game.Resource[] resources = { Resource.desert, Resource.wheat,
 				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
 				Resource.wood, Resource.brick, Resource.wheat, Resource.ore,
@@ -122,8 +123,10 @@ public class GameTest {
 		// 4,
 		// 5, 6, 3, 11 };
 
-		game = new Game(colors, resources, new FakeDice(arrayA, arrayB), 0, userPanel, board, Main.configureRandomNumberArray(resources), this.devCards);
-		
+		game = new TestableGame(colors, resources,
+				new FakeDice(arrayA, arrayB), 0, userPanel, board,
+				Main.configureRandomNumberArray(resources), this.devCards);
+
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(16, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
@@ -137,8 +140,7 @@ public class GameTest {
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(11, HexComponent.RoadPosition.northeast);
 		game.setBuildType(Game.BuildType.settlement);
-		game.processBuildStructureClick(11,
-				HexComponent.StructurePosition.east);
+		game.processBuildStructureClick(11, HexComponent.StructurePosition.east);
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(13, HexComponent.RoadPosition.northeast);
 		game.setBuildType(Game.BuildType.settlement);
@@ -167,9 +169,9 @@ public class GameTest {
 	}
 
 	@Test
-	public void getAdjacentRoadsForStructureTest() throws Exception{
+	public void getAdjacentRoadsForStructureTest() throws Exception {
 		setUpGameDavis();
-		
+
 		List<HexComponent.RoadPosition> poses = Arrays
 				.asList(game
 						.getAdjacentRoadPositionsForStructure(HexComponent.StructurePosition.west));
@@ -220,15 +222,15 @@ public class GameTest {
 
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
-		
+
 		Field hexfield = Game.class.getDeclaredField("hexArray");
 		hexfield.setAccessible(true);
-		
+
 		ArrayList<Hex> hex = (ArrayList<Hex>) hexfield.get(game);
 
 		Player[] players = (Player[]) (field.get(game));
 		Player player = players[game.getCurrentPlayer()];
-		
+
 		game.roll();
 		assertEquals(2, player.getCards()[4]);
 	}
@@ -456,7 +458,7 @@ public class GameTest {
 				HexComponent.StructurePosition.southwest);
 		assertEquals(0, player.getCards()[1]);
 		assertEquals(0, player.getCards()[4]);
-		
+
 		assertEquals(3, game.getVictoryPointsForPlayer(0));
 	}
 
@@ -469,7 +471,6 @@ public class GameTest {
 		game.addRoad(0, 16, HexComponent.RoadPosition.southeast);
 		game.addRoad(0, 16, HexComponent.RoadPosition.south);
 
-
 		assertEquals(2, game.getVictoryPointsForPlayer(0));
 
 		game.addRoad(0, 17, HexComponent.RoadPosition.northwest);
@@ -480,14 +481,15 @@ public class GameTest {
 	@Test
 	public void testAddOneVictoryPointForOneSettlement() throws Exception {
 		setUpGameDavis();
-		
+
 		assertEquals(2, game.getVictoryPointsForPlayer(0));
-		
+
 		game.setBuildType(BuildType.road);
-		System.out.println(game.addRoad(0, 16, HexComponent.RoadPosition.northeast));
+		System.out.println(game.addRoad(0, 16,
+				HexComponent.RoadPosition.northeast));
 		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
-	
+
 		assertEquals(3, game.getVictoryPointsForPlayer(0));
 	}
 
@@ -497,7 +499,8 @@ public class GameTest {
 		setUpGameDavis();
 
 		game.setBuildType(BuildType.road);
-		System.out.println(game.addRoad(0, 16, HexComponent.RoadPosition.northeast));
+		System.out.println(game.addRoad(0, 16,
+				HexComponent.RoadPosition.northeast));
 		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
 
@@ -578,34 +581,34 @@ public class GameTest {
 		game.addRoad(0, 17, HexComponent.RoadPosition.northwest);
 		game.addRoad(0, 17, HexComponent.RoadPosition.southwest);
 
-		//assertEquals(4, game.getVictoryPointsForPlayer(0));
+		// assertEquals(4, game.getVictoryPointsForPlayer(0));
 
-		//assertEquals(-1, game.checkVictory());
-		
+		// assertEquals(-1, game.checkVictory());
+
 		game.setBuildType(BuildType.city);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.northwest);
-		//assertEquals(5, game.getVictoryPointsForPlayer(0));
+		// assertEquals(5, game.getVictoryPointsForPlayer(0));
 
 		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
-		//assertEquals(6, game.getVictoryPointsForPlayer(0));
+		// assertEquals(6, game.getVictoryPointsForPlayer(0));
 		game.setBuildType(BuildType.city);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
-		//assertEquals(7, game.getVictoryPointsForPlayer(0));
+		// assertEquals(7, game.getVictoryPointsForPlayer(0));
 
 		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.southwest);
-		//assertEquals(8, game.getVictoryPointsForPlayer(0));
+		// assertEquals(8, game.getVictoryPointsForPlayer(0));
 		game.setBuildType(BuildType.city);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.southwest);
-		//assertEquals(9, game.getVictoryPointsForPlayer(0));
-		
+		// assertEquals(9, game.getVictoryPointsForPlayer(0));
+
 		assertEquals(-1, game.checkVictory());
 
 		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 17, HexComponent.StructurePosition.southwest);
 		assertEquals(10, game.getVictoryPointsForPlayer(0));
-		
+
 		assertEquals(0, game.checkVictory());
 	}
 
@@ -619,84 +622,86 @@ public class GameTest {
 		game.addRoad(0, 17, HexComponent.RoadPosition.northwest);
 		game.addRoad(0, 17, HexComponent.RoadPosition.southwest);
 
-		//assertEquals(4, game.getVictoryPointsForPlayer(0));
+		// assertEquals(4, game.getVictoryPointsForPlayer(0));
 
-		//assertEquals(-1, game.checkVictory());
-		
+		// assertEquals(-1, game.checkVictory());
+
 		game.setBuildType(BuildType.city);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.northwest);
-		//assertEquals(5, game.getVictoryPointsForPlayer(0));
+		// assertEquals(5, game.getVictoryPointsForPlayer(0));
 
 		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
-		//assertEquals(6, game.getVictoryPointsForPlayer(0));
+		// assertEquals(6, game.getVictoryPointsForPlayer(0));
 		game.setBuildType(BuildType.city);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.east);
-		//assertEquals(7, game.getVictoryPointsForPlayer(0));
+		// assertEquals(7, game.getVictoryPointsForPlayer(0));
 
 		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.southwest);
-		//assertEquals(8, game.getVictoryPointsForPlayer(0));
+		// assertEquals(8, game.getVictoryPointsForPlayer(0));
 		game.setBuildType(BuildType.city);
 		game.addBuilding(0, 16, HexComponent.StructurePosition.southwest);
-		//assertEquals(9, game.getVictoryPointsForPlayer(0));
-		
-		//assertEquals(-1, game.checkVictory());
+		// assertEquals(9, game.getVictoryPointsForPlayer(0));
+
+		// assertEquals(-1, game.checkVictory());
 
 		game.setBuildType(BuildType.settlement);
 		game.addBuilding(0, 17, HexComponent.StructurePosition.southwest);
-		//assertEquals(10, game.getVictoryPointsForPlayer(0));
-		
-		//assertEquals(0, game.checkVictory());
-		
+		// assertEquals(10, game.getVictoryPointsForPlayer(0));
+
+		// assertEquals(0, game.checkVictory());
+
 		game.setBuildType(BuildType.city);
 		game.addBuilding(0, 17, HexComponent.StructurePosition.southwest);
 		assertEquals(11, game.getVictoryPointsForPlayer(0));
 
 		assertEquals(0, game.checkVictory());
 	}
-	
+
 	@Test
-	public void testThatRobberPreventsResourceGathering() throws Exception{
-		// player index 1 should have only 1 wood because of the robber on hex 14.
+	public void testThatRobberPreventsResourceGathering() throws Exception {
+		// player index 1 should have only 1 wood because of the robber on hex
+		// 14.
 		setUpGameDavis();
-		
+
 		game.endTurn(); // Change to player index 1's turn.
 		game.setRobberLocation(14);
 
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
-		
+
 		Field hexfield = Game.class.getDeclaredField("hexArray");
 		hexfield.setAccessible(true);
-		
+
 		ArrayList<Hex> hex = (ArrayList<Hex>) hexfield.get(game);
 
 		Player[] players = (Player[]) (field.get(game));
 		Player player = players[game.getCurrentPlayer()];
-		
+
 		game.roll();
 		assertEquals(1, player.getCards()[1]);
 	}
-	
+
 	@Test
-	public void testThatBuildTypeIsSetToNoneAfterRobberIsMoved() throws Exception{
+	public void testThatBuildTypeIsSetToNoneAfterRobberIsMoved()
+			throws Exception {
 		setUpGameDavis();
-		
+
 		game.setRobberLocation(14);
 
 		Field buildTypeField = Game.class.getDeclaredField("currentBuildType");
 		buildTypeField.setAccessible(true);
-		
+
 		assertEquals(Game.BuildType.none, buildTypeField.get(game));
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testThatMoveRobberToSameHexThrowsException() throws Exception {
 		setUpGameDavis();
-		
+
 		game.setRobberLocation(14);
-		
+
 		game.setRobberLocation(14);
 	}
 }

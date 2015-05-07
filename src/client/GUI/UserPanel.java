@@ -50,6 +50,7 @@ public class UserPanel extends JPanel implements IUserPanel {
 	private JButton cityButton;
 	private JButton roadButton;
 	private JButton devButton;
+	private JButton playDevButton;
 	private JButton pricesButton;
 	private JPanel turnPanel;
 	private JButton startButton;
@@ -81,6 +82,7 @@ public class UserPanel extends JPanel implements IUserPanel {
 		addCardButton();
 		addCardPanel();
 
+		addDevButton();
 		addPricesButton();
 
 	}
@@ -206,6 +208,24 @@ public class UserPanel extends JPanel implements IUserPanel {
 		this.add(pricesButton);
 	}
 
+	private void addDevButton() {
+		this.playDevButton = new JButton("Play Development Card");
+		this.playDevButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				displayDevCardSelector();
+			}
+		});
+		this.playDevButton.setVisible(false);
+		this.add(this.playDevButton);
+
+	}
+
+	protected void displayDevCardSelector() {
+		// TODO Auto-generated method stub
+	}
+
 	private void addBuildPanel() {
 		// TODO only highlight to build when they have enough cards to build
 		// something. Only show the buttons of things that they can build. when
@@ -255,8 +275,6 @@ public class UserPanel extends JPanel implements IUserPanel {
 	private void addTurnPanel() {
 		// this section creates the panel for the player's actions/choices. You
 		// must roll. Afterwards, you can build or end your turn.
-		// TODO don't allow people the option to build or end their turn before
-		// they roll. Disable build button after they already click it.
 		this.turnPanel = new JPanel();
 		turnPanel.setPreferredSize(new Dimension(300, 30));
 		turnPanel.setBackground(Color.red);
@@ -431,8 +449,9 @@ public class UserPanel extends JPanel implements IUserPanel {
 		this.devButton.setVisible(true);
 		this.cityButton.setVisible(true);
 		this.dice.setVisible(true);
+		this.playDevButton.setVisible(true);
+		this.playDevButton.setEnabled(false);
 		this.setTurnPhase(Game.TurnPhase.preroll);
-
 	}
 
 	public void updateResourceCards(int[] cards) {
@@ -444,13 +463,13 @@ public class UserPanel extends JPanel implements IUserPanel {
 		this.totalLabel.setText(TOTAL_CARDS_LABEL_STRING + cards[6]);
 
 	}
-	
+
 	public void beginRobber() {
 		this.tradeButton.setEnabled(false);
 		this.buildButton.setEnabled(false);
 		this.endButton.setEnabled(false);
 	}
-	
+
 	public void endRobber() {
 		this.tradeButton.setEnabled(true);
 		this.buildButton.setEnabled(true);
