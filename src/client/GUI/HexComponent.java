@@ -3,8 +3,12 @@ package client.GUI;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Path2D.Double;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+
 import client.Controller.Game;
 
 /**
@@ -278,6 +282,81 @@ public class HexComponent {
 			break;
 		}
 		return road;
+
+	}
+
+	public PortComponent makePort(RoadPosition pos) {
+
+		Line2D.Double lineA = null;
+		Line2D.Double lineB = null;
+		Point2D.Double mergePoint = null;
+		Point2D.Double pointA = null;
+		Point2D.Double pointB = null;
+		switch (pos) {
+		case north:
+			mergePoint = new Point2D.Double(this.centerX, this.centerY
+					- HexComponent.RADIUS * 2 * HexComponent.Y_SCALAR);
+			pointA = new Point2D.Double(this.centerX - HexComponent.RADIUS / 2,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			pointB = new Point2D.Double(this.centerX + HexComponent.RADIUS / 2,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			break;
+		case south:
+			mergePoint = new Point2D.Double(this.centerX, this.centerY
+					+ HexComponent.RADIUS * 2 * HexComponent.Y_SCALAR);
+			pointA = new Point2D.Double(this.centerX - HexComponent.RADIUS / 2,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			pointB = new Point2D.Double(this.centerX + HexComponent.RADIUS / 2,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			break;
+		case northeast:
+			mergePoint = new Point2D.Double(this.centerX + HexComponent.RADIUS
+					* 1.5, this.centerY - HexComponent.RADIUS
+					* HexComponent.Y_SCALAR);
+			pointA = new Point2D.Double(this.centerX + HexComponent.RADIUS,
+					this.centerY);
+			pointB = new Point2D.Double(this.centerX + HexComponent.RADIUS / 2,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			break;
+		case southeast:
+			mergePoint = new Point2D.Double(this.centerX + HexComponent.RADIUS
+					* 1.5, this.centerY + HexComponent.RADIUS
+					* HexComponent.Y_SCALAR);
+			pointA = new Point2D.Double(this.centerX + HexComponent.RADIUS,
+					this.centerY);
+			pointB = new Point2D.Double(this.centerX + HexComponent.RADIUS / 2,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			break;
+		case northwest:
+			mergePoint = new Point2D.Double(this.centerX - HexComponent.RADIUS
+					* 1.5, this.centerY - HexComponent.RADIUS
+					* HexComponent.Y_SCALAR);
+			pointA = new Point2D.Double(this.centerX - HexComponent.RADIUS,
+					this.centerY);
+			pointB = new Point2D.Double(this.centerX - HexComponent.RADIUS / 2,
+					this.centerY - HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			break;
+		case southwest:
+			mergePoint = new Point2D.Double(this.centerX - HexComponent.RADIUS
+					* 1.5, this.centerY + HexComponent.RADIUS
+					* HexComponent.Y_SCALAR);
+			pointA = new Point2D.Double(this.centerX - HexComponent.RADIUS,
+					this.centerY);
+			pointB = new Point2D.Double(this.centerX - HexComponent.RADIUS / 2,
+					this.centerY + HexComponent.RADIUS * HexComponent.Y_SCALAR);
+			break;
+		default:
+			break;
+		}
+
+		Ellipse2D.Double circle = new Ellipse2D.Double(mergePoint.getX()
+				- PortComponent.PORT_DIAMETER / 2, mergePoint.getY()
+				- PortComponent.PORT_DIAMETER / 2, PortComponent.PORT_DIAMETER,
+				PortComponent.PORT_DIAMETER);
+
+		lineA = new Line2D.Double(mergePoint, pointA);
+		lineB = new Line2D.Double(mergePoint, pointB);
+		return new PortComponent(lineA, lineB, circle);
 
 	}
 

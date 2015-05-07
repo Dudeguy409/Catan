@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 
 import client.Controller.Game;
+import client.GUI.HexComponent.RoadPosition;
 
 /**
  * This class creates the GUI for the board
@@ -50,6 +51,7 @@ public class BoardRenderer extends JComponent implements MouseListener,
 	// Game class, and its value represents its position in the board's hexArray
 	private int[] hexIndexToGameTranslator = { 0, 3, 7, 12, 16, 17, 18, 15, 11,
 			6, 2, 1, 4, 8, 13, 14, 10, 5, 9 };
+	private PortComponent[] portArray = new PortComponent[9];
 
 	/**
 	 * constructs an empty, randomized board.
@@ -61,7 +63,7 @@ public class BoardRenderer extends JComponent implements MouseListener,
 	public BoardRenderer(Game.Resource[] randomColorArray,
 			int[] randomNumberArray) {
 		this.setPreferredSize(new Dimension(800, 800));
-		
+
 		this.colorNumberArray = randomColorArray;
 		this.rollNumberArray = randomNumberArray;
 
@@ -72,7 +74,7 @@ public class BoardRenderer extends JComponent implements MouseListener,
 				break;
 			}
 		}
-		
+
 		this.addMouseListener(this);
 	}
 
@@ -121,7 +123,6 @@ public class BoardRenderer extends JComponent implements MouseListener,
 						(int) hex.getY() + 5);
 			}
 
-
 		}
 
 		for (StructureComponent structure : this.roadArray) {
@@ -143,6 +144,17 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			g2.fill(structure.getShape());
 			g2.setColor(Color.black);
 			g2.draw(structure.getShape());
+		}
+
+		for (PortComponent p : this.portArray) {
+			g2.setColor(Color.white);
+			g2.draw(p.getLineA());
+			g2.draw(p.getLineB());
+			g2.setColor(p.getColor());
+			g2.fill(p.getSquare());
+			g2.setColor(Color.black);
+			g2.draw(p.getSquare());
+
 		}
 
 	}
@@ -170,8 +182,9 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			Game.BuildType buildType = this.game.getCurrentBuildType();
 			int hexId = nearArray[0];
 			if (buildType == Game.BuildType.robber) {
-				this.game.setRobberLocation(this.hexIndexToGameTranslator[hexId]);
-				System.out.println("robber moved to "+hexId);
+				this.game
+						.setRobberLocation(this.hexIndexToGameTranslator[hexId]);
+				System.out.println("robber moved to " + hexId);
 			} else if (buildType != Game.BuildType.none) {
 				if (buildType != Game.BuildType.road) {
 					HexComponent.StructurePosition pos = this
@@ -271,6 +284,26 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			this.pointArray[i] = new Point2D.Double(this.boardArray[i].getX(),
 					this.boardArray[i].getY());
 		}
+
+		this.portArray[0] = this.boardArray[18].makePort(RoadPosition.north);
+		this.portArray[1] = this.boardArray[7].makePort(RoadPosition.southeast);
+		this.portArray[2] = this.boardArray[1].makePort(RoadPosition.south);
+		this.portArray[3] = this.boardArray[2].makePort(RoadPosition.southwest);
+		this.portArray[4] = this.boardArray[3].makePort(RoadPosition.south);
+		this.portArray[5] = this.boardArray[6].makePort(RoadPosition.northwest);
+		this.portArray[6] = this.boardArray[15]
+				.makePort(RoadPosition.northwest);
+		this.portArray[7] = this.boardArray[12]
+				.makePort(RoadPosition.northeast);
+		this.portArray[8] = this.boardArray[17]
+				.makePort(RoadPosition.northeast);
+
+		this.portArray[0].setColor(Game.brickColor);
+		this.portArray[4].setColor(Game.woodColor);
+		this.portArray[5].setColor(Game.wheatColor);
+		this.portArray[6].setColor(Game.sheepColor);
+		this.portArray[8].setColor(Game.oreColor);
+
 	}
 
 	// returns an array of: the hex clicked, the second nearest hex, the third
@@ -323,7 +356,8 @@ public class BoardRenderer extends JComponent implements MouseListener,
 
 		// if the mouse click was in the center of the hex, the neighbor is set
 		// to -1 to signal that the mouse click was not valid.
-		if (distanceRecordA < HexComponent.RADIUS / 2 && this.game.getCurrentBuildType() != Game.BuildType.robber) {
+		if (distanceRecordA < HexComponent.RADIUS / 2
+				&& this.game.getCurrentBuildType() != Game.BuildType.robber) {
 			nearArray[1] = -1;
 		}
 		return nearArray;
