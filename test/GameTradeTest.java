@@ -56,9 +56,11 @@ public class GameTradeTest {
 		LinkedList<Integer> playerStealSelections = new LinkedList<Integer>();
 		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
 		LinkedList<Resource> resourceToStealSelections = new LinkedList<Game.Resource>();
-		
-		
-		
+
+		resourceToStealSelections.add(Resource.sheep);
+		robberMoveSelections.add(1);
+		playerStealSelections.add(0);
+
 		game.configureTestableGame(null, null, playerStealSelections, null,
 				robberMoveSelections, resourceToStealSelections);
 
@@ -251,7 +253,7 @@ public class GameTradeTest {
 	}
 
 	@Test
-	public void testLargerTradeOne() throws Exception {
+	public void testLargerTradePlayerOne() throws Exception {
 		setUpGameAndrew();
 		this.game.roll();
 		this.game.endTurn();
@@ -266,15 +268,15 @@ public class GameTradeTest {
 		this.game.roll();
 		this.game.endTurn();
 
-		int[] offer = { 0, 1, 2, 0, 0 };
-		int[] request = { 2, 0, 0, 0, 1 };
+		int[] offer = { 1, 0, 2, 0, 0 };
+		int[] request = { 0, 1, 0, 0, 1 };
 		boolean rslt = game.trade(1, offer, request);
 		assertEquals(rslt, true);
 
-		int[] expectedAArray = { 3, 0, 2, 0, 2, 0, 7 };
+		int[] expectedAArray = { 0, 1, 3, 0, 2, 0, 6 };
 		String expectedA = Arrays.toString(expectedAArray);
 		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
-		int[] expectedBArray = { 0, 2, 2, 0, 0, 0, 4 };
+		int[] expectedBArray = { 2, 0, 2, 0, 0, 0, 4 };
 		String expectedB = Arrays.toString(expectedBArray);
 		String actualB = Arrays.toString(this.game.getCardsForPlayer(1));
 
@@ -284,8 +286,9 @@ public class GameTradeTest {
 	}
 
 	@Test
-	public void testLargerTradeTwo() throws Exception {
+	public void testLargerTradePlayerTwo() throws Exception {
 		setUpGameAndrew();
+
 		this.game.roll();
 		this.game.endTurn();
 		this.game.roll();
@@ -301,12 +304,12 @@ public class GameTradeTest {
 		this.game.roll();
 		this.game.endTurn();
 
-		int[] offer = { 2, 1, 0, 0, 0 };
+		int[] offer = { 1, 1, 0, 0, 0 };
 		int[] request = { 0, 0, 3, 0, 1 };
 		boolean rslt = game.trade(0, offer, request);
 		assertEquals(rslt, true);
 
-		int[] expectedAArray = { 3, 2, 1, 0, 0, 0, 6 };
+		int[] expectedAArray = { 2, 1, 2, 0, 1, 0, 6 };
 		String expectedA = Arrays.toString(expectedAArray);
 		String actualA = Arrays.toString(this.game.getCardsForPlayer(0));
 
