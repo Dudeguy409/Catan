@@ -78,6 +78,8 @@ public class TestableGame extends Game {
 		// game.adjustCardsForPlayer(...) just like a DiscardFrame would.
 	}
 
+	// TODO since these two methods are void, these methods could be called in
+	// the test rather than here, if preferred.
 	@Override
 	protected void displayMoveRobberMessage() {
 		setRobberLocation(this.robberMoveSelections.poll());

@@ -41,11 +41,14 @@ public class Main {
 		frame.setSize(SIZE);
 		frame.setTitle("Settlers of Catan");
 		frame.setLayout(new FlowLayout());
+		// TODO implement randomizer for port resources
+		Resource[] portResources = { Resource.wheat, Resource.wood,
+				Resource.sheep, Resource.brick, Resource.ore };
 		Game.Resource[] hexResources = HexResourceTypeGenerator
 				.getHexColors(new Random().nextLong());
 		int[] randomNumberArray = configureRandomNumberArray(hexResources);
 		BoardRenderer myBoard = new BoardRenderer(hexResources,
-				randomNumberArray);
+				randomNumberArray, portResources);
 		UserPanel myPanel = new UserPanel();
 
 		LinkedList<Game.DevCard> devCards = RandomDevCardDeckGenerator
@@ -62,10 +65,10 @@ public class Main {
 		frame.add(myBoard, FlowLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		//TODO remove
-//		int[] a = { 2, 2, 2, 2, 2 };
-//		int[] b = { 2, 2, 2, 2, 2 };
-//		new PlayerTradeFrame(game, 0, 1, a, b);
+		// TODO remove
+		// int[] a = { 2, 2, 2, 2, 2 };
+		// int[] b = { 2, 2, 2, 2, 2 };
+		// new PlayerTradeFrame(game, 0, 1, a, b);
 	}
 
 	private static Color[] configurePlayerColors(int numberOfPlayers) {

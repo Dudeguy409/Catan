@@ -34,7 +34,7 @@ public class Game {
 			sheepColor, brickColor, oreColor };
 
 	public static enum Resource {
-		wood(0), brick(1), sheep(2), ore(3), wheat(4), desert(-1);
+		wheat(0), wood(1), sheep(2), brick(3), ore(4), desert(-1);
 
 		private int numVal;
 
@@ -424,10 +424,10 @@ public class Game {
 		this.userPanel.beginRobber();
 		this.currentBuildType = BuildType.robber;
 	}
-	
+
 	protected Player getPlayer(int playerToStealFrom) {
 		return this.players[playerToStealFrom];
-		
+
 	}
 
 	protected void displayMoveRobberMessage() {

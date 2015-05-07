@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 
 import client.Controller.Game;
+import client.Controller.Game.Resource;
 import client.GUI.HexComponent.RoadPosition;
 
 /**
@@ -52,6 +53,7 @@ public class BoardRenderer extends JComponent implements MouseListener,
 	private int[] hexIndexToGameTranslator = { 0, 3, 7, 12, 16, 17, 18, 15, 11,
 			6, 2, 1, 4, 8, 13, 14, 10, 5, 9 };
 	private PortComponent[] portArray = new PortComponent[9];
+	private Resource[] portResources;
 
 	/**
 	 * constructs an empty, randomized board.
@@ -61,9 +63,9 @@ public class BoardRenderer extends JComponent implements MouseListener,
 	 * @param myPanel
 	 */
 	public BoardRenderer(Game.Resource[] randomColorArray,
-			int[] randomNumberArray) {
+			int[] randomNumberArray, Resource[] portResources) {
 		this.setPreferredSize(new Dimension(800, 800));
-
+		this.portResources = portResources;
 		this.colorNumberArray = randomColorArray;
 		this.rollNumberArray = randomNumberArray;
 
@@ -285,24 +287,32 @@ public class BoardRenderer extends JComponent implements MouseListener,
 					this.boardArray[i].getY());
 		}
 
-		this.portArray[0] = this.boardArray[18].makePort(RoadPosition.north);
-		this.portArray[1] = this.boardArray[7].makePort(RoadPosition.southeast);
-		this.portArray[2] = this.boardArray[1].makePort(RoadPosition.south);
-		this.portArray[3] = this.boardArray[2].makePort(RoadPosition.southwest);
+		this.portArray[0] = this.boardArray[15]
+				.makePort(RoadPosition.northwest);
+		this.portArray[1] = this.boardArray[12]
+				.makePort(RoadPosition.northeast);
+		this.portArray[2] = this.boardArray[17]
+				.makePort(RoadPosition.northeast);
+		this.portArray[3] = this.boardArray[1].makePort(RoadPosition.south);
 		this.portArray[4] = this.boardArray[3].makePort(RoadPosition.south);
 		this.portArray[5] = this.boardArray[6].makePort(RoadPosition.northwest);
-		this.portArray[6] = this.boardArray[15]
-				.makePort(RoadPosition.northwest);
-		this.portArray[7] = this.boardArray[12]
-				.makePort(RoadPosition.northeast);
-		this.portArray[8] = this.boardArray[17]
-				.makePort(RoadPosition.northeast);
 
-		this.portArray[0].setColor(Game.brickColor);
-		this.portArray[4].setColor(Game.woodColor);
-		this.portArray[5].setColor(Game.wheatColor);
-		this.portArray[6].setColor(Game.sheepColor);
-		this.portArray[8].setColor(Game.oreColor);
+		// These ports are on the far side of the hex (don't border another hex)
+		// and are always 3:1 ports.
+		this.portArray[6] = this.boardArray[18].makePort(RoadPosition.north);
+		this.portArray[7] = this.boardArray[7].makePort(RoadPosition.southeast);
+		this.portArray[8] = this.boardArray[2].makePort(RoadPosition.southwest);
+
+		for (int i = 0; i < this.portResources.length; i++) {
+			if (this.portResources[i] == Game.Resource.desert) {
+				// Don't change the color
+			} else {
+				this.portArray[i]
+						.setColor(Game.resourceColors[this.portResources[i]
+								.getNumVal()]);
+			}
+
+		}
 
 	}
 
