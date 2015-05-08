@@ -471,7 +471,6 @@ public class Game {
 	protected void drawRandomCardFromOpponent(int playerToStealFrom) {
 		// TODO handle drawing a random card from someone's hand.
 		int[] cards = this.players[playerToStealFrom].getCards();
-		System.out.println("cards: " + Arrays.toString(cards));
 
 		ArrayList<Integer> candidateCards = new ArrayList<Integer>();
 
@@ -484,9 +483,11 @@ public class Game {
 		int randomResourceNum = candidateCards.get((int) (Math.random()
 				* (candidateCards.size() - 1) + 1));
 
-		System.out.println("candidates: " + candidateCards.toString());
-		System.out.println("stole: " + randomResourceNum);
+//		System.out.println("candidates: " + candidateCards.toString());
+//		System.out.println("stole: " + randomResourceNum);
 
+		getPlayer(playerToStealFrom).adjustCards(randomResourceNum, -1);
+		getPlayer(currentPlayer).adjustCards(randomResourceNum, 1);
 	}
 
 	private ArrayList<Hex> findRolledHexes(int rollNumber) {
