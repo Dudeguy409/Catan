@@ -741,4 +741,24 @@ public class GameTest {
 		assertTrue(players[0]);
 		assertFalse(players[1]);
 	}
+	
+	@Test
+	public void testDrawRandomCardFromOpponent() throws Exception {
+		setUpGameDavis();
+
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Player[] players = (Player[]) (field.get(game));
+		int[] delta = { 1, 0, 0, 0, 0};
+		players[0].adjustCards(delta);
+		players[1].adjustCards(delta);
+		
+		Player curPlayer = players[game.getCurrentPlayer()];
+		
+		game.drawRandomCardFromOpponent(1);
+		
+		
+		assertEquals(2, curPlayer.getCards()[0]);
+	}
 }

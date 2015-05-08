@@ -74,6 +74,24 @@ public class Player {
 			return -1;
 		}
 	}
+	
+	public int getCard(int type) {
+		switch (type) {
+		case 0:
+			return this.wheatCount;
+		case 1:
+			return this.woodCount;
+		case 2:
+			return this.woolCount;
+		case 3:
+			return this.brickCount;
+		case 4:
+			return this.oreCount;
+
+		default:
+			return -1;
+		}
+	}
 
 	public void adjustCards(Game.Resource type, int numberToAdd) {
 		switch (type) {
@@ -98,6 +116,29 @@ public class Player {
 		this.updateTotal();
 	}
 
+	public void adjustCards(int type, int numberToAdd) {
+		switch (type) {
+		case 0:
+			this.wheatCount += numberToAdd;
+			break;
+		case 1:
+			this.woodCount += numberToAdd;
+			break;
+		case 2:
+			this.woolCount += numberToAdd;
+			break;
+		case 3:
+			this.brickCount += numberToAdd;
+			break;
+		case 4:
+			this.oreCount += numberToAdd;
+			break;
+		default:
+			break;
+		}
+		this.updateTotal();
+	}
+	
 	/**
 	 * calculates the total number of cards that the player holds, primarily to
 	 * determine how many cards will be lost if a seven is rolled.
