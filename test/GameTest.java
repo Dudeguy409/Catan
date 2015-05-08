@@ -55,10 +55,13 @@ public class GameTest {
 			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
+		
+		Resource[] portResources = { Resource.brick, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
 
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources), devCards);
+				Main.configureRandomNumberArray(resources), devCards, portResources);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);
@@ -99,10 +102,14 @@ public class GameTest {
 		// int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9,
 		// 4,
 		// 5, 6, 3, 11 };
+		
+		Resource[] portResources = { Resource.brick, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
+		
 		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, userPanel, board,
-				randomNumberArray, this.devCards);
+				randomNumberArray, this.devCards, portResources);
 	}
 
 	public void setUpGameAndrewPlayerTwoStart() throws Exception {
@@ -121,10 +128,14 @@ public class GameTest {
 		// int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9,
 		// 4,
 		// 5, 6, 3, 11 };
+		
+		Resource[] portResources = { Resource.brick, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
+		
 		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 1, userPanel, board,
-				randomNumberArray, this.devCards);
+				randomNumberArray, this.devCards, portResources);
 	}
 
 	public void setUpGameDavis() throws Exception {
@@ -753,12 +764,18 @@ public class GameTest {
 		int[] delta = { 1, 0, 0, 0, 0};
 		players[0].adjustCards(delta);
 		players[1].adjustCards(delta);
-		
 		Player curPlayer = players[game.getCurrentPlayer()];
+		
+		assertEquals(2, curPlayer.getCards()[0]);
+		
+		
+		LinkedList<Integer> cardsToSteal = new LinkedList<Integer>();
+		cardsToSteal.add(0);
+		game.configureTestableGame(null, null, null, null, null, cardsToSteal);
 		
 		game.drawRandomCardFromOpponent(1);
 		
 		
-		assertEquals(2, curPlayer.getCards()[0]);
+		assertEquals(3, curPlayer.getCards()[0]);
 	}
 }

@@ -14,7 +14,7 @@ public class TestableGame extends Game {
 	private LinkedList<Resource> yearOfPlentySelections;
 	private LinkedList<Integer> playerStealSelections;
 	private LinkedList<Integer> playerTradeSelections;
-	private LinkedList<Resource> resourceToStealSelections;
+	private LinkedList<Integer> resourceToStealSelections;
 	private LinkedList<Integer> robberMoveSelections;
 
 	public TestableGame(Color[] pColors, Resource[] hexResources, IDice dice,
@@ -31,7 +31,7 @@ public class TestableGame extends Game {
 			LinkedList<Integer> playerStealSelections,
 			LinkedList<Integer> playerTradeSelections,
 			LinkedList<Integer> robberMoveSelections,
-			LinkedList<Resource> resourceToStealSelections) {
+			LinkedList<Integer> resourceToStealSelections) {
 
 		this.monopolySelections = monopolySelections;
 		this.yearOfPlentySelections = yearOfPlentySelections;
@@ -57,10 +57,10 @@ public class TestableGame extends Game {
 		return this.yearOfPlentySelections.poll();
 	}
 
-	@Override
-	public int selectPlayerToStealFrom() {
-		return this.playerStealSelections.poll();
-	}
+//	@Override
+//	public int selectPlayerToStealFrom() {
+//		return this.playerStealSelections.poll();
+//	}
 
 	@Override
 	public int selectPlayerToTradeWith() {
@@ -88,7 +88,8 @@ public class TestableGame extends Game {
 
 	@Override
 	protected void drawRandomCardFromOpponent(int playerToStealFrom) {
-		Resource r = this.resourceToStealSelections.poll();
+		System.out.println(this.resourceToStealSelections);
+		int r = this.resourceToStealSelections.poll();
 		this.getPlayer(playerToStealFrom).adjustCards(r, -1);
 		this.getPlayer(this.getCurrentPlayer()).adjustCards(r, 1);
 	}
