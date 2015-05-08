@@ -145,9 +145,12 @@ public class GameTest {
 		// 4,
 		// 5, 6, 3, 11 };
 
+		Resource[] portResources = { Resource.brick, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
+		
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, userPanel, board,
-				Main.configureRandomNumberArray(resources), this.devCards);
+				Main.configureRandomNumberArray(resources), this.devCards, portResources);
 
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(16, HexComponent.RoadPosition.north);

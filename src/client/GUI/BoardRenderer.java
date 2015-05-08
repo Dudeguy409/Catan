@@ -185,7 +185,7 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			int hexId = nearArray[0];
 			if (buildType == Game.BuildType.robber) {
 				this.game
-						.setRobberLocation(this.hexIndexToGameTranslator[hexId]);
+						.setRobberLocation(this.hexIndexToGUITranslator[hexId]);
 				System.out.println("robber moved to " + hexId);
 			} else if (buildType != Game.BuildType.none) {
 				if (buildType != Game.BuildType.road) {
