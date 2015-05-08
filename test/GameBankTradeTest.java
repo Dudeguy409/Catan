@@ -241,19 +241,36 @@ public class GameBankTradeTest {
 
 	@Test
 	public void testDoesntOfferThreeWithPort() throws Exception {
-		// TODO
-		int[] arrayA = { 1, 1, 1, 1, 1, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
-		int[] arrayB = { 1, 1, 1, 1, 1, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
+		int[] arrayA = { 4, 4, 4, 1, 1, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+		int[] arrayB = { 4, 4, 4, 1, 1, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
 		setUpGameAndrew(arrayA, arrayB);
 
-	}
+		this.game.roll();
 
-	@Test
-	public void testOffersThreeWithPort() throws Exception {
-		// TODO
-		int[] arrayA = { 1, 1, 1, 1, 1, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
-		int[] arrayB = { 1, 1, 1, 1, 1, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
-		setUpGameAndrew(arrayA, arrayB);
+		int[] offer = { 2, 0, 0, 0, 0 };
+		int[] request = { 0, 1, 0, 0, 0 };
+		assertEquals(false, this.game.tradeWithBank(offer, request));
+		assertEquals(Arrays.toString(this.game.getCardsForPlayer(0)),
+				"[2, 0, 0, 0, 0, 0, 2]");
+
+		this.game.endTurn();
+
+		this.game.roll();
+		this.game.endTurn();
+
+		this.game.roll();
+
+		int[] offer2 = { 4, 0, 0, 0, 0 };
+		int[] request2 = { 0, 1, 0, 0, 0 };
+		assertEquals(false, this.game.tradeWithBank(offer2, request2));
+		assertEquals(Arrays.toString(this.game.getCardsForPlayer(0)),
+				"[4, 0, 0, 0, 0, 0, 4]");
+
+		int[] offer3 = { 3, 0, 0, 0, 0 };
+		int[] request3 = { 0, 1, 0, 0, 0 };
+		assertEquals(true, this.game.tradeWithBank(offer3, request3));
+		assertEquals(Arrays.toString(this.game.getCardsForPlayer(0)),
+				"[1, 1, 0, 0, 0, 0, 2]");
 
 	}
 
