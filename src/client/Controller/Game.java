@@ -504,8 +504,15 @@ public class Game {
 	public void drawDevCard() {
 		int[] cards = players[this.currentPlayer].getCards();
 		if (cards[0] >= 1 && cards[2] >= 1 && cards[4] >= 1) {
-			this.players[this.currentPlayer].changeDevCardCount(
-					this.devCardDeck.poll(), 1);
+			DevCard d = this.devCardDeck.poll();
+
+			String message = "Player " + (this.currentPlayer + 1)
+					+ ", You have just drawn a " + d.name()
+					+ " development card.";
+
+			JOptionPane.showMessageDialog(null, message);
+
+			this.players[this.currentPlayer].changeDevCardCount(d, 1);
 			int[] delta = { -1, 0, -1, 0, -1 };
 			this.players[this.currentPlayer].adjustCards(delta);
 		}

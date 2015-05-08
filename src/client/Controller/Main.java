@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import client.Controller.Game.Resource;
 import client.GUI.BoardRenderer;
+import client.GUI.DevCardSelectorFrame;
 import client.GUI.UserPanel;
 
 /**
@@ -64,10 +65,10 @@ public class Main {
 		frame.add(myBoard, FlowLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		frame.setResizable(false);
 		// TODO remove
-		// int[] a = { 2, 2, 2, 2, 2 };
-		// int[] b = { 2, 2, 2, 2, 2 };
-		// new PlayerTradeFrame(game, 0, 1, a, b);
+		int[] a = { 0, 2, 0, 0, 1 };
+		new DevCardSelectorFrame(game, a);
 	}
 
 	private static Color[] configurePlayerColors(int numberOfPlayers) {

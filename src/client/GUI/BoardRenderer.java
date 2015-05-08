@@ -126,6 +126,17 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			}
 
 		}
+		
+		for (PortComponent p : this.portArray) {
+			g2.setColor(Color.white);
+			g2.draw(p.getLineA());
+			g2.draw(p.getLineB());
+			g2.setColor(p.getColor());
+			g2.fill(p.getSquare());
+			g2.setColor(Color.black);
+			g2.draw(p.getSquare());
+
+		}
 
 		for (StructureComponent structure : this.roadArray) {
 			g2.setColor(structure.getPlayerColor());
@@ -146,17 +157,6 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			g2.fill(structure.getShape());
 			g2.setColor(Color.black);
 			g2.draw(structure.getShape());
-		}
-
-		for (PortComponent p : this.portArray) {
-			g2.setColor(Color.white);
-			g2.draw(p.getLineA());
-			g2.draw(p.getLineB());
-			g2.setColor(p.getColor());
-			g2.fill(p.getSquare());
-			g2.setColor(Color.black);
-			g2.draw(p.getSquare());
-
 		}
 
 	}
