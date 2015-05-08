@@ -2,6 +2,7 @@ package client.Controller;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -470,19 +471,21 @@ public class Game {
 	protected void drawRandomCardFromOpponent(int playerToStealFrom) {
 		// TODO handle drawing a random card from someone's hand.
 		int[] cards = this.players[playerToStealFrom].getCards();
-		
+		System.out.println("cards: " + Arrays.toString(cards));
+
 		ArrayList<Integer> candidateCards = new ArrayList<Integer>();
-		
-		for(int i = 0; i<=4; i++) {
-			for(int j = 0; j<cards[i]; j++) {
+
+		for (int i = 0; i <= 4; i++) {
+			for (int j = 0; j < cards[i]; j++) {
 				candidateCards.add(i);
 			}
 		}
-		
-		int randomResourceNum = (int) (Math.random()*(candidateCards.size()-1));
-		
-		System.out.println("stole: "+ randomResourceNum);
-		
+
+		int randomResourceNum = candidateCards.get((int) (Math.random()
+				* (candidateCards.size() - 1) + 1));
+
+		System.out.println("candidates: " + candidateCards.toString());
+		System.out.println("stole: " + randomResourceNum);
 
 	}
 
@@ -804,7 +807,7 @@ public class Game {
 		for (int i = 0, j = 0; i < this.numberOfPlayers; i++) {
 			if (i == this.currentPlayer) {
 
-			} else if (possiblePlayers[i]){
+			} else if (possiblePlayers[i]) {
 				options[j] = Integer.toString(i + 1);
 				j++;
 			}
@@ -928,20 +931,30 @@ public class Game {
 		board.moveRobber(robberLoc);
 		this.currentBuildType = BuildType.none;
 		this.userPanel.endRobber();
-		
-		
+
 		boolean[] playersToStealFrom = getPlayersToStealFrom(robberLoc);
-		System.out.println("players to steal from: " + playersToStealFrom);
+		System.out.println("players to steal from: "
+				+ Arrays.toString(playersToStealFrom));
 
-		int playerToStealFrom = selectPlayerToStealFrom(playersToStealFrom);
-		System.out.println("player to steal from: " + playerToStealFrom);
+		boolean noPlayersToStealFrom = true;
+		for (boolean player : playersToStealFrom) {
+			if (player) {
+				noPlayersToStealFrom = false;
+				break;
+			}
+		}
 
-		drawRandomCardFromOpponent(playerToStealFrom);
-		updateUserPanelCards();
-		// TODO only let people move the robber to a hex where all players
-		// touching it have more than 3 points
+		if (!noPlayersToStealFrom) {
+			int playerToStealFrom = selectPlayerToStealFrom(playersToStealFrom);
+			System.out.println("player to steal from: " + playerToStealFrom);
+
+			drawRandomCardFromOpponent(playerToStealFrom);
+			updateUserPanelCards();
+			// TODO only let people move the robber to a hex where all players
+			// touching it have more than 3 points
+		}
 	}
-	
+
 	public boolean[] getPlayersToStealFrom(int robberLocation) {
 		boolean[] playersToStealFrom = new boolean[numberOfPlayers];
 		int[] structPositions = getStructurePositionsOnHex(robberLocation);
@@ -949,7 +962,7 @@ public class Game {
 		for (int j = 0; j < structPositions.length; j++) {
 			StructurePiece p = this.structMgr
 					.getStructurePiece(structPositions[j]);
-			
+
 			if (p != null) {
 				playersToStealFrom[p.getPlayerIndex()] = true;
 			}
