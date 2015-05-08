@@ -126,7 +126,7 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			}
 
 		}
-		
+
 		for (PortComponent p : this.portArray) {
 			g2.setColor(Color.white);
 			g2.draw(p.getLineA());
@@ -186,7 +186,6 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			if (buildType == Game.BuildType.robber) {
 				this.game
 						.setRobberLocation(this.hexIndexToGUITranslator[hexId]);
-				System.out.println("robber moved to " + hexId);
 			} else if (buildType != Game.BuildType.none) {
 				if (buildType != Game.BuildType.road) {
 					HexComponent.StructurePosition pos = this
@@ -237,7 +236,7 @@ public class BoardRenderer extends JComponent implements MouseListener,
 	}
 
 	public void moveRobber(int hexIndex) {
-		this.robberIndex = this.hexIndexToGUITranslator[hexIndex];
+		this.robberIndex = this.hexIndexToGameTranslator[hexIndex];
 		this.repaint();
 	}
 

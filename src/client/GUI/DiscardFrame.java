@@ -94,7 +94,6 @@ public class DiscardFrame extends CardSelectorFrame {
 
 	protected boolean adjustCards(int i, boolean add) {
 		boolean succeeded = false;
-		System.out.println(i + "  " + add);
 		if (add) {
 			if (delta[i] > 0) {
 				System.out.println("ERROR!!!");
