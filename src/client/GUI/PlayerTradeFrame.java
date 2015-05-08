@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 import client.Controller.Game;
 
-public class PlayerTradeFrame extends CardSelectorFrame {
+public class PlayerTradeFrame extends TradeFrame {
 	/**
 	 * 
 	 */

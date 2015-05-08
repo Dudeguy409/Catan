@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import javax.swing.JOptionPane;
 
+import client.GUI.BankTradeFrame;
 import client.GUI.DiscardFrame;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.RoadPosition;
@@ -855,14 +856,16 @@ public class Game {
 
 		if (rslt != -1) {
 			if (rslt == -18) {
-				System.out.println("Bank selected!");
-				// TODO
-				// tradeWithBank(rslts[0], rslts[1]);
+				createBankTradeFrame();
 			} else {
-				System.out.printf("Player %d selected!\n", (rslt + 1));
 				createPlayerTradeFrame(rslt);
 			}
 		}
+	}
+
+	private void createBankTradeFrame() {
+		new BankTradeFrame(this, this.currentPlayer,
+				this.getCardsForPlayer(this.currentPlayer));
 	}
 
 	protected void createPlayerTradeFrame(int rslt) {
@@ -872,7 +875,6 @@ public class Game {
 	}
 
 	public boolean tradeWithBank(int[] rslts, int[] rslts2) {
-		// TODO Auto-generated method stub
 		int[] currentCardCounts = this.getCardsForPlayer(this.currentPlayer);
 		int bankCredits = 0;
 
