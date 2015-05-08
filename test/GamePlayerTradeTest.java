@@ -12,7 +12,7 @@ import client.Controller.Game.Resource;
 import client.Controller.Main;
 import client.GUI.HexComponent;
 
-public class GameTradeTest {
+public class GamePlayerTradeTest {
 
 	private TestableGame game;
 	private FakeBoardRenderer board;

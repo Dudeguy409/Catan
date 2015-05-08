@@ -105,6 +105,28 @@ public class GameTest {
 				randomNumberArray, this.devCards);
 	}
 
+	public void setUpGameAndrewPlayerTwoStart() throws Exception {
+		this.userPanel = new FakeUserPanel();
+		this.board = new FakeBoardRenderer();
+
+		Color[] colors = { new Color(2), new Color(3) };
+		Game.Resource[] resources = { Resource.desert, Resource.wheat,
+				Resource.wood, Resource.ore, Resource.brick, Resource.sheep,
+				Resource.wood, Resource.brick, Resource.wheat, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.wood, Resource.wheat,
+				Resource.sheep, Resource.ore, Resource.wood, Resource.brick,
+				Resource.sheep };
+		int[] arrayA = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+		int[] arrayB = { 5, 2, 1, 4, 2, 3, 4, 6, 2, 6, 1, 2, 5, 2, 3, 4, 6, 1 };
+		// int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9,
+		// 4,
+		// 5, 6, 3, 11 };
+		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
+		game = new TestableGame(colors, resources,
+				new FakeDice(arrayA, arrayB), 1, userPanel, board,
+				randomNumberArray, this.devCards);
+	}
+
 	public void setUpGameDavis() throws Exception {
 		this.userPanel = new FakeUserPanel();
 		this.board = new FakeBoardRenderer();
@@ -151,17 +173,16 @@ public class GameTest {
 	@Test
 	public void getDiceRollTest() {
 		// TODO
-		assertTrue(false);
 	}
 
 	@Test
 	public void TestPlayerQueueInitializes() throws Exception {
-		setUpGameEthan();
+		setUpGameAndrew();
 		Field field = Game.class.getDeclaredField("startingTurnsQueue");
 		field.setAccessible(true);
 
 		Queue<Integer> prePlayerQueue = (LinkedList<Integer>) (field.get(game));
-		Integer[] values = { 1, 2, 2, 1 };
+		Integer[] values = { 1, 1, 0 };
 		Queue<Integer> expectedQueue = new LinkedList<Integer>(
 				Arrays.asList(values));
 
@@ -261,13 +282,13 @@ public class GameTest {
 
 	@Test
 	public void testThatNormalGameStartsAfterPreGame() throws Exception {
-		setUpGameAndrew();
+		setUpGameAndrewPlayerTwoStart();
 
 		Field field = Game.class.getDeclaredField("startingTurnsQueue");
 		field.setAccessible(true);
 
 		Queue<Integer> prePlayerQueue = (LinkedList<Integer>) (field.get(game));
-		Integer[] values = { 1, 0, 0, 1 };
+		Integer[] values = { 0, 0, 1 };
 		Queue<Integer> expectedQueue = new LinkedList<Integer>(
 				Arrays.asList(values));
 
@@ -293,7 +314,7 @@ public class GameTest {
 		field.setAccessible(true);
 
 		prePlayerQueue = (LinkedList<Integer>) (field.get(game));
-		Integer[] values2 = { 0, 0, 1 };
+		Integer[] values2 = { 0, 1 };
 		expectedQueue = new LinkedList<Integer>(Arrays.asList(values2));
 
 		assertEquals(expectedQueue, prePlayerQueue);
@@ -311,7 +332,7 @@ public class GameTest {
 		field.setAccessible(true);
 
 		prePlayerQueue = (LinkedList<Integer>) (field.get(game));
-		Integer[] values3 = { 0, 1 };
+		Integer[] values3 = { 1 };
 		expectedQueue = new LinkedList<Integer>(Arrays.asList(values3));
 
 		assertEquals(expectedQueue, prePlayerQueue);
@@ -334,7 +355,7 @@ public class GameTest {
 		field.setAccessible(true);
 
 		prePlayerQueue = (LinkedList<Integer>) (field.get(game));
-		Integer[] values4 = { 1 };
+		Integer[] values4 = {};
 		expectedQueue = new LinkedList<Integer>(Arrays.asList(values4));
 
 		assertEquals(expectedQueue, prePlayerQueue);
@@ -349,7 +370,7 @@ public class GameTest {
 				HexComponent.StructurePosition.northwest);
 		assertEquals(game.getVictoryPointsForPlayer(1), 2);
 		assertEquals(game.getVictoryPointsForPlayer(0), 2);
-		assertEquals(game.getCurrentPlayer(), 0);
+		assertEquals(game.getCurrentPlayer(), 1);
 		assertEquals(game.isBeginningOfGame(), false);
 
 		field = Game.class.getDeclaredField("startingTurnsQueue");
