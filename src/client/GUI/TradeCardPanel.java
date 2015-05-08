@@ -15,14 +15,15 @@ public class TradeCardPanel extends CardSelectorPanel {
 				"TradeCardPanels should pass in their playerIndex!!!");
 	}
 
-	public TradeCardPanel(int playerIndex, PlayerTradeFrame frame, int[] cardCounts) {
+	public TradeCardPanel(int playerIndex, CardSelectorFrame frame,
+			int[] cardCounts) {
 		super(frame, cardCounts);
 		this.playerIndex = playerIndex;
 	}
 
 	@Override
 	protected boolean adjustCards(int resourceIndex, boolean add) {
-		return ((PlayerTradeFrame) this.frame).adjustCards(this.playerIndex,
+		return ((TradeFrame) this.frame).adjustCards(this.playerIndex,
 				resourceIndex, add);
 	}
 
