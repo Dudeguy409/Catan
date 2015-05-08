@@ -835,7 +835,49 @@ public class Game {
 
 	public boolean tradeWithBank(int[] rslts, int[] rslts2) {
 		// TODO Auto-generated method stub
-		return false;
+		int[] currentCardCounts = this.getCardsForPlayer(this.currentPlayer);
+		int bankCredits = 0;
+
+		for (int i = 0; i < rslts.length; i++) {
+			if (rslts[i] > currentCardCounts[i]) {
+				return false;
+			}
+
+			int tradeRate;
+
+			if (this.players[this.currentPlayer].hasPort(Resource.values()[i])) {
+				tradeRate = 2;
+			} else if (this.players[this.currentPlayer]
+					.hasPort(Resource.desert)) {
+				tradeRate = 3;
+			} else {
+				tradeRate = 4;
+			}
+
+			if (rslts[i] % tradeRate != 0) {
+				return false;
+			}
+
+			bankCredits += rslts[i] / tradeRate;
+		}
+
+		int requestCount = 0;
+		for (int i = 0; i < rslts2.length; i++) {
+			requestCount += rslts2[i];
+		}
+
+		if (requestCount != bankCredits) {
+			return false;
+		}
+
+		for (int i = 0; i < rslts.length; i++) {
+			rslts[i] *= -1;
+		}
+
+		this.adjustCardsForPlayer(this.currentPlayer, rslts2);
+		this.adjustCardsForPlayer(this.currentPlayer, rslts);
+
+		return true;
 	}
 
 	public void adjustCardsForPlayer(int playerIndex, int[] delta) {

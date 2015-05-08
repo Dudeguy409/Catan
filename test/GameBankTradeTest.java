@@ -48,7 +48,8 @@ public class GameBankTradeTest {
 		}
 
 		// TODO put in correct values
-		Resource[] portResources = {};
+		Resource[] portResources = { Resource.brick, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, this.userPanel, this.board,
 				Main.configureRandomNumberArray(resources), this.devCards,

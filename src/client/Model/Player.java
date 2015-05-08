@@ -167,4 +167,8 @@ public class Player {
 		this.ports.add(portResource);
 	}
 
+	public boolean hasPort(Game.Resource resource) {
+		return this.ports.contains(resource);
+	}
+
 }
