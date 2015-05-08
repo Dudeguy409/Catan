@@ -1,5 +1,7 @@
 package client.Model;
 
+import java.util.HashSet;
+
 import client.Controller.Game;
 
 /**
@@ -22,6 +24,7 @@ public class Player {
 	private int knight = 0;
 	private int roadBuilder = 0;
 	private int victory = 0;
+	private HashSet<Game.Resource> ports = new HashSet<Game.Resource>();
 
 	// TODO remove or implement
 	// private int playerIndex;
@@ -54,7 +57,7 @@ public class Player {
 		this.oreCount += delta[4];
 		this.updateTotal();
 	}
-	
+
 	public int getCard(Game.Resource type) {
 		switch (type) {
 		case wood:
@@ -142,7 +145,7 @@ public class Player {
 
 		}
 	}
-	
+
 	public int getDevCard(Game.DevCard devCard) {
 		switch (devCard) {
 		case yearOfPlenty:
@@ -158,6 +161,10 @@ public class Player {
 		default:
 			return -1;
 		}
+	}
+
+	public void addPort(Game.Resource portResource) {
+		this.ports.add(portResource);
 	}
 
 }

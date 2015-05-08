@@ -82,6 +82,7 @@ public class Game {
 	private LinkedList<DevCard> devCardDeck;
 	private int robberLocation = -1;
 	private int roadBuild = 0;
+	private PortManager portMgr;
 
 	/**
 	 * The number of hexes on the field.
@@ -90,7 +91,8 @@ public class Game {
 
 	public Game(Color[] pColors, Resource[] hexResources, IDice dice,
 			int startingPlayer, IUserPanel userPanel, IBoardRenderer board,
-			int[] randomNumberArray, LinkedList<DevCard> devCardDeck) {
+			int[] randomNumberArray, LinkedList<DevCard> devCardDeck,
+			Resource[] portTypes) {
 
 		this.currentPlayer = startingPlayer;
 		this.dice = dice;
@@ -115,6 +117,7 @@ public class Game {
 		this.roadMgr = new RoadManager(this.numberOfPlayers);
 		this.hexMgr = new HexManager();
 		this.structMgr = new StructureManager(this.numberOfPlayers);
+		this.portMgr = new PortManager(portTypes);
 		this.userPanel = userPanel;
 		this.userPanel.configureUserPanel(this);
 		this.board = board;
@@ -298,6 +301,11 @@ public class Game {
 					this.structMgr.addStructure(playerIndex, structureId);
 					this.board.addBuilding(hexId, pos,
 							this.colorArray[playerIndex], BuildType.settlement);
+					Resource portResource = this.portMgr
+							.getPortTypeForStructurePosition(structureId);
+					if (portResource != null) {
+						this.players[this.currentPlayer].addPort(portResource);
+					}
 					if (!this.preGameMode) {
 						int[] delta = { -1, -1, -1, -1, 0, 0, 0 };
 						this.players[playerIndex].adjustCards(delta);

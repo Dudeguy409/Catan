@@ -48,10 +48,13 @@ public class GamePlayerTradeTest {
 			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
+		
+		Resource[] portResources = {};
 
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources), this.devCards);
+				Main.configureRandomNumberArray(resources), this.devCards,
+				portResources);
 
 		LinkedList<Integer> playerStealSelections = new LinkedList<Integer>();
 		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();

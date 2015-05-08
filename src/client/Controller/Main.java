@@ -41,9 +41,8 @@ public class Main {
 		frame.setSize(SIZE);
 		frame.setTitle("Settlers of Catan");
 		frame.setLayout(new FlowLayout());
-		// TODO implement randomizer for port resources
-		Resource[] portResources = { Resource.wheat, Resource.wood,
-				Resource.sheep, Resource.brick, Resource.ore };
+		Resource[] portResources = PortResourceTypeGenerator
+				.getRandomPortResources(new Random().nextLong());
 		Game.Resource[] hexResources = HexResourceTypeGenerator
 				.getHexColors(new Random().nextLong());
 		int[] randomNumberArray = configureRandomNumberArray(hexResources);
@@ -56,7 +55,7 @@ public class Main {
 
 		Game game = new Game(colors, hexResources, new Dice(),
 				new Random().nextInt(colors.length), myPanel, myBoard,
-				randomNumberArray, devCards);
+				randomNumberArray, devCards, portResources);
 
 		frame.add(myPanel, FlowLayout.LEFT);
 

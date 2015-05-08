@@ -19,9 +19,10 @@ public class TestableGame extends Game {
 
 	public TestableGame(Color[] pColors, Resource[] hexResources, IDice dice,
 			int startingPlayer, IUserPanel userPanel, IBoardRenderer board,
-			int[] randomNumberArray, LinkedList<DevCard> devCardDeck) {
+			int[] randomNumberArray, LinkedList<DevCard> devCardDeck,
+			Resource[] portTypes) {
 		super(pColors, hexResources, dice, startingPlayer, userPanel, board,
-				randomNumberArray, devCardDeck);
+				randomNumberArray, devCardDeck, portTypes);
 	}
 
 	protected void configureTestableGame(

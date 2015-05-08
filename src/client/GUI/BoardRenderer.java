@@ -287,15 +287,15 @@ public class BoardRenderer extends JComponent implements MouseListener,
 					this.boardArray[i].getY());
 		}
 
-		this.portArray[0] = this.boardArray[15]
-				.makePort(RoadPosition.northwest);
+		this.portArray[0] = this.boardArray[3].makePort(RoadPosition.south);
 		this.portArray[1] = this.boardArray[12]
 				.makePort(RoadPosition.northeast);
 		this.portArray[2] = this.boardArray[17]
 				.makePort(RoadPosition.northeast);
-		this.portArray[3] = this.boardArray[1].makePort(RoadPosition.south);
-		this.portArray[4] = this.boardArray[3].makePort(RoadPosition.south);
-		this.portArray[5] = this.boardArray[6].makePort(RoadPosition.northwest);
+		this.portArray[3] = this.boardArray[15]
+				.makePort(RoadPosition.northwest);
+		this.portArray[4] = this.boardArray[6].makePort(RoadPosition.northwest);
+		this.portArray[5] = this.boardArray[1].makePort(RoadPosition.south);
 
 		// These ports are on the far side of the hex (don't border another hex)
 		// and are always 3:1 ports.
