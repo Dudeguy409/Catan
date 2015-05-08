@@ -379,19 +379,20 @@ public class Game {
 				if (robberLocation != hexId) {
 					Resource type = hex.getResource();
 
-					int[] structPositions = {
-							this.hexMgr.getStructureId(hexId,
-									HexComponent.StructurePosition.east),
-							this.hexMgr.getStructureId(hexId,
-									HexComponent.StructurePosition.northeast),
-							this.hexMgr.getStructureId(hexId,
-									HexComponent.StructurePosition.northwest),
-							this.hexMgr.getStructureId(hexId,
-									HexComponent.StructurePosition.southeast),
-							this.hexMgr.getStructureId(hexId,
-									HexComponent.StructurePosition.southwest),
-							this.hexMgr.getStructureId(hexId,
-									HexComponent.StructurePosition.west) };
+					int[] structPositions = getStructurePositionsOnHex(hexId);
+					// int[] structPositions = {
+					// this.hexMgr.getStructureId(hexId,
+					// HexComponent.StructurePosition.east),
+					// this.hexMgr.getStructureId(hexId,
+					// HexComponent.StructurePosition.northeast),
+					// this.hexMgr.getStructureId(hexId,
+					// HexComponent.StructurePosition.northwest),
+					// this.hexMgr.getStructureId(hexId,
+					// HexComponent.StructurePosition.southeast),
+					// this.hexMgr.getStructureId(hexId,
+					// HexComponent.StructurePosition.southwest),
+					// this.hexMgr.getStructureId(hexId,
+					// HexComponent.StructurePosition.west) };
 
 					for (int j = 0; j < structPositions.length; j++) {
 
@@ -426,6 +427,23 @@ public class Game {
 		}
 	}
 
+	private int[] getStructurePositionsOnHex(int hexId) {
+		int[] structPositions = {
+				this.hexMgr.getStructureId(hexId,
+						HexComponent.StructurePosition.east),
+				this.hexMgr.getStructureId(hexId,
+						HexComponent.StructurePosition.northeast),
+				this.hexMgr.getStructureId(hexId,
+						HexComponent.StructurePosition.northwest),
+				this.hexMgr.getStructureId(hexId,
+						HexComponent.StructurePosition.southeast),
+				this.hexMgr.getStructureId(hexId,
+						HexComponent.StructurePosition.southwest),
+				this.hexMgr.getStructureId(hexId,
+						HexComponent.StructurePosition.west) };
+		return structPositions;
+	}
+
 	private void startMoveRobber() {
 		displayMoveRobberMessage();
 
@@ -451,6 +469,20 @@ public class Game {
 
 	protected void drawRandomCardFromOpponent(int playerToStealFrom) {
 		// TODO handle drawing a random card from someone's hand.
+		int[] cards = this.players[playerToStealFrom].getCards();
+		
+		ArrayList<Integer> candidateCards = new ArrayList<Integer>();
+		
+		for(int i = 0; i<=4; i++) {
+			for(int j = 0; j<cards[i]; j++) {
+				candidateCards.add(i);
+			}
+		}
+		
+		int randomResourceNum = (int) (Math.random()*(candidateCards.size()-1));
+		
+		System.out.println("stole: "+ randomResourceNum);
+		
 
 	}
 
@@ -761,7 +793,9 @@ public class Game {
 
 	}
 
-	public int selectPlayerToStealFrom() {
+	public int selectPlayerToStealFrom(boolean[] possiblePlayers) {
+		// TODO
+
 		String message = "Please select a player to steal from.";
 		String title = "Steal";
 
@@ -770,7 +804,7 @@ public class Game {
 		for (int i = 0, j = 0; i < this.numberOfPlayers; i++) {
 			if (i == this.currentPlayer) {
 
-			} else {
+			} else if (possiblePlayers[i]){
 				options[j] = Integer.toString(i + 1);
 				j++;
 			}
@@ -894,16 +928,34 @@ public class Game {
 		board.moveRobber(robberLoc);
 		this.currentBuildType = BuildType.none;
 		this.userPanel.endRobber();
+		
+		
+		boolean[] playersToStealFrom = getPlayersToStealFrom(robberLoc);
+		System.out.println("players to steal from: " + playersToStealFrom);
 
-		int playerToStealFrom = selectPlayerToStealFrom();
+		int playerToStealFrom = selectPlayerToStealFrom(playersToStealFrom);
+		System.out.println("player to steal from: " + playerToStealFrom);
 
 		drawRandomCardFromOpponent(playerToStealFrom);
-		// TODO then only allow to steal from players with settlements on
-		// the hex moved to.
-		// TODO update user panel to have right amount of cards after every
-		// event.
+		updateUserPanelCards();
 		// TODO only let people move the robber to a hex where all players
 		// touching it have more than 3 points
+	}
+	
+	public boolean[] getPlayersToStealFrom(int robberLocation) {
+		boolean[] playersToStealFrom = new boolean[numberOfPlayers];
+		int[] structPositions = getStructurePositionsOnHex(robberLocation);
+
+		for (int j = 0; j < structPositions.length; j++) {
+			StructurePiece p = this.structMgr
+					.getStructurePiece(structPositions[j]);
+			
+			if (p != null) {
+				playersToStealFrom[p.getPlayerIndex()] = true;
+			}
+		}
+
+		return playersToStealFrom;
 	}
 
 	public void playRoadBuilder() {
