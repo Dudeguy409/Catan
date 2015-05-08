@@ -725,4 +725,17 @@ public class GameTest {
 
 		game.setRobberLocation(14);
 	}
+	
+	@Test
+	public void testGetPlayersToStealFrom() throws Exception {
+		setUpGameDavis();
+		
+		boolean[] players = game.getPlayersToStealFrom(14);
+		assertFalse(players[0]);
+		assertTrue(players[1]);
+		
+		players = game.getPlayersToStealFrom(16);
+		assertTrue(players[0]);
+		assertFalse(players[1]);
+	}
 }
