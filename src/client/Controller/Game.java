@@ -825,9 +825,9 @@ public class Game {
 				this.players[rslt].getCards());
 	}
 
-	private void tradeWithBank(int[] rslts, int[] rslts2) {
+	public boolean tradeWithBank(int[] rslts, int[] rslts2) {
 		// TODO Auto-generated method stub
-
+		return false;
 	}
 
 	public void adjustCardsForPlayer(int playerIndex, int[] delta) {
