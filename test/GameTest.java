@@ -55,13 +55,14 @@ public class GameTest {
 			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
-		
+
 		Resource[] portResources = { Resource.brick, Resource.ore,
 				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
 
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources), devCards, portResources);
+				Main.configureRandomNumberArray(resources), devCards,
+				portResources);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);
@@ -102,10 +103,10 @@ public class GameTest {
 		// int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9,
 		// 4,
 		// 5, 6, 3, 11 };
-		
+
 		Resource[] portResources = { Resource.brick, Resource.ore,
 				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
-		
+
 		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, userPanel, board,
@@ -128,10 +129,10 @@ public class GameTest {
 		// int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9,
 		// 4,
 		// 5, 6, 3, 11 };
-		
+
 		Resource[] portResources = { Resource.brick, Resource.ore,
 				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
-		
+
 		int[] randomNumberArray = Main.configureRandomNumberArray(resources);
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 1, userPanel, board,
@@ -158,10 +159,11 @@ public class GameTest {
 
 		Resource[] portResources = { Resource.brick, Resource.ore,
 				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
-		
+
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, userPanel, board,
-				Main.configureRandomNumberArray(resources), this.devCards, portResources);
+				Main.configureRandomNumberArray(resources), this.devCards,
+				portResources);
 
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(16, HexComponent.RoadPosition.north);
@@ -401,31 +403,54 @@ public class GameTest {
 			throws Exception {
 		setUpGameAndrew();
 
+		// player 0 builds just one road
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(12, HexComponent.RoadPosition.south);
 		game.processBuildRoadClick(12, HexComponent.RoadPosition.southeast);
 		game.processBuildRoadClick(12, HexComponent.RoadPosition.northeast);
 		game.processBuildRoadClick(12, HexComponent.RoadPosition.north);
 		game.processBuildRoadClick(12, HexComponent.RoadPosition.northwest);
+
+		assertEquals(game.getVictoryPointsForPlayer(0), 0);
+		assertEquals(game.getRoadCountForPlayer(0), 1);
+
+		// player 0 builds a settlement
 		game.setBuildType(Game.BuildType.settlement);
 		game.processBuildStructureClick(12,
 				HexComponent.StructurePosition.southwest);
+
+		assertEquals(game.getVictoryPointsForPlayer(1), 0);
+		assertEquals(game.getRoadCountForPlayer(1), 0);
+
 		assertEquals(game.getVictoryPointsForPlayer(0), 1);
 		assertEquals(game.getRoadCountForPlayer(0), 1);
 
+		// player 1 builds a road and settlement
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(16, HexComponent.RoadPosition.southeast);
 		game.setBuildType(Game.BuildType.settlement);
 		game.processBuildStructureClick(16,
 				HexComponent.StructurePosition.southeast);
+
+		assertEquals(game.getVictoryPointsForPlayer(0), 1);
+		assertEquals(game.getRoadCountForPlayer(0), 1);
+
+		assertEquals(game.getVictoryPointsForPlayer(1), 1);
+		assertEquals(game.getRoadCountForPlayer(1), 1);
+
+		// player 1 builds a second road
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(9, HexComponent.RoadPosition.northwest);
 		game.processBuildRoadClick(9, HexComponent.RoadPosition.north);
 		game.processBuildRoadClick(9, HexComponent.RoadPosition.northeast);
 		game.processBuildRoadClick(9, HexComponent.RoadPosition.southeast);
 		game.processBuildRoadClick(9, HexComponent.RoadPosition.south);
+
 		assertEquals(game.getVictoryPointsForPlayer(0), 1);
-		assertEquals(game.getRoadCountForPlayer(0), 2);
+		assertEquals(game.getRoadCountForPlayer(0), 1);
+
+		assertEquals(game.getVictoryPointsForPlayer(1), 1);
+		assertEquals(game.getRoadCountForPlayer(1), 2);
 
 	}
 
@@ -739,20 +764,20 @@ public class GameTest {
 
 		game.setRobberLocation(14);
 	}
-	
+
 	@Test
 	public void testGetPlayersToStealFrom() throws Exception {
 		setUpGameDavis();
-		
+
 		boolean[] players = game.getPlayersToStealFrom(14);
 		assertFalse(players[0]);
 		assertTrue(players[1]);
-		
+
 		players = game.getPlayersToStealFrom(16);
 		assertTrue(players[0]);
 		assertFalse(players[1]);
 	}
-	
+
 	@Test
 	public void testDrawRandomCardFromOpponent() throws Exception {
 		setUpGameDavis();
@@ -761,21 +786,19 @@ public class GameTest {
 		field.setAccessible(true);
 
 		Player[] players = (Player[]) (field.get(game));
-		int[] delta = { 1, 0, 0, 0, 0};
+		int[] delta = { 1, 0, 0, 0, 0 };
 		players[0].adjustCards(delta);
 		players[1].adjustCards(delta);
 		Player curPlayer = players[game.getCurrentPlayer()];
-		
+
 		assertEquals(2, curPlayer.getCards()[0]);
-		
-		
+
 		LinkedList<Integer> cardsToSteal = new LinkedList<Integer>();
 		cardsToSteal.add(0);
 		game.configureTestableGame(null, null, null, null, null, cardsToSteal);
-		
+
 		game.drawRandomCardFromOpponent(1);
-		
-		
+
 		assertEquals(3, curPlayer.getCards()[0]);
 	}
 }

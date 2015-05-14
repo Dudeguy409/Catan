@@ -1,7 +1,5 @@
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.LinkedList;
-
 import client.Controller.Game;
 import client.Controller.IDice;
 import client.GUI.IBoardRenderer;
@@ -57,10 +55,10 @@ public class TestableGame extends Game {
 		return this.yearOfPlentySelections.poll();
 	}
 
-//	@Override
-//	public int selectPlayerToStealFrom() {
-//		return this.playerStealSelections.poll();
-//	}
+	@Override
+	public int selectPlayerToStealFrom(boolean[] possiblePlayers) {
+		return this.playerStealSelections.poll();
+	}
 
 	@Override
 	public int selectPlayerToTradeWith() {

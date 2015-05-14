@@ -48,8 +48,9 @@ public class GamePlayerTradeTest {
 			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
-		
-		Resource[] portResources = {};
+
+		Resource[] portResources = { Resource.brick, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
 
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, this.userPanel, this.board,
@@ -58,9 +59,9 @@ public class GamePlayerTradeTest {
 
 		LinkedList<Integer> playerStealSelections = new LinkedList<Integer>();
 		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
-		LinkedList<Resource> resourceToStealSelections = new LinkedList<Game.Resource>();
+		LinkedList<Integer> resourceToStealSelections = new LinkedList<Integer>();
 
-		resourceToStealSelections.add(Resource.sheep);
+		resourceToStealSelections.add(2);
 		robberMoveSelections.add(1);
 		playerStealSelections.add(0);
 

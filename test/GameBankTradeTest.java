@@ -47,7 +47,6 @@ public class GameBankTradeTest {
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
 
-		// TODO put in correct values
 		Resource[] portResources = { Resource.brick, Resource.ore,
 				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
 		game = new TestableGame(colors, resources,
@@ -57,9 +56,9 @@ public class GameBankTradeTest {
 
 		LinkedList<Integer> playerStealSelections = new LinkedList<Integer>();
 		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
-		LinkedList<Resource> resourceToStealSelections = new LinkedList<Game.Resource>();
+		LinkedList<Integer> resourceToStealSelections = new LinkedList<Integer>();
 
-		resourceToStealSelections.add(Resource.sheep);
+		resourceToStealSelections.add(2);
 		robberMoveSelections.add(1);
 		playerStealSelections.add(0);
 
