@@ -724,6 +724,14 @@ public class GameTest {
 		// player index 1 should have only 1 wood because of the robber on hex
 		// 14.
 		setUpGameDavis();
+		
+		LinkedList<Integer> playerStealList = new LinkedList<Integer>();
+		playerStealList.add(1);
+		
+		LinkedList<Integer> resourceStealList = new LinkedList<Integer>();
+		resourceStealList.add(3);
+		
+		game.configureTestableGame(null, null, playerStealList, null, null, resourceStealList);
 
 		game.endTurn(); // Change to player index 1's turn.
 		game.setRobberLocation(14);
@@ -751,6 +759,7 @@ public class GameTest {
 		LinkedList<Integer> playerStealList = new LinkedList<Integer>();
 		playerStealList.add(1);
 		
+		
 		LinkedList<Integer> resourceStealList = new LinkedList<Integer>();
 		resourceStealList.add(3);
 		
@@ -767,6 +776,14 @@ public class GameTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testThatMoveRobberToSameHexThrowsException() throws Exception {
 		setUpGameDavis();
+		
+		LinkedList<Integer> playerStealList = new LinkedList<Integer>();
+		playerStealList.add(1);
+		
+		LinkedList<Integer> resourceStealList = new LinkedList<Integer>();
+		resourceStealList.add(3);
+		
+		game.configureTestableGame(null, null, playerStealList, null, null, resourceStealList);
 
 		game.setRobberLocation(14);
 
