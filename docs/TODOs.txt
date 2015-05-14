@@ -1,0 +1,23 @@
+******REFACTOR/fix according to metrics : drawBoard, determineStruct and RoadPosition, game, main?
+*****fix tests
+*****implement dev cards
+
+**can't move robber to square with 2 vps, throw exception, catch and display window
+**1 dev card per turn
+**implement points for largest army
+
+*update vps on GUI
+*Longest road???
+*can't terminate by closing number of players window
+*add useDevCardButton
+*set discardPanelExitOnClose to loop if not enough cards discarded
+*make sure panels that matter can't be x-ed out
+*show message and catch exception when place robber on same hex
+
+
+
+---bank has finite number of cards?
+---interrupting longest road
+--grey out colors already chosen
+---can leave robber on same hex if nobody has over 3 points???
+---must wait till next turn to play dev card
