@@ -13,9 +13,7 @@ import client.Controller.Game.DevCard;
 import client.Controller.Main;
 import client.Controller.Game.Resource;
 import client.Controller.RoadManager;
-import client.Controller.StructureManager;
 import client.GUI.HexComponent;
-import client.Model.Hex;
 import client.Model.Player;
 
 public class DevelopmentCardTest {
@@ -60,6 +58,17 @@ public class DevelopmentCardTest {
 		game = new TestableGame(colors, resources, new FakeDice(arrayA, arrayB), 0,
 				this.userPanel, this.board,
 				Main.configureRandomNumberArray(resources), devCards, portResources);
+		
+		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
+		robberMoveSelections.add(14);
+		
+		LinkedList<Integer> playerStealSelections = new LinkedList<Integer>();
+		playerStealSelections.add(1);
+		
+		LinkedList<Integer> resourceSelections = new LinkedList<Integer>();
+		resourceSelections.add(2);
+		
+		game.configureTestableGame(null, null, playerStealSelections, null, robberMoveSelections, resourceSelections);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);
