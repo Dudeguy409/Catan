@@ -43,9 +43,6 @@ public class HexResourceGeneratorTest {
 			}
 		}
 
-		System.out.println(max);
-		System.out.println(expectedMaximumNumberOfOccurences);
 		assertFalse(max > expectedMaximumNumberOfOccurences);
-
 	}
 }
