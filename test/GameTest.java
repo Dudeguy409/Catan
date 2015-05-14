@@ -156,15 +156,15 @@ public class GameTest {
 		// int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9,
 		// 4,
 		// 5, 6, 3, 11 };
-
+		
 		Resource[] portResources = { Resource.brick, Resource.ore,
 				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
-
+		
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, userPanel, board,
 				Main.configureRandomNumberArray(resources), this.devCards,
 				portResources);
-
+		
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(16, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
@@ -747,6 +747,14 @@ public class GameTest {
 	public void testThatBuildTypeIsSetToNoneAfterRobberIsMoved()
 			throws Exception {
 		setUpGameDavis();
+		
+		LinkedList<Integer> playerStealList = new LinkedList<Integer>();
+		playerStealList.add(1);
+		
+		LinkedList<Integer> resourceStealList = new LinkedList<Integer>();
+		resourceStealList.add(3);
+		
+		game.configureTestableGame(null, null, playerStealList, null, null, resourceStealList);
 
 		game.setRobberLocation(14);
 
