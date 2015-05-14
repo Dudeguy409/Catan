@@ -11,12 +11,14 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JComponent;
 
 import client.Controller.Game;
 import client.Controller.Game.Resource;
 import client.GUI.HexComponent.RoadPosition;
+import client.GUI.HexComponent.StructurePosition;
 
 /**
  * This class creates the GUI for the board
@@ -286,6 +288,11 @@ public class BoardRenderer extends JComponent implements MouseListener,
 					this.boardArray[i].getY());
 		}
 
+		configurePorts();
+
+	}
+
+	private void configurePorts() {
 		this.portArray[0] = this.boardArray[3].makePort(RoadPosition.south);
 		this.portArray[1] = this.boardArray[12]
 				.makePort(RoadPosition.northeast);
@@ -312,7 +319,6 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			}
 
 		}
-
 	}
 
 	// returns an array of: the hex clicked, the second nearest hex, the third
@@ -380,191 +386,210 @@ public class BoardRenderer extends JComponent implements MouseListener,
 	 */
 	private HexComponent.StructurePosition determineStructurePosition(
 			int[] nearHex) {
-		HexComponent.StructurePosition pos = null;
 
-		if (nearHex[0] == nearHex[1] - 1 && nearHex[0] > nearHex[2]
-				|| nearHex[0] == nearHex[2] - 1 && nearHex[0] > nearHex[1])
-			pos = HexComponent.StructurePosition.west;
-		if (nearHex[0] == nearHex[1] - 1 && nearHex[0] < nearHex[2]
-				|| nearHex[0] == nearHex[2] - 1 && nearHex[0] < nearHex[1])
-			pos = HexComponent.StructurePosition.northwest;
-		if (nearHex[0] == nearHex[1] + 1 && nearHex[0] > nearHex[2]
-				|| nearHex[0] == nearHex[2] + 1 && nearHex[0] > nearHex[1])
-			pos = HexComponent.StructurePosition.southeast;
-		if (nearHex[0] == nearHex[1] + 1 && nearHex[0] < nearHex[2]
-				|| nearHex[0] == nearHex[2] + 1 && nearHex[0] < nearHex[1])
-			pos = HexComponent.StructurePosition.east;
-		if (nearHex[0] < nearHex[1] - 1 && nearHex[0] < nearHex[2] - 1)
-			pos = HexComponent.StructurePosition.northeast;
-		if (nearHex[0] > nearHex[1] + 1 && nearHex[0] > nearHex[2] + 1)
-			pos = HexComponent.StructurePosition.southwest;
-		// deals with border hexes/positions
 		if (nearHex[4] > HexComponent.RADIUS * 1.5) {
+			return handleOutlierSettlementPositionCases(nearHex);
+		} else {
+			return determineNormalSettlementPosition(nearHex);
+		}
 
-			if (nearHex[3] < HexComponent.RADIUS * 1.5) {
-				// deals with the settlements on the coast that border two
-				// hexes.
-				switch (nearHex[0]) {
-				case 1:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.southeast;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.west;
-					break;
-				case 3:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.southwest;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.east;
-					break;
-				case 6:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.southwest;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.northwest;
-					break;
-				case 12:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.southeast;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.northeast;
-					break;
-				case 15:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.west;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.northeast;
-					break;
-				case 17:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.east;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.northwest;
-					break;
-				case 0:
-					if (nearHex[0] > nearHex[1] - 2) {
-						pos = HexComponent.StructurePosition.west;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.east;
-					break;
-				case 2:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.southeast;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.northwest;
-					break;
-				case 7:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.southwest;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.northeast;
-					break;
-				case 11:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.southwest;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.northeast;
-					break;
-				case 16:
-					if (nearHex[0] > nearHex[1]) {
-						pos = HexComponent.StructurePosition.southeast;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.northwest;
-					break;
-				case 18:
-					if (nearHex[0] > nearHex[1] + 2) {
-						pos = HexComponent.StructurePosition.west;
-						break;
-					} else
-						pos = HexComponent.StructurePosition.east;
-					break;
-				}
+	}
+
+	// deals with border hexes/positions
+	private HexComponent.StructurePosition handleOutlierSettlementPositionCases(
+			int[] nearHex) {
+		if (nearHex[3] < HexComponent.RADIUS * 1.5) {
+			return handleTwoHexCoastSettlementPosition(nearHex);
+		} else {
+
+			if (nearHex[4] > HexComponent.RADIUS * 2.25) {
+				return handleHexTwoOceanSettlementPosition(nearHex);
 			} else {
-				// deals with positions that only border the hex and the ocean.
-				switch (nearHex[0]) {
-				case 1:
-					pos = HexComponent.StructurePosition.southwest;
-					break;
-				case 3:
-					pos = HexComponent.StructurePosition.southeast;
-					break;
-				case 6:
-					pos = HexComponent.StructurePosition.west;
-					break;
-				case 12:
-					pos = HexComponent.StructurePosition.east;
-					break;
-				case 15:
-					pos = HexComponent.StructurePosition.northwest;
-					break;
-				case 17:
-					pos = HexComponent.StructurePosition.northeast;
-					break;
-				}
-				// deals with hexes that have two positions that only border the
-				// ocean and the main hex.
-				if (nearHex[4] > HexComponent.RADIUS * 2.25) {
-					switch (nearHex[0]) {
-					case 0:
-						if (nearHex[0] > nearHex[1] - 2) {
-							pos = HexComponent.StructurePosition.southwest;
-							break;
-						} else
-							pos = HexComponent.StructurePosition.southeast;
-						break;
-					case 2:
-						if (nearHex[0] > nearHex[1]) {
-							pos = HexComponent.StructurePosition.southwest;
-							break;
-						} else
-							pos = HexComponent.StructurePosition.west;
-						break;
-					case 7:
-						if (nearHex[0] > nearHex[1]) {
-							pos = HexComponent.StructurePosition.southeast;
-							break;
-						} else
-							pos = HexComponent.StructurePosition.east;
-						break;
-					case 11:
-						if (nearHex[0] > nearHex[1]) {
-							pos = HexComponent.StructurePosition.west;
-							break;
-						} else
-							pos = HexComponent.StructurePosition.northwest;
-						break;
-					case 16:
-						if (nearHex[0] > nearHex[1]) {
-							pos = HexComponent.StructurePosition.east;
-							break;
-						} else
-							pos = HexComponent.StructurePosition.northeast;
-						break;
-					case 18:
-						if (nearHex[0] > nearHex[1] + 2) {
-							pos = HexComponent.StructurePosition.northwest;
-							break;
-						} else
-							pos = HexComponent.StructurePosition.northeast;
-						break;
-					}
-				}
-
+				return handleOneHexOceanSettlementPosition(nearHex);
 			}
 
 		}
+	}
+
+	// deals with hexes that have two positions that only border the
+	// ocean and the main hex.
+	private StructurePosition handleHexTwoOceanSettlementPosition(int[] nearHex) {
+		switch (nearHex[0]) {
+		case 0:
+			if (nearHex[0] > nearHex[1] - 2) {
+				return HexComponent.StructurePosition.southwest;
+
+			} else
+				return HexComponent.StructurePosition.southeast;
+
+		case 2:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.StructurePosition.southwest;
+
+			} else
+				return HexComponent.StructurePosition.west;
+
+		case 7:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.StructurePosition.southeast;
+
+			} else
+				return HexComponent.StructurePosition.east;
+
+		case 11:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.StructurePosition.west;
+
+			} else
+				return HexComponent.StructurePosition.northwest;
+
+		case 16:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.StructurePosition.east;
+
+			} else
+				return HexComponent.StructurePosition.northeast;
+
+		case 18:
+			if (nearHex[0] > nearHex[1] + 2) {
+				return HexComponent.StructurePosition.northwest;
+
+			} else
+				return HexComponent.StructurePosition.northeast;
+		default:
+			return null;
+
+		}
+	}
+
+	// deals with positions that only border the hex and the ocean.
+	private StructurePosition handleOneHexOceanSettlementPosition(int[] nearHex) {
+		// TODO memoize
+		HashMap<Integer, StructurePosition> positionMap = new HashMap<Integer, HexComponent.StructurePosition>();
+		positionMap.put(1, HexComponent.StructurePosition.southwest);
+		positionMap.put(3, HexComponent.StructurePosition.southeast);
+		positionMap.put(6, HexComponent.StructurePosition.west);
+		positionMap.put(12, HexComponent.StructurePosition.east);
+		positionMap.put(15, HexComponent.StructurePosition.northwest);
+		positionMap.put(17, HexComponent.StructurePosition.northeast);
+
+		return positionMap.get(nearHex[0]);
+
+	}
+
+	private HexComponent.StructurePosition handleTwoHexCoastSettlementPosition(
+			int[] nearHex) {
+		HexComponent.StructurePosition pos = null;
+		switch (nearHex[0]) {
+		case 1:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.southeast;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.west;
+			break;
+		case 3:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.southwest;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.east;
+			break;
+		case 6:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.southwest;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.northwest;
+			break;
+		case 12:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.southeast;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.northeast;
+			break;
+		case 15:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.west;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.northeast;
+			break;
+		case 17:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.east;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.northwest;
+			break;
+		case 0:
+			if (nearHex[0] > nearHex[1] - 2) {
+				pos = HexComponent.StructurePosition.west;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.east;
+			break;
+		case 2:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.southeast;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.northwest;
+			break;
+		case 7:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.southwest;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.northeast;
+			break;
+		case 11:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.southwest;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.northeast;
+			break;
+		case 16:
+			if (nearHex[0] > nearHex[1]) {
+				pos = HexComponent.StructurePosition.southeast;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.northwest;
+			break;
+		case 18:
+			if (nearHex[0] > nearHex[1] + 2) {
+				pos = HexComponent.StructurePosition.west;
+				break;
+			} else
+				pos = HexComponent.StructurePosition.east;
+			break;
+		}
 		return pos;
+	}
+
+	private HexComponent.StructurePosition determineNormalSettlementPosition(
+			int[] nearHex) {
+		if ((nearHex[0] == nearHex[1] - 1 && nearHex[0] > nearHex[2])
+				|| (nearHex[0] == nearHex[2] - 1 && nearHex[0] > nearHex[1])) {
+			return HexComponent.StructurePosition.west;
+		} else if ((nearHex[0] == nearHex[1] - 1 && nearHex[0] < nearHex[2])
+				|| (nearHex[0] == nearHex[2] - 1 && nearHex[0] < nearHex[1])) {
+			return HexComponent.StructurePosition.northwest;
+		} else if ((nearHex[0] == nearHex[1] + 1 && nearHex[0] > nearHex[2])
+				|| (nearHex[0] == nearHex[2] + 1 && nearHex[0] > nearHex[1])) {
+			return HexComponent.StructurePosition.southeast;
+		} else if ((nearHex[0] == nearHex[1] + 1 && nearHex[0] < nearHex[2])
+				|| (nearHex[0] == nearHex[2] + 1 && nearHex[0] < nearHex[1])) {
+			return HexComponent.StructurePosition.east;
+		} else if (nearHex[0] < nearHex[1] - 1 && nearHex[0] < nearHex[2] - 1) {
+			return HexComponent.StructurePosition.northeast;
+		} else if (nearHex[0] > nearHex[1] + 1 && nearHex[0] > nearHex[2] + 1) {
+			return HexComponent.StructurePosition.southwest;
+		}
+
+		return null;
 	}
 
 	// determines the position for the road to be built on the clicked hex.
@@ -603,7 +628,7 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			if (nearHex[0] == nearHex[1] - rowArray[row])
 				pos = HexComponent.RoadPosition.north;
 			if (nearHex[3] > HexComponent.RADIUS * HexComponent.Y_SCALAR) {
-				// System.out.println(nearHex[3]);
+
 			}
 
 		} else if (row == 2) {
@@ -628,8 +653,8 @@ public class BoardRenderer extends JComponent implements MouseListener,
 			if (nearHex[0] == nearHex[1] + rowArray[0])
 				pos = HexComponent.RoadPosition.southwest;
 		}
-		// catches the exception cases where the road is along the coast.
 
+		// catches the outlying cases where the road is along the coast.
 		if (nearHex[4] > HexComponent.RADIUS * 2 - 5) {
 			switch (nearHex[0]) {
 			case 1:
