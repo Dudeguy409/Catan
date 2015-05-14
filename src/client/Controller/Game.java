@@ -484,8 +484,8 @@ public class Game {
 		int randomResourceNum = candidateCards.get((int) (Math.random()
 				* (candidateCards.size() - 1) + 1));
 
-//		System.out.println("candidates: " + candidateCards.toString());
-//		System.out.println("stole: " + randomResourceNum);
+		// System.out.println("candidates: " + candidateCards.toString());
+		// System.out.println("stole: " + randomResourceNum);
 
 		getPlayer(playerToStealFrom).adjustCards(randomResourceNum, -1);
 		getPlayer(currentPlayer).adjustCards(randomResourceNum, 1);
@@ -520,10 +520,12 @@ public class Game {
 	}
 
 	public void useYearOfPlenty() {
-		Resource[] resources = new Resource[2];
-		resources[0] = selectResourceForYearOfPlenty(true);
-		resources[1] = selectResourceForYearOfPlenty(false);
-		adjustForYearOfPlenty(resources);
+		if (players[this.currentPlayer].getDevCard(DevCard.yearOfPlenty) >= 1) {
+			Resource[] resources = new Resource[2];
+			resources[0] = selectResourceForYearOfPlenty(true);
+			resources[1] = selectResourceForYearOfPlenty(false);
+			adjustForYearOfPlenty(resources);
+		}
 	}
 
 	public void adjustForYearOfPlenty(Resource[] resources) {
@@ -534,8 +536,10 @@ public class Game {
 	}
 
 	public void useMonopoly() {
-		Resource resource = selectResourceForMonopoly();
-		adjustForMonopoly(resource);
+		if (players[this.currentPlayer].getDevCard(DevCard.monopoly) >= 1) {
+			Resource resource = selectResourceForMonopoly();
+			adjustForMonopoly(resource);
+		}
 	}
 
 	public void adjustForMonopoly(Resource resource) {
@@ -982,15 +986,23 @@ public class Game {
 	}
 
 	public void playRoadBuilder() {
-		setBuildType(BuildType.road);
-		int roadCount = this.roadMgr.getRoadCountForPlayer(this.currentPlayer);
-		if (roadCount < 14)
-			this.roadBuild = 2;
-		else if (roadCount == 14)
-			this.roadBuild = 1;
+		if (players[this.currentPlayer].getDevCard(DevCard.roadBuilder) >= 1) {
+			players[this.currentPlayer].changeDevCardCount(DevCard.roadBuilder,
+					-1);
+			setBuildType(BuildType.road);
+			int roadCount = this.roadMgr
+					.getRoadCountForPlayer(this.currentPlayer);
+			if (roadCount < 14)
+				this.roadBuild = 2;
+			else if (roadCount == 14)
+				this.roadBuild = 1;
+		}
 	}
 
 	public void playKnight() {
-		startMoveRobber();
+		if (players[this.currentPlayer].getDevCard(DevCard.knight) >= 1) {
+			players[this.currentPlayer].changeDevCardCount(DevCard.knight, -1);
+			startMoveRobber();
+		}
 	}
 }

@@ -53,10 +53,13 @@ public class DevelopmentCardTest {
 			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
+		
+		Resource[] portResources = { Resource.brick, Resource.ore,
+				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
 
 		game = new TestableGame(colors, resources, new FakeDice(arrayA, arrayB), 0,
 				this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources), devCards);
+				Main.configureRandomNumberArray(resources), devCards, portResources);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);
@@ -131,6 +134,7 @@ public class DevelopmentCardTest {
 		assertEquals(1, player.getCards()[1]);
 		assertEquals(0, player.getCards()[2]);
 		assertEquals(0, player.getCards()[4]);
+		assertEquals(0, player.getDevCard(DevCard.yearOfPlenty));
 	}
 
 	@Test
@@ -191,6 +195,7 @@ public class DevelopmentCardTest {
 		assertEquals(1, player.getCards()[0]);
 		assertEquals(0, player.getCards()[2]);
 		assertEquals(0, player.getCards()[4]);
+		assertEquals(0, player.getDevCard(DevCard.monopoly));
 	}
 
 	@Test
@@ -231,6 +236,7 @@ public class DevelopmentCardTest {
 		game.processBuildRoadClick(3, HexComponent.RoadPosition.northwest);
 
 		assertEquals(4, roadMgr.getRoadCountForPlayer(0));
+		assertEquals(0, player.getDevCard(DevCard.roadBuilder));
 	}
 
 	@Test
@@ -285,6 +291,7 @@ public class DevelopmentCardTest {
 		game.processBuildRoadClick(1, HexComponent.RoadPosition.south);
 
 		assertEquals(15, roadMgr.getRoadCountForPlayer(0));
+		assertEquals(0, player.getDevCard(DevCard.roadBuilder));
 	}
 
 	@Test
@@ -338,6 +345,7 @@ public class DevelopmentCardTest {
 		assertEquals(0, roadBuild);
 
 		assertEquals(15, roadMgr.getRoadCountForPlayer(0));
+		assertEquals(0, player.getDevCard(DevCard.roadBuilder));
 	}
 
 	@Test
@@ -370,6 +378,7 @@ public class DevelopmentCardTest {
 		
 		game.roll();
 		assertEquals(1, plyer.getCards()[1]);
+		assertEquals(0, plyer.getDevCard(DevCard.knight));
 	}
 
 }
