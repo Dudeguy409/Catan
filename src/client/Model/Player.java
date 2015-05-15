@@ -10,14 +10,12 @@ import client.Controller.Game;
  * @author Andrew Davidson. Created May 28, 2010.
  */
 public class Player {
-	// TODO add port and bank trade rates
 	private int wheatCount = 0;
 	private int woodCount = 0;
 	private int woolCount = 0;
 	private int brickCount = 0;
 	private int oreCount = 0;
-	private int playedSoldierCount = 0;
-	//private int devVictoryPoints = 0;
+	private int devVictoryPoints = 0;
 	private int totalResourceCards = 0;
 	private int yearOfPlenty = 0;
 	private int monopoly = 0;
@@ -27,11 +25,6 @@ public class Player {
 	private int victory = 0;
 	private HashSet<Game.Resource> ports = new HashSet<Game.Resource>();
 
-	// TODO remove or implement
-	// private int playerIndex;
-	// private int[] unplayedDevCardCount;
-	// private Color color;
-
 	/**
 	 * returns all of the player's cards in a convenient array.
 	 * 
@@ -39,9 +32,17 @@ public class Player {
 	 */
 	public int[] getCards() {
 		int[] cards = { this.wheatCount, this.woodCount, this.woolCount,
-				this.brickCount, this.oreCount, this.playedSoldierCount,
+				this.brickCount, this.oreCount, knightsPlayed,
 				this.totalResourceCards };
 		return cards;
+	}
+
+	public int getDevCardVPs() {
+		return this.devVictoryPoints;
+	}
+
+	public void incrementDevVps() {
+		this.devVictoryPoints++;
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class Player {
 			return -1;
 		}
 	}
-	
+
 	public int getCard(int type) {
 		switch (type) {
 		case 0:
@@ -139,7 +140,7 @@ public class Player {
 		}
 		this.updateTotal();
 	}
-	
+
 	/**
 	 * calculates the total number of cards that the player holds, primarily to
 	 * determine how many cards will be lost if a seven is rolled.
@@ -150,19 +151,19 @@ public class Player {
 				+ this.woolCount + this.brickCount + this.oreCount;
 	}
 
-//	/**
-//	 * tells panel how many victory points the player has. The player wins at
-//	 * 10.
-//	 * 
-//	 * @return number of victory points
-//	 */
-//	public int getVPs() {
-//		return this.devVictoryPoints;
-//	}
-//
-//	private void addVP() {
-//		this.devVictoryPoints++;
-//	}
+	// /**
+	// * tells panel how many victory points the player has. The player wins at
+	// * 10.
+	// *
+	// * @return number of victory points
+	// */
+	// public int getVPs() {
+	// return this.devVictoryPoints;
+	// }
+	//
+	// private void addVP() {
+	// this.devVictoryPoints++;
+	// }
 
 	public void changeDevCardCount(Game.DevCard devCard, int delta) {
 		switch (devCard) {
@@ -180,7 +181,7 @@ public class Player {
 			break;
 		case victory:
 			this.victory += delta;
-			//addVP();
+			// addVP();
 			break;
 		default:
 			break;
@@ -212,15 +213,15 @@ public class Player {
 	public boolean hasPort(Game.Resource resource) {
 		return this.ports.contains(resource);
 	}
-	
+
 	public void incrementKnightsPlayed() {
 		this.knightsPlayed++;
 	}
-	
+
 	public int getKnightsPlayed() {
 		return this.knightsPlayed;
 	}
-	
+
 	public int getVictoryPointDevCards() {
 		return victory;
 	}

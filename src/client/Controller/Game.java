@@ -391,7 +391,7 @@ public class Game {
 								.getStructurePiece(structPositions[j]);
 
 						if (p != null) {
-							
+
 							int cardsToAdd = 0;
 
 							if (p.getBuildType() == BuildType.city) {
@@ -489,17 +489,20 @@ public class Game {
 		if (cards[0] >= 1 && cards[2] >= 1 && cards[4] >= 1) {
 			DevCard d = this.devCardDeck.poll();
 
-			String message = "Player " + (this.currentPlayer + 1)
-					+ ", You have just drawn a " + d.name()
-					+ " development card.";
-
-			JOptionPane.showMessageDialog(null, message);
+			displayDrawnDevCard(d);
 
 			this.players[this.currentPlayer].changeDevCardCount(d, 1);
 			int[] delta = { -1, 0, -1, 0, -1 };
 			this.players[this.currentPlayer].adjustCards(delta);
 		}
 
+	}
+
+	protected void displayDrawnDevCard(DevCard d) {
+		String message = "Player " + (this.currentPlayer + 1)
+				+ ", You have just drawn a " + d.name() + " development card.";
+
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 	public void useYearOfPlenty() {
@@ -516,6 +519,12 @@ public class Game {
 		players[this.currentPlayer].adjustCards(resources[1], 1);
 		players[this.currentPlayer]
 				.changeDevCardCount(DevCard.yearOfPlenty, -1);
+	}
+
+	protected void useVictoryPointCard() {
+		this.players[this.currentPlayer].incrementDevVps();
+		this.players[this.currentPlayer]
+				.changeDevCardCount(DevCard.victory, -1);
 	}
 
 	public void useMonopoly() {
@@ -665,14 +674,15 @@ public class Game {
 		points += structMgr
 				.calculateStructureVictoyPointsForPlayer(playerNumber);
 		userPanel.updateVPLabel(playerNumber, points);
-		
-		//add points for knights
-		if(players[playerNumber].getKnightsPlayed()>=3 && playerWithLargestArmy == playerNumber) {
+
+		// add points for knights
+		if (players[playerNumber].getKnightsPlayed() >= 3
+				&& playerWithLargestArmy == playerNumber) {
 			points += 2;
 		}
-		
+
 		points += players[playerNumber].getVictoryPointDevCards();
-		
+
 		return points;
 	}
 
@@ -937,8 +947,8 @@ public class Game {
 		this.userPanel.endRobber();
 
 		boolean[] playersToStealFrom = getPlayersToStealFrom(robberLoc);
-		System.out.println("players to steal from: "
-				+ Arrays.toString(playersToStealFrom));
+		// System.out.println("players to steal from: "
+		// + Arrays.toString(playersToStealFrom));
 
 		boolean noPlayersToStealFrom = true;
 		for (boolean player : playersToStealFrom) {
@@ -950,7 +960,7 @@ public class Game {
 
 		if (!noPlayersToStealFrom) {
 			int playerToStealFrom = selectPlayerToStealFrom(playersToStealFrom);
-			System.out.println("player to steal from: " + playerToStealFrom);
+			// System.out.println("player to steal from: " + playerToStealFrom);
 
 			drawRandomCardFromOpponent(playerToStealFrom);
 			updateUserPanelCards();
@@ -994,13 +1004,13 @@ public class Game {
 			players[this.currentPlayer].changeDevCardCount(DevCard.knight, -1);
 			startMoveRobber();
 		}
-		
+
 		players[this.currentPlayer].incrementKnightsPlayed();
-		
+
 		if (players[this.currentPlayer].getKnightsPlayed() > maxArmySize) {
 			maxArmySize = players[this.currentPlayer].getKnightsPlayed();
 			playerWithLargestArmy = this.currentPlayer;
 		}
 	}
-	
+
 }

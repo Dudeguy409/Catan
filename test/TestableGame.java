@@ -92,4 +92,9 @@ public class TestableGame extends Game {
 		this.getPlayer(this.getCurrentPlayer()).adjustCards(r, 1);
 	}
 
+	@Override
+	protected void displayDrawnDevCard(DevCard d) {
+		// does nothing.
+	}
+
 }

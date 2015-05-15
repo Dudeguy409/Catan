@@ -67,8 +67,8 @@ public class Main {
 		frame.setVisible(true);
 		frame.setResizable(false);
 		// TODO remove
-		int[] a = { 0, 2, 0, 0, 1 };
-		new DevCardSelectorFrame(game, a);
+		// int[] a = { 0, 2, 0, 0, 1 };
+		// new DevCardSelectorFrame(game, a);
 	}
 
 	private static Color[] configurePlayerColors(int numberOfPlayers) {
