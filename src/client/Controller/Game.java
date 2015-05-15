@@ -78,6 +78,8 @@ public class Game {
 	private Queue<Integer> startingTurnsQueue;
 	private int maxRoadLength = 0;
 	private int playerWithLongestRoad = -1;
+	private int maxArmySize = -1;
+	private int playerWithLargestArmy = -1;
 	private boolean preGameMode = true;
 	private boolean hasBuiltRoad = false;
 	private ArrayList<Hex> hexArray;
@@ -682,6 +684,12 @@ public class Game {
 		points += structMgr
 				.calculateStructureVictoyPointsForPlayer(playerNumber);
 		userPanel.updateVPLabel(playerNumber, points);
+		
+		if(players[playerNumber].getKnightsPlayed()>=3 && playerWithLargestArmy == playerNumber) {
+			points += 2;
+		}
+		
+		
 		return points;
 	}
 
@@ -1003,6 +1011,13 @@ public class Game {
 		if (players[this.currentPlayer].getDevCard(DevCard.knight) >= 1) {
 			players[this.currentPlayer].changeDevCardCount(DevCard.knight, -1);
 			startMoveRobber();
+		}
+		
+		players[this.currentPlayer].incrementKnightsPlayed();
+		
+		if (players[this.currentPlayer].getKnightsPlayed() > maxArmySize) {
+			maxArmySize = players[this.currentPlayer].getKnightsPlayed();
+			playerWithLargestArmy = this.currentPlayer;
 		}
 	}
 }

@@ -391,9 +391,9 @@ public class DevelopmentCardTest {
 		assertEquals(1, plyer.getCards()[1]);
 		assertEquals(0, plyer.getDevCard(DevCard.knight));
 	}
-
+	
 	@Test
-	public void TestLargestArmyVictoryPoints() throws Exception{
+	public void TestLargestArmyVictoryPoints() throws Exception {
 		setUpGameEthan();
 		
 		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
@@ -414,6 +414,7 @@ public class DevelopmentCardTest {
 		game.configureTestableGame(null, null, playerStealSelections, null,
 				robberMoveSelections, resourceSelections);
 		
+
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
 
@@ -421,57 +422,48 @@ public class DevelopmentCardTest {
 		devField.setAccessible(true);
 
 		Player player = new Player();
-		int[] delta = { 3, 0, 3, 0, 3, 0 };
+		int[] delta = { 1, 0, 1, 0, 1, 0 };
 		player.adjustCards(delta);
 
 		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
 				.get(game);
 		devCardDeck.addFirst(Game.DevCard.knight);
-		devCardDeck.addFirst(Game.DevCard.knight);
-		devCardDeck.addFirst(Game.DevCard.knight);
-		
-		assertEquals(2, game.getVictoryPointsForPlayer(0));
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
+		
+		assertEquals(2, game.getVictoryPointsForPlayer(0));
+		
 		game.drawDevCard();
-//		assertEquals(1, player.getDevCard(Game.DevCard.knight));
+		assertEquals(1, player.getDevCard(Game.DevCard.knight));
 		game.playKnight();
 		game.endTurn(); // Change to player index 1's turn.
-		assertEquals(1, game.getCurrentPlayer());
-
-
-		Player[] plyers = (Player[]) (field.get(game));
-		Player plyer = plyers[game.getCurrentPlayer()];
 
 		game.roll();
-		
-		//assertEquals(0, plyer.getDevCard(DevCard.knight));
 		game.endTurn();
+		assertEquals(0, game.getCurrentPlayer());
 		
-		game.roll();
+		devCardDeck.addFirst(Game.DevCard.knight);
+		player.adjustCards(delta);
+		
 		game.drawDevCard();
-		assertEquals(1, plyer.getCards()[1]);
+		assertEquals(1, player.getDevCard(Game.DevCard.knight));
 		game.playKnight();
-		
-		//assertEquals(0, plyer.getCards()[1]);
-		
 		game.endTurn(); // Change to player index 1's turn.
-		
-		//assertEquals(0, game.getCurrentPlayer());
-		
 		
 		game.roll();
 		game.endTurn();
-		game.roll();
+		assertEquals(0, game.getCurrentPlayer());
+		
+		devCardDeck.addFirst(Game.DevCard.knight);
+		player.adjustCards(delta);
+		
 		game.drawDevCard();
+		assertEquals(1, player.getDevCard(Game.DevCard.knight));
 		game.playKnight();
 		game.endTurn(); // Change to player index 1's turn.
-		
-		//assertEquals(0, plyer.getCards()[1]);
 		
 		assertEquals(4, game.getVictoryPointsForPlayer(0));
-		
 	}
 
 }

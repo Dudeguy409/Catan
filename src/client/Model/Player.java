@@ -22,6 +22,7 @@ public class Player {
 	private int yearOfPlenty = 0;
 	private int monopoly = 0;
 	private int knight = 0;
+	private int knightsPlayed = 0;
 	private int roadBuilder = 0;
 	private int victory = 0;
 	private HashSet<Game.Resource> ports = new HashSet<Game.Resource>();
@@ -210,6 +211,14 @@ public class Player {
 
 	public boolean hasPort(Game.Resource resource) {
 		return this.ports.contains(resource);
+	}
+	
+	public void incrementKnightsPlayed() {
+		this.knightsPlayed++;
+	}
+	
+	public int getKnightsPlayed() {
+		return this.knightsPlayed;
 	}
 
 }
