@@ -594,39 +594,29 @@ public class BoardRenderer extends JComponent implements MouseListener,
 
 	// determines the position for the road to be built on the clicked hex.
 	private HexComponent.RoadPosition determineRoadPosition(int[] nearHex) {
-		HexComponent.RoadPosition pos = null;
-		int[] rowArray = new int[5];
-		rowArray[0] = 3;
-		rowArray[1] = 4;
-		rowArray[2] = 5;
-		rowArray[3] = 4;
-		rowArray[4] = 3;
-		int row = -1;
-		if (nearHex[0] < 3)
-			row = 0;
-		else if (nearHex[0] < 7)
-			row = 1;
-		else if (nearHex[0] < 12)
-			row = 2;
-		else if (nearHex[0] < 16)
-			row = 3;
-		else
-			row = 4;
 
-		if (nearHex[1] == nearHex[0] + 1)
-			pos = HexComponent.RoadPosition.northwest;
-		if (nearHex[1] == nearHex[0] - 1)
-			pos = HexComponent.RoadPosition.southeast;
+		int[] rowArray = { 3, 4, 5, 4, 3 };
+		int row = determineRow(nearHex);
+
+		if (nearHex[3] > HexComponent.RADIUS * 2 - 5) {
+			// catches the case when the road being built does not start or end
+			// at a different hex.
+			return handleSingleHexRoadPosition(nearHex);
+		} else if (nearHex[4] > HexComponent.RADIUS * 2 - 5) {
+			// catches the outlying cases where the road is along the coast.
+			return handleCoastalRoadPosition(nearHex);
+		}
+
 		if (row > 2) {
 
 			if (nearHex[0] == nearHex[1] + rowArray[row])
-				pos = HexComponent.RoadPosition.southwest;
+				return HexComponent.RoadPosition.southwest;
 			if (nearHex[0] == nearHex[1] - rowArray[4])
-				pos = HexComponent.RoadPosition.northeast;
+				return HexComponent.RoadPosition.northeast;
 			if (nearHex[0] == nearHex[1] + rowArray[row - 1])
-				pos = HexComponent.RoadPosition.south;
+				return HexComponent.RoadPosition.south;
 			if (nearHex[0] == nearHex[1] - rowArray[row])
-				pos = HexComponent.RoadPosition.north;
+				return HexComponent.RoadPosition.north;
 			if (nearHex[3] > HexComponent.RADIUS * HexComponent.Y_SCALAR) {
 
 			}
@@ -634,142 +624,134 @@ public class BoardRenderer extends JComponent implements MouseListener,
 		} else if (row == 2) {
 
 			if (nearHex[0] == nearHex[1] + rowArray[row])
-				pos = HexComponent.RoadPosition.south;
+				return HexComponent.RoadPosition.south;
 			if (nearHex[0] == nearHex[1] - rowArray[row])
-				pos = HexComponent.RoadPosition.north;
+				return HexComponent.RoadPosition.north;
 			if (nearHex[0] == nearHex[1] + rowArray[row - 1])
-				pos = HexComponent.RoadPosition.southwest;
+				return HexComponent.RoadPosition.southwest;
 			if (nearHex[0] == nearHex[1] - rowArray[3])
-				pos = HexComponent.RoadPosition.northeast;
+				return HexComponent.RoadPosition.northeast;
 
 		} else if (row < 2) {
 
 			if (nearHex[0] == nearHex[1] - rowArray[row + 1])
-				pos = HexComponent.RoadPosition.north;
+				return HexComponent.RoadPosition.north;
 			if (nearHex[0] == nearHex[1] + rowArray[row])
-				pos = HexComponent.RoadPosition.south;
+				return HexComponent.RoadPosition.south;
 			if (nearHex[0] == nearHex[1] - rowArray[row])
-				pos = HexComponent.RoadPosition.northeast;
+				return HexComponent.RoadPosition.northeast;
 			if (nearHex[0] == nearHex[1] + rowArray[0])
-				pos = HexComponent.RoadPosition.southwest;
+				return HexComponent.RoadPosition.southwest;
 		}
 
-		// catches the outlying cases where the road is along the coast.
-		if (nearHex[4] > HexComponent.RADIUS * 2 - 5) {
-			switch (nearHex[0]) {
-			case 1:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.south;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.southwest;
-				break;
-			case 3:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.south;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.southeast;
-				break;
-			case 6:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.southwest;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.northwest;
-				break;
-			case 12:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.southeast;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.northeast;
-				break;
-			case 15:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.northwest;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.north;
-				break;
-			case 17:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.northeast;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.north;
-				break;
-			case 0:
-				if (nearHex[0] > nearHex[1] - 2) {
-					pos = HexComponent.RoadPosition.southwest;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.southeast;
-				break;
-			case 2:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.south;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.northwest;
-				break;
-			case 7:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.south;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.northeast;
-				break;
-			case 11:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.southwest;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.north;
-				break;
-			case 16:
-				if (nearHex[0] > nearHex[1]) {
-					pos = HexComponent.RoadPosition.southeast;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.north;
-				break;
-			case 18:
-				if (nearHex[0] > nearHex[1] + 2) {
-					pos = HexComponent.RoadPosition.northwest;
-					break;
-				} else
-					pos = HexComponent.RoadPosition.northeast;
-				break;
-			}
+		if (nearHex[1] == nearHex[0] + 1)
+			return HexComponent.RoadPosition.northwest;
+		if (nearHex[1] == nearHex[0] - 1)
+			return HexComponent.RoadPosition.southeast;
 
-			// catches the case when the road being built does not start or end
-			// at a different hex.
-			if (nearHex[3] > HexComponent.RADIUS * 2 - 5) {
-				switch (nearHex[0]) {
-				case 0:
-					pos = HexComponent.RoadPosition.south;
-					break;
-				case 2:
-					pos = HexComponent.RoadPosition.southwest;
-					break;
-				case 7:
-					pos = HexComponent.RoadPosition.southeast;
-					break;
-				case 11:
-					pos = HexComponent.RoadPosition.northwest;
-					break;
-				case 16:
-					pos = HexComponent.RoadPosition.northeast;
-					break;
-				case 18:
-					pos = HexComponent.RoadPosition.north;
-					break;
+		return null;
+	}
 
-				}
-			}
+	private int determineRow(int[] nearHex) {
+
+		if (nearHex[0] < 3)
+			return 0;
+		else if (nearHex[0] < 7)
+			return 1;
+		else if (nearHex[0] < 12)
+			return 2;
+		else if (nearHex[0] < 16)
+			return 3;
+		else
+			return 4;
+	}
+
+	private RoadPosition handleCoastalRoadPosition(int[] nearHex) {
+		switch (nearHex[0]) {
+		case 1:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.south;
+			} else
+				return HexComponent.RoadPosition.southwest;
+		case 3:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.south;
+			} else
+				return HexComponent.RoadPosition.southeast;
+		case 6:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.southwest;
+			} else
+				return HexComponent.RoadPosition.northwest;
+		case 12:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.southeast;
+			} else
+				return HexComponent.RoadPosition.northeast;
+		case 15:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.northwest;
+			} else
+				return HexComponent.RoadPosition.north;
+		case 17:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.northeast;
+			} else
+				return HexComponent.RoadPosition.north;
+		case 0:
+			if (nearHex[0] > nearHex[1] - 2) {
+				return HexComponent.RoadPosition.southwest;
+			} else
+				return HexComponent.RoadPosition.southeast;
+		case 2:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.south;
+			} else
+				return HexComponent.RoadPosition.northwest;
+		case 7:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.south;
+			} else
+				return HexComponent.RoadPosition.northeast;
+		case 11:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.southwest;
+			} else
+				return HexComponent.RoadPosition.north;
+		case 16:
+			if (nearHex[0] > nearHex[1]) {
+				return HexComponent.RoadPosition.southeast;
+			} else
+				return HexComponent.RoadPosition.north;
+		case 18:
+			if (nearHex[0] > nearHex[1] + 2) {
+				return HexComponent.RoadPosition.northwest;
+			} else
+				return HexComponent.RoadPosition.northeast;
+		default:
+			return null;
 		}
-		return pos;
+	}
+
+	private RoadPosition handleSingleHexRoadPosition(int[] nearHex) {
+		switch (nearHex[0]) {
+		case 0:
+			return HexComponent.RoadPosition.south;
+
+		case 2:
+			return HexComponent.RoadPosition.southwest;
+		case 7:
+			return HexComponent.RoadPosition.southeast;
+		case 11:
+			return HexComponent.RoadPosition.northwest;
+		case 16:
+			return HexComponent.RoadPosition.northeast;
+		case 18:
+			return HexComponent.RoadPosition.north;
+		default:
+			return null;
+
+		}
 	}
 
 }

@@ -384,19 +384,6 @@ public class Game {
 					Resource type = hex.getResource();
 
 					int[] structPositions = getStructurePositionsOnHex(hexId);
-					// int[] structPositions = {
-					// this.hexMgr.getStructureId(hexId,
-					// HexComponent.StructurePosition.east),
-					// this.hexMgr.getStructureId(hexId,
-					// HexComponent.StructurePosition.northeast),
-					// this.hexMgr.getStructureId(hexId,
-					// HexComponent.StructurePosition.northwest),
-					// this.hexMgr.getStructureId(hexId,
-					// HexComponent.StructurePosition.southeast),
-					// this.hexMgr.getStructureId(hexId,
-					// HexComponent.StructurePosition.southwest),
-					// this.hexMgr.getStructureId(hexId,
-					// HexComponent.StructurePosition.west) };
 
 					for (int j = 0; j < structPositions.length; j++) {
 
@@ -404,13 +391,7 @@ public class Game {
 								.getStructurePiece(structPositions[j]);
 
 						if (p != null) {
-							// System.out.println("Structure: player "
-							// + (1 + p.getPlayerIndex()) + ", buildType: "
-							// + p.getBuildType() + "resource: "
-							// + hex.getResource() + ", structure id: "
-							// + p.getStructureId() + ", hex id: "
-							// + hex.getHexID() + ", hex roll number: "
-							// + hex.getRollNumber());
+							
 							int cardsToAdd = 0;
 
 							if (p.getBuildType() == BuildType.city) {
@@ -820,7 +801,6 @@ public class Game {
 	}
 
 	public int selectPlayerToStealFrom(boolean[] possiblePlayers) {
-		// TODO
 
 		String message = "Please select a player to steal from.";
 		String title = "Steal";
