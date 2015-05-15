@@ -51,24 +51,26 @@ public class DevelopmentCardTest {
 			devCards.add(place.nextInt(19), Game.DevCard.roadBuilder);
 			devCards.add(place.nextInt(19), Game.DevCard.yearOfPlenty);
 		}
-		
+
 		Resource[] portResources = { Resource.brick, Resource.ore,
 				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
 
-		game = new TestableGame(colors, resources, new FakeDice(arrayA, arrayB), 0,
-				this.userPanel, this.board,
-				Main.configureRandomNumberArray(resources), devCards, portResources);
-		
+		game = new TestableGame(colors, resources,
+				new FakeDice(arrayA, arrayB), 0, this.userPanel, this.board,
+				Main.configureRandomNumberArray(resources), devCards,
+				portResources);
+
 		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
 		robberMoveSelections.add(14);
-		
+
 		LinkedList<Integer> playerStealSelections = new LinkedList<Integer>();
 		playerStealSelections.add(1);
-		
+
 		LinkedList<Integer> resourceSelections = new LinkedList<Integer>();
 		resourceSelections.add(2);
-		
-		game.configureTestableGame(null, null, playerStealSelections, null, robberMoveSelections, resourceSelections);
+
+		game.configureTestableGame(null, null, playerStealSelections, null,
+				robberMoveSelections, resourceSelections);
 
 		// gets the game out of the Pre-game set-up phase
 		game.setBuildType(Game.BuildType.road);
@@ -384,10 +386,92 @@ public class DevelopmentCardTest {
 
 		Player[] plyers = (Player[]) (field.get(game));
 		Player plyer = plyers[game.getCurrentPlayer()];
-		
+
 		game.roll();
 		assertEquals(1, plyer.getCards()[1]);
 		assertEquals(0, plyer.getDevCard(DevCard.knight));
+	}
+
+	@Test
+	public void TestLargestArmyVictoryPoints() throws Exception{
+		setUpGameEthan();
+		
+		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
+		robberMoveSelections.add(14);
+		robberMoveSelections.add(15);
+		robberMoveSelections.add(16);
+
+		LinkedList<Integer> playerStealSelections = new LinkedList<Integer>();
+		playerStealSelections.add(1);
+		playerStealSelections.add(1);
+		playerStealSelections.add(1);
+
+		LinkedList<Integer> resourceSelections = new LinkedList<Integer>();
+		resourceSelections.add(2);
+		resourceSelections.add(2);
+		resourceSelections.add(2);
+
+		game.configureTestableGame(null, null, playerStealSelections, null,
+				robberMoveSelections, resourceSelections);
+		
+		Field field = Game.class.getDeclaredField("players");
+		field.setAccessible(true);
+
+		Field devField = Game.class.getDeclaredField("devCardDeck");
+		devField.setAccessible(true);
+
+		Player player = new Player();
+		int[] delta = { 3, 0, 3, 0, 3, 0 };
+		player.adjustCards(delta);
+
+		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
+				.get(game);
+		devCardDeck.addFirst(Game.DevCard.knight);
+		devCardDeck.addFirst(Game.DevCard.knight);
+		devCardDeck.addFirst(Game.DevCard.knight);
+		
+		assertEquals(2, game.getVictoryPointsForPlayer(0));
+
+		Player[] players = { player, new Player() };
+		field.set(game, players);
+		game.drawDevCard();
+//		assertEquals(1, player.getDevCard(Game.DevCard.knight));
+		game.playKnight();
+		game.endTurn(); // Change to player index 1's turn.
+		assertEquals(1, game.getCurrentPlayer());
+
+
+		Player[] plyers = (Player[]) (field.get(game));
+		Player plyer = plyers[game.getCurrentPlayer()];
+
+		game.roll();
+		
+		//assertEquals(0, plyer.getDevCard(DevCard.knight));
+		game.endTurn();
+		
+		game.roll();
+		game.drawDevCard();
+		assertEquals(1, plyer.getCards()[1]);
+		game.playKnight();
+		
+		//assertEquals(0, plyer.getCards()[1]);
+		
+		game.endTurn(); // Change to player index 1's turn.
+		
+		//assertEquals(0, game.getCurrentPlayer());
+		
+		
+		game.roll();
+		game.endTurn();
+		game.roll();
+		game.drawDevCard();
+		game.playKnight();
+		game.endTurn(); // Change to player index 1's turn.
+		
+		//assertEquals(0, plyer.getCards()[1]);
+		
+		assertEquals(4, game.getVictoryPointsForPlayer(0));
+		
 	}
 
 }
