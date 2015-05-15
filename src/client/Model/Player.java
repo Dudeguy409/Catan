@@ -17,7 +17,7 @@ public class Player {
 	private int brickCount = 0;
 	private int oreCount = 0;
 	private int playedSoldierCount = 0;
-	private int devVictoryPoints = 0;
+	//private int devVictoryPoints = 0;
 	private int totalResourceCards = 0;
 	private int yearOfPlenty = 0;
 	private int monopoly = 0;
@@ -150,19 +150,19 @@ public class Player {
 				+ this.woolCount + this.brickCount + this.oreCount;
 	}
 
-	/**
-	 * tells panel how many victory points the player has. The player wins at
-	 * 10.
-	 * 
-	 * @return number of victory points
-	 */
-	public int getVPs() {
-		return this.devVictoryPoints;
-	}
-
-	private void addVP() {
-		this.devVictoryPoints++;
-	}
+//	/**
+//	 * tells panel how many victory points the player has. The player wins at
+//	 * 10.
+//	 * 
+//	 * @return number of victory points
+//	 */
+//	public int getVPs() {
+//		return this.devVictoryPoints;
+//	}
+//
+//	private void addVP() {
+//		this.devVictoryPoints++;
+//	}
 
 	public void changeDevCardCount(Game.DevCard devCard, int delta) {
 		switch (devCard) {
@@ -180,7 +180,7 @@ public class Player {
 			break;
 		case victory:
 			this.victory += delta;
-			addVP();
+			//addVP();
 			break;
 		default:
 			break;
@@ -219,6 +219,10 @@ public class Player {
 	
 	public int getKnightsPlayed() {
 		return this.knightsPlayed;
+	}
+	
+	public int getVictoryPointDevCards() {
+		return victory;
 	}
 
 }

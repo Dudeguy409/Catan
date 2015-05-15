@@ -685,10 +685,12 @@ public class Game {
 				.calculateStructureVictoyPointsForPlayer(playerNumber);
 		userPanel.updateVPLabel(playerNumber, points);
 		
+		//add points for knights
 		if(players[playerNumber].getKnightsPlayed()>=3 && playerWithLargestArmy == playerNumber) {
 			points += 2;
 		}
 		
+		points += players[playerNumber].getVictoryPointDevCards();
 		
 		return points;
 	}
@@ -1020,4 +1022,5 @@ public class Game {
 			playerWithLargestArmy = this.currentPlayer;
 		}
 	}
+	
 }
