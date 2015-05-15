@@ -161,6 +161,8 @@ public class DevelopmentCardTest {
 		Player player = new Player();
 		int[] delta = { 1, 0, 1, 0, 1, 0 };
 		player.adjustCards(delta);
+		
+		assertEquals(2, game.getVictoryPointsForPlayer(0));
 
 		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
 				.get(game);
@@ -169,7 +171,7 @@ public class DevelopmentCardTest {
 		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.drawDevCard();
-		assertEquals(1, player.getVPs());
+		assertEquals(3, game.getVictoryPointsForPlayer(0));
 		assertEquals(0, player.getCards()[0]);
 		assertEquals(0, player.getCards()[2]);
 		assertEquals(0, player.getCards()[4]);
