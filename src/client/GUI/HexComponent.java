@@ -375,5 +375,83 @@ public class HexComponent {
 	public Shape getRollNumberShape() {
 		return rollNumberShape;
 	}
+	
+	public static StructurePosition[] getAdjacentStructurePositionsForRoad(
+			RoadPosition pos) {
+		switch (pos) {
+		case north:
+			HexComponent.StructurePosition[] arrayToReturn = {
+					HexComponent.StructurePosition.northwest,
+					HexComponent.StructurePosition.northeast };
+			return arrayToReturn;
+		case northwest:
+			HexComponent.StructurePosition[] arrayToReturn2 = {
+					HexComponent.StructurePosition.northwest,
+					HexComponent.StructurePosition.west };
+			return arrayToReturn2;
+		case northeast:
+			HexComponent.StructurePosition[] arrayToReturn3 = {
+					HexComponent.StructurePosition.east,
+					HexComponent.StructurePosition.northeast };
+			return arrayToReturn3;
+		case south:
+			HexComponent.StructurePosition[] arrayToReturn4 = {
+					HexComponent.StructurePosition.southwest,
+					HexComponent.StructurePosition.southeast };
+			return arrayToReturn4;
+		case southeast:
+			HexComponent.StructurePosition[] arrayToReturn5 = {
+					HexComponent.StructurePosition.east,
+					HexComponent.StructurePosition.southeast };
+			return arrayToReturn5;
+		case southwest:
+			HexComponent.StructurePosition[] arrayToReturn6 = {
+					HexComponent.StructurePosition.west,
+					HexComponent.StructurePosition.southwest };
+			return arrayToReturn6;
+		default:
+			return null;
+		}
+
+	}
+	
+	public static HexComponent.RoadPosition[] getAdjacentRoadPositionsForStructure(
+			StructurePosition pos) {
+		switch (pos) {
+		case west:
+			HexComponent.RoadPosition[] arrayToReturn = {
+					HexComponent.RoadPosition.northwest,
+					HexComponent.RoadPosition.southwest };
+			return arrayToReturn;
+		case northwest:
+			HexComponent.RoadPosition[] arrayToReturn2 = {
+					HexComponent.RoadPosition.northwest,
+					HexComponent.RoadPosition.north };
+			return arrayToReturn2;
+		case northeast:
+			HexComponent.RoadPosition[] arrayToReturn3 = {
+					HexComponent.RoadPosition.north,
+					HexComponent.RoadPosition.northeast };
+			return arrayToReturn3;
+		case east:
+			HexComponent.RoadPosition[] arrayToReturn4 = {
+					HexComponent.RoadPosition.northeast,
+					HexComponent.RoadPosition.southeast };
+			return arrayToReturn4;
+		case southeast:
+			HexComponent.RoadPosition[] arrayToReturn5 = {
+					HexComponent.RoadPosition.south,
+					HexComponent.RoadPosition.southeast };
+			return arrayToReturn5;
+		case southwest:
+			HexComponent.RoadPosition[] arrayToReturn6 = {
+					HexComponent.RoadPosition.south,
+					HexComponent.RoadPosition.southwest };
+			return arrayToReturn6;
+		default:
+			return null;
+		}
+
+	}
 
 }

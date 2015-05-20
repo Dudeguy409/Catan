@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.util.LinkedList;
+import java.util.Set;
+
 import client.Controller.Game;
 import client.Controller.IDice;
 import client.GUI.IBoardRenderer;
@@ -56,7 +58,7 @@ public class TestableGame extends Game {
 	}
 
 	@Override
-	public int selectPlayerToStealFrom(boolean[] possiblePlayers) {
+	public int selectPlayerToStealFrom(Set<Integer> possiblePlayers) {
 		return this.playerStealSelections.poll();
 	}
 
@@ -88,8 +90,8 @@ public class TestableGame extends Game {
 	protected void drawRandomCardFromOpponent(int playerToStealFrom) {
 		System.out.println(this.resourceToStealSelections);
 		int r = this.resourceToStealSelections.poll();
-		this.getPlayer(playerToStealFrom).adjustCards(r, -1);
-		this.getPlayer(this.getCurrentPlayer()).adjustCards(r, 1);
+		this.players[playerToStealFrom].adjustCards(r, -1);
+		this.players[this.currentPlayer].adjustCards(r, 1);
 	}
 
 	@Override

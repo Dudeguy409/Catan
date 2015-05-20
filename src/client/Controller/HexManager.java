@@ -40,6 +40,23 @@ public class HexManager {
 
 		return rslts;
 	}
+	
+	protected int[] getStructureIDsOnHex(int hexId) {
+		int[] structIds = {
+				getStructureId(hexId,
+						HexComponent.StructurePosition.east),
+				getStructureId(hexId,
+						HexComponent.StructurePosition.northeast),
+				getStructureId(hexId,
+						HexComponent.StructurePosition.northwest),
+				getStructureId(hexId,
+						HexComponent.StructurePosition.southeast),
+				getStructureId(hexId,
+						HexComponent.StructurePosition.southwest),
+				getStructureId(hexId,
+						HexComponent.StructurePosition.west) };
+		return structIds;
+	}
 
 	private void initializeRoadMap() {
 		this.roadMap = new HashMap<LocationKey, Integer>();

@@ -8,11 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import org.junit.Test;
 
 import client.Controller.Game;
-import client.Controller.HexManager;
 import client.Controller.Main;
 import client.Controller.StructureManager;
 import client.Controller.Game.BuildType;
@@ -156,15 +156,15 @@ public class GameTest {
 		// int[] randomNumberArray = { 5, 2, 6, 3, 8, 0, 9, 12, 11, 4, 8, 10, 9,
 		// 4,
 		// 5, 6, 3, 11 };
-		
+
 		Resource[] portResources = { Resource.brick, Resource.ore,
 				Resource.sheep, Resource.wheat, Resource.desert, Resource.wood };
-		
+
 		game = new TestableGame(colors, resources,
 				new FakeDice(arrayA, arrayB), 0, userPanel, board,
 				Main.configureRandomNumberArray(resources), this.devCards,
 				portResources);
-		
+
 		game.setBuildType(Game.BuildType.road);
 		game.processBuildRoadClick(16, HexComponent.RoadPosition.north);
 		game.setBuildType(Game.BuildType.settlement);
@@ -210,42 +210,42 @@ public class GameTest {
 		setUpGameDavis();
 
 		List<HexComponent.RoadPosition> poses = Arrays
-				.asList(game
+				.asList(HexComponent
 						.getAdjacentRoadPositionsForStructure(HexComponent.StructurePosition.west));
 		assertTrue(poses.contains(HexComponent.RoadPosition.northwest));
 		assertTrue(poses.contains(HexComponent.RoadPosition.southwest));
 		assertTrue(poses.size() == 2);
 
 		poses = Arrays
-				.asList(game
+				.asList(HexComponent
 						.getAdjacentRoadPositionsForStructure(HexComponent.StructurePosition.northwest));
 		assertTrue(poses.contains(HexComponent.RoadPosition.northwest));
 		assertTrue(poses.contains(HexComponent.RoadPosition.north));
 		assertTrue(poses.size() == 2);
 
 		poses = Arrays
-				.asList(game
+				.asList(HexComponent
 						.getAdjacentRoadPositionsForStructure(HexComponent.StructurePosition.northeast));
 		assertTrue(poses.contains(HexComponent.RoadPosition.north));
 		assertTrue(poses.contains(HexComponent.RoadPosition.northeast));
 		assertTrue(poses.size() == 2);
 
 		poses = Arrays
-				.asList(game
+				.asList(HexComponent
 						.getAdjacentRoadPositionsForStructure(HexComponent.StructurePosition.east));
 		assertTrue(poses.contains(HexComponent.RoadPosition.northeast));
 		assertTrue(poses.contains(HexComponent.RoadPosition.southeast));
 		assertTrue(poses.size() == 2);
 
 		poses = Arrays
-				.asList(game
+				.asList(HexComponent
 						.getAdjacentRoadPositionsForStructure(HexComponent.StructurePosition.southeast));
 		assertTrue(poses.contains(HexComponent.RoadPosition.southeast));
 		assertTrue(poses.contains(HexComponent.RoadPosition.south));
 		assertTrue(poses.size() == 2);
 
 		poses = Arrays
-				.asList(game
+				.asList(HexComponent
 						.getAdjacentRoadPositionsForStructure(HexComponent.StructurePosition.southwest));
 		assertTrue(poses.contains(HexComponent.RoadPosition.southwest));
 		assertTrue(poses.contains(HexComponent.RoadPosition.south));
@@ -724,14 +724,15 @@ public class GameTest {
 		// player index 1 should have only 1 wood because of the robber on hex
 		// 14.
 		setUpGameDavis();
-		
+
 		LinkedList<Integer> playerStealList = new LinkedList<Integer>();
 		playerStealList.add(1);
-		
+
 		LinkedList<Integer> resourceStealList = new LinkedList<Integer>();
 		resourceStealList.add(3);
-		
-		game.configureTestableGame(null, null, playerStealList, null, null, resourceStealList);
+
+		game.configureTestableGame(null, null, playerStealList, null, null,
+				resourceStealList);
 
 		game.endTurn(); // Change to player index 1's turn.
 		game.setRobberLocation(14);
@@ -755,15 +756,15 @@ public class GameTest {
 	public void testThatBuildTypeIsSetToNoneAfterRobberIsMoved()
 			throws Exception {
 		setUpGameDavis();
-		
+
 		LinkedList<Integer> playerStealList = new LinkedList<Integer>();
 		playerStealList.add(1);
-		
-		
+
 		LinkedList<Integer> resourceStealList = new LinkedList<Integer>();
 		resourceStealList.add(3);
-		
-		game.configureTestableGame(null, null, playerStealList, null, null, resourceStealList);
+
+		game.configureTestableGame(null, null, playerStealList, null, null,
+				resourceStealList);
 
 		game.setRobberLocation(14);
 
@@ -776,14 +777,15 @@ public class GameTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testThatMoveRobberToSameHexThrowsException() throws Exception {
 		setUpGameDavis();
-		
+
 		LinkedList<Integer> playerStealList = new LinkedList<Integer>();
 		playerStealList.add(1);
-		
+
 		LinkedList<Integer> resourceStealList = new LinkedList<Integer>();
 		resourceStealList.add(3);
-		
-		game.configureTestableGame(null, null, playerStealList, null, null, resourceStealList);
+
+		game.configureTestableGame(null, null, playerStealList, null, null,
+				resourceStealList);
 
 		game.setRobberLocation(14);
 
@@ -794,13 +796,14 @@ public class GameTest {
 	public void testGetPlayersToStealFrom() throws Exception {
 		setUpGameDavis();
 
-		boolean[] players = game.getPlayersToStealFrom(14);
-		assertFalse(players[0]);
-		assertTrue(players[1]);
+		Set<Integer> players = game.getPlayersToStealFrom(14);
+		assertFalse(players.contains(0));
+		assertTrue(players.contains(1));
 
+		// Cannot steal from yourself
 		players = game.getPlayersToStealFrom(16);
-		assertTrue(players[0]);
-		assertFalse(players[1]);
+		assertFalse(players.contains(0));
+		assertFalse(players.contains(1));
 	}
 
 	@Test
