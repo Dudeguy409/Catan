@@ -41,6 +41,7 @@ public class DevCardSelectorFrame extends JFrame {
 	public DevCardSelectorFrame(Game game, int[] devCardCounts) {
 		super();
 		this.game = game;
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.devCardCounts = devCardCounts;
 
 		this.setSize(DIMENSION);
@@ -96,9 +97,9 @@ public class DevCardSelectorFrame extends JFrame {
 		default:
 			break;
 		}
-		
+
 		setVisible(false); // you can't see me!
 		dispose(); // Destroy the JFrame object
-		
+
 	}
 }

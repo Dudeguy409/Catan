@@ -2,10 +2,11 @@ package client.Controller;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.swing.JOptionPane;
@@ -14,7 +15,6 @@ import client.GUI.BankTradeFrame;
 import client.GUI.DiscardFrame;
 import client.GUI.HexComponent;
 import client.GUI.HexComponent.RoadPosition;
-import client.GUI.HexComponent.StructurePosition;
 import client.GUI.IBoardRenderer;
 import client.GUI.IUserPanel;
 import client.GUI.PlayerTradeFrame;
@@ -67,8 +67,8 @@ public class Game {
 	private IUserPanel userPanel;
 	private TurnPhase currentTurnPhase = TurnPhase.build;
 	private BuildType currentBuildType = BuildType.none;
-	private int currentPlayer;
-	private Player[] players;
+	protected int currentPlayer;
+	protected Player[] players;
 	private Color[] colorArray;
 	private int numberOfPlayers;
 	private RoadManager roadMgr;
@@ -231,7 +231,8 @@ public class Game {
 	}
 
 	private boolean isValidBeginnerRoad(int hexId, RoadPosition pos) {
-		HexComponent.StructurePosition[] structPos = getAdjacentStructurePositionsForRoad(pos);
+		HexComponent.StructurePosition[] structPos = HexComponent
+				.getAdjacentStructurePositionsForRoad(pos);
 		int a = this.hexMgr.getStructureId(hexId, structPos[0]);
 		int b = this.hexMgr.getStructureId(hexId, structPos[1]);
 		if ((this.structMgr.isValidBeginningSettlementPosition(a))
@@ -251,7 +252,7 @@ public class Game {
 
 		boolean isAdjacent = false;
 
-		HexComponent.RoadPosition[] adjRoads = this
+		HexComponent.RoadPosition[] adjRoads = HexComponent
 				.getAdjacentRoadPositionsForStructure(pos);
 
 		ArrayList<Integer> possibleRoads = new ArrayList<Integer>();
@@ -363,8 +364,6 @@ public class Game {
 
 		if (roll == 7) {
 
-			// TODO handle if they x out discard window.
-
 			for (int i = 0; i < this.players.length; i++) {
 				if (this.players[i].getCards()[6] > 7) {
 					displayDiscardFrame(i);
@@ -383,12 +382,12 @@ public class Game {
 				if (robberLocation != hexId) {
 					Resource type = hex.getResource();
 
-					int[] structPositions = getStructurePositionsOnHex(hexId);
+					int[] structIDs = this.hexMgr.getStructureIDsOnHex(hexId);
 
-					for (int j = 0; j < structPositions.length; j++) {
+					for (int j = 0; j < structIDs.length; j++) {
 
 						StructurePiece p = this.structMgr
-								.getStructurePiece(structPositions[j]);
+								.getStructurePiece(structIDs[j]);
 
 						if (p != null) {
 
@@ -412,33 +411,11 @@ public class Game {
 		}
 	}
 
-	private int[] getStructurePositionsOnHex(int hexId) {
-		int[] structPositions = {
-				this.hexMgr.getStructureId(hexId,
-						HexComponent.StructurePosition.east),
-				this.hexMgr.getStructureId(hexId,
-						HexComponent.StructurePosition.northeast),
-				this.hexMgr.getStructureId(hexId,
-						HexComponent.StructurePosition.northwest),
-				this.hexMgr.getStructureId(hexId,
-						HexComponent.StructurePosition.southeast),
-				this.hexMgr.getStructureId(hexId,
-						HexComponent.StructurePosition.southwest),
-				this.hexMgr.getStructureId(hexId,
-						HexComponent.StructurePosition.west) };
-		return structPositions;
-	}
-
 	private void startMoveRobber() {
 		displayMoveRobberMessage();
 
 		this.userPanel.beginRobber();
 		this.currentBuildType = BuildType.robber;
-	}
-
-	protected Player getPlayer(int playerToStealFrom) {
-		return this.players[playerToStealFrom];
-
 	}
 
 	protected void displayMoveRobberMessage() {
@@ -467,11 +444,8 @@ public class Game {
 		int randomResourceNum = candidateCards.get((int) (Math.random()
 				* (candidateCards.size() - 1) + 1));
 
-		// System.out.println("candidates: " + candidateCards.toString());
-		// System.out.println("stole: " + randomResourceNum);
-
-		getPlayer(playerToStealFrom).adjustCards(randomResourceNum, -1);
-		getPlayer(currentPlayer).adjustCards(randomResourceNum, 1);
+		this.players[playerToStealFrom].adjustCards(randomResourceNum, -1);
+		this.players[currentPlayer].adjustCards(randomResourceNum, 1);
 	}
 
 	private ArrayList<Hex> findRolledHexes(int rollNumber) {
@@ -579,84 +553,6 @@ public class Game {
 
 	public int getNumberOfPlayers() {
 		return this.numberOfPlayers;
-	}
-
-	public HexComponent.RoadPosition[] getAdjacentRoadPositionsForStructure(
-			StructurePosition pos) {
-		switch (pos) {
-		case west:
-			HexComponent.RoadPosition[] arrayToReturn = {
-					HexComponent.RoadPosition.northwest,
-					HexComponent.RoadPosition.southwest };
-			return arrayToReturn;
-		case northwest:
-			HexComponent.RoadPosition[] arrayToReturn2 = {
-					HexComponent.RoadPosition.northwest,
-					HexComponent.RoadPosition.north };
-			return arrayToReturn2;
-		case northeast:
-			HexComponent.RoadPosition[] arrayToReturn3 = {
-					HexComponent.RoadPosition.north,
-					HexComponent.RoadPosition.northeast };
-			return arrayToReturn3;
-		case east:
-			HexComponent.RoadPosition[] arrayToReturn4 = {
-					HexComponent.RoadPosition.northeast,
-					HexComponent.RoadPosition.southeast };
-			return arrayToReturn4;
-		case southeast:
-			HexComponent.RoadPosition[] arrayToReturn5 = {
-					HexComponent.RoadPosition.south,
-					HexComponent.RoadPosition.southeast };
-			return arrayToReturn5;
-		case southwest:
-			HexComponent.RoadPosition[] arrayToReturn6 = {
-					HexComponent.RoadPosition.south,
-					HexComponent.RoadPosition.southwest };
-			return arrayToReturn6;
-		default:
-			return null;
-		}
-
-	}
-
-	private StructurePosition[] getAdjacentStructurePositionsForRoad(
-			RoadPosition pos) {
-		switch (pos) {
-		case north:
-			HexComponent.StructurePosition[] arrayToReturn = {
-					HexComponent.StructurePosition.northwest,
-					HexComponent.StructurePosition.northeast };
-			return arrayToReturn;
-		case northwest:
-			HexComponent.StructurePosition[] arrayToReturn2 = {
-					HexComponent.StructurePosition.northwest,
-					HexComponent.StructurePosition.west };
-			return arrayToReturn2;
-		case northeast:
-			HexComponent.StructurePosition[] arrayToReturn3 = {
-					HexComponent.StructurePosition.east,
-					HexComponent.StructurePosition.northeast };
-			return arrayToReturn3;
-		case south:
-			HexComponent.StructurePosition[] arrayToReturn4 = {
-					HexComponent.StructurePosition.southwest,
-					HexComponent.StructurePosition.southeast };
-			return arrayToReturn4;
-		case southeast:
-			HexComponent.StructurePosition[] arrayToReturn5 = {
-					HexComponent.StructurePosition.east,
-					HexComponent.StructurePosition.southeast };
-			return arrayToReturn5;
-		case southwest:
-			HexComponent.StructurePosition[] arrayToReturn6 = {
-					HexComponent.StructurePosition.west,
-					HexComponent.StructurePosition.southwest };
-			return arrayToReturn6;
-		default:
-			return null;
-		}
-
 	}
 
 	public Object getPlayerWithLongestRoad() {
@@ -782,9 +678,14 @@ public class Game {
 
 		Resource[] options = { Resource.wheat, Resource.wood, Resource.sheep,
 				Resource.ore, Resource.brick };
-		int selected = JOptionPane.showOptionDialog(null, message, title,
-				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				options, -1);
+
+		int selected = -1;
+
+		while (selected < 0) {
+			selected = JOptionPane.showOptionDialog(null, message, title,
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null, options, -1);
+		}
 
 		return options[selected];
 	}
@@ -802,33 +703,40 @@ public class Game {
 
 		Resource[] options = { Resource.wheat, Resource.wood, Resource.sheep,
 				Resource.ore, Resource.brick };
-		int selected = JOptionPane.showOptionDialog(null, message, title,
-				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				options, -1);
+		int selected = -1;
+
+		while (selected < 0) {
+			selected = JOptionPane.showOptionDialog(null, message, title,
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null, options, -1);
+		}
 
 		return options[selected];
 
 	}
 
-	public int selectPlayerToStealFrom(boolean[] possiblePlayers) {
+	public int selectPlayerToStealFrom(Set<Integer> possiblePlayers) {
 
 		String message = "Please select a player to steal from.";
 		String title = "Steal";
 
-		String[] options = new String[this.numberOfPlayers - 1];
+		String[] options = new String[possiblePlayers.size()];
 
-		for (int i = 0, j = 0; i < this.numberOfPlayers; i++) {
-			if (i == this.currentPlayer) {
-
-			} else if (possiblePlayers[i]) {
-				options[j] = Integer.toString(i + 1);
-				j++;
-			}
+		int index = 0;
+		for (Integer i : possiblePlayers) {
+			options[index] = Integer.toString(i + 1);
+			index++;
 		}
 
-		return JOptionPane.showOptionDialog(null, message, title,
-				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				options, -1);
+		int selected = -1;
+
+		while (selected < 0) {
+			selected = JOptionPane.showOptionDialog(null, message, title,
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null, options, -1);
+		}
+
+		return selected;
 	}
 
 	public int selectPlayerToTradeWith() {
@@ -857,6 +765,7 @@ public class Game {
 			}
 			return Integer.parseInt(options[selection]) - 1;
 		} catch (Exception e) {
+			// return a special id representing the bank
 			return -18;
 		}
 
@@ -866,6 +775,7 @@ public class Game {
 		int rslt = selectPlayerToTradeWith();
 
 		if (rslt != -1) {
+			// a special id representing the bank
 			if (rslt == -18) {
 				createBankTradeFrame();
 			} else {
@@ -946,39 +856,35 @@ public class Game {
 		this.currentBuildType = BuildType.none;
 		this.userPanel.endRobber();
 
-		boolean[] playersToStealFrom = getPlayersToStealFrom(robberLoc);
-		// System.out.println("players to steal from: "
-		// + Arrays.toString(playersToStealFrom));
+		Set<Integer> playersToStealFrom = getPlayersToStealFrom(robberLoc);
 
-		boolean noPlayersToStealFrom = true;
-		for (boolean player : playersToStealFrom) {
-			if (player) {
-				noPlayersToStealFrom = false;
-				break;
-			}
-		}
-
-		if (!noPlayersToStealFrom) {
-			int playerToStealFrom = selectPlayerToStealFrom(playersToStealFrom);
-			// System.out.println("player to steal from: " + playerToStealFrom);
-
-			drawRandomCardFromOpponent(playerToStealFrom);
-			updateUserPanelCards();
+		if (playersToStealFrom.size() == 0) {
+			// Do nothing.
+		} else if (playersToStealFrom.size() == 1) {
 			// TODO only let people move the robber to a hex where all players
 			// touching it have more than 3 points
+			int playerToStealFrom = playersToStealFrom.iterator().next();
+			drawRandomCardFromOpponent(playerToStealFrom);
+			updateUserPanelCards();
+		} else {
+			int playerToStealFrom = selectPlayerToStealFrom(playersToStealFrom);
+			drawRandomCardFromOpponent(playerToStealFrom);
+			updateUserPanelCards();
 		}
 	}
 
-	public boolean[] getPlayersToStealFrom(int robberLocation) {
-		boolean[] playersToStealFrom = new boolean[numberOfPlayers];
-		int[] structPositions = getStructurePositionsOnHex(robberLocation);
+	public Set<Integer> getPlayersToStealFrom(int robberLocation) {
+		Set<Integer> playersToStealFrom = new HashSet<Integer>();
+		int[] structIDs = this.hexMgr.getStructureIDsOnHex(robberLocation);
 
-		for (int j = 0; j < structPositions.length; j++) {
-			StructurePiece p = this.structMgr
-					.getStructurePiece(structPositions[j]);
+		for (int j = 0; j < structIDs.length; j++) {
+			StructurePiece p = this.structMgr.getStructurePiece(structIDs[j]);
 
 			if (p != null) {
-				playersToStealFrom[p.getPlayerIndex()] = true;
+				int playerIndex = p.getPlayerIndex();
+				if (playerIndex != this.currentPlayer) {
+					playersToStealFrom.add(playerIndex);
+				}
 			}
 		}
 

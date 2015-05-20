@@ -6,8 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
@@ -34,6 +34,7 @@ public class DiscardFrame extends CardSelectorFrame {
 
 	public DiscardFrame(Game game, int playerIndex, int[] cardCounts) {
 		super();
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.game = game;
 		this.setResizable(false);
 		this.playerIndex = playerIndex;
@@ -84,6 +85,7 @@ public class DiscardFrame extends CardSelectorFrame {
 		this.add(cardPanel, BorderLayout.CENTER);
 		this.add(labelPanel, BorderLayout.SOUTH);
 		this.setVisible(true);
+
 	}
 
 	private void submitChoices() {
@@ -113,11 +115,11 @@ public class DiscardFrame extends CardSelectorFrame {
 			if (this.remainingCardCount < 0) {
 				System.out.println("ERROR!!!");
 			} else if (this.remainingCardCount == 0) {
-
+				// Do nothing
 			} else if ((this.cardCounts[i] + delta[i]) < 0) {
 				System.out.println("ERROR!!!");
 			} else if ((this.cardCounts[i] + delta[i]) == 0) {
-
+				// Do nothing
 			} else {
 				delta[i] -= 1;
 				this.remainingCardCount -= 1;
@@ -140,4 +142,5 @@ public class DiscardFrame extends CardSelectorFrame {
 		return succeeded;
 
 	}
+
 }

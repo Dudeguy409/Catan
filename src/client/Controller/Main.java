@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import client.Controller.Game.Resource;
 import client.GUI.BoardRenderer;
-import client.GUI.DevCardSelectorFrame;
 import client.GUI.UserPanel;
 
 /**
@@ -32,9 +31,6 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		int playerCount = configureNumberOfPlayers();
-		if (playerCount < 2) {
-			System.exit(0);
-		}
 
 		Color[] colors = configurePlayerColors(playerCount);
 
@@ -116,7 +112,6 @@ public class Main {
 									"Exit Program?",
 									JOptionPane.OK_CANCEL_OPTION,
 									JOptionPane.WARNING_MESSAGE, null);
-					System.out.println(rslt);
 					if (rslt != 2) {
 						System.exit(0);
 					} else {
@@ -145,10 +140,25 @@ public class Main {
 
 	private static int configureNumberOfPlayers() {
 		Object[] options1 = { "2", "3", "4" };
-		return JOptionPane.showOptionDialog(null,
-				"How many players are there?", "Setup",
-				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				options1, -1) + 2;
+		int selection = -1;
+		while (selection < 2) {
+			selection = JOptionPane.showOptionDialog(null,
+					"How many players are there?", "Setup",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null, options1, -1) + 2;
+			if (selection < 2) {
+				int rslt = JOptionPane
+						.showConfirmDialog(
+								null,
+								"You have selected to close the player selection menu.  This will quit the game.  Do you want to quit?",
+								"Exit Program?", JOptionPane.OK_CANCEL_OPTION,
+								JOptionPane.WARNING_MESSAGE, null);
+				if (rslt != 2) {
+					System.exit(0);
+				}
+			}
+		}
+		return selection;
 	}
 
 	public static int[] configureRandomNumberArray(Resource[] hexResources) {
