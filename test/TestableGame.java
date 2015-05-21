@@ -15,6 +15,7 @@ public class TestableGame extends Game {
 	private LinkedList<Integer> playerTradeSelections;
 	private LinkedList<Integer> resourceToStealSelections;
 	private LinkedList<Integer> robberMoveSelections;
+	public int sameHexRobberErrorCount = 0;
 
 	public TestableGame(Color[] pColors, Resource[] hexResources, IDice dice,
 			int startingPlayer, IUserPanel userPanel, IBoardRenderer board,
@@ -106,7 +107,7 @@ public class TestableGame extends Game {
 
 	@Override
 	protected void displayRobberErrorMessage() {
-		// does nothing.
+		this.sameHexRobberErrorCount++;
 	}
 
 	@Override

@@ -774,8 +774,8 @@ public class GameTest {
 		assertEquals(Game.BuildType.none, buildTypeField.get(game));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testThatMoveRobberToSameHexThrowsException() throws Exception {
+	@Test
+	public void testThatMoveRobberToSameHexGivesWarningMessage() throws Exception {
 		setUpGameDavis();
 
 		LinkedList<Integer> playerStealList = new LinkedList<Integer>();
@@ -788,8 +788,11 @@ public class GameTest {
 				resourceStealList);
 
 		game.setRobberLocation(14);
+		assertEquals(game.sameHexRobberErrorCount,0);
 
 		game.setRobberLocation(14);
+		
+		assertEquals(game.sameHexRobberErrorCount,1);
 	}
 
 	@Test

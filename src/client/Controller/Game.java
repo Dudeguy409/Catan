@@ -119,11 +119,8 @@ public class Game {
 		this.players = new Player[this.numberOfPlayers];
 		for (int i = 0; i < this.numberOfPlayers; i++) {
 			this.players[i] = new Player();
-			// TODO remove
-			this.players[i].adjustCards(Resource.sheep, 21);
-			this.players[i].adjustCards(Resource.ore, 21);
-			this.players[i].adjustCards(Resource.wheat, 21);
 		}
+		
 		this.roadMgr = new RoadManager(this.numberOfPlayers);
 		this.hexMgr = new HexManager();
 		this.structMgr = new StructureManager(this.numberOfPlayers);

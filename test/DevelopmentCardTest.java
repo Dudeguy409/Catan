@@ -137,10 +137,14 @@ public class DevelopmentCardTest {
 
 		Player[] players = { player, new Player() };
 		field.set(game, players);
-		Resource[] resources = { Game.Resource.wheat, Game.Resource.wood };
+		LinkedList<Resource> resources = new LinkedList<Resource>();
+		resources.add(Game.Resource.wheat);
+		resources.add(Game.Resource.wood);
+
+		game.configureTestableGame(null, resources, null, null, null, null);
 
 		game.drawDevCard();
-		game.adjustForYearOfPlenty(resources);
+		game.playYearOfPlenty();
 		assertEquals(1, player.getCards()[0]);
 		assertEquals(1, player.getCards()[1]);
 		assertEquals(0, player.getCards()[2]);
@@ -161,7 +165,7 @@ public class DevelopmentCardTest {
 		Player player = new Player();
 		int[] delta = { 1, 0, 1, 0, 1, 0 };
 		player.adjustCards(delta);
-		
+
 		assertEquals(2, game.getVictoryPointsForPlayer(0));
 
 		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
@@ -171,6 +175,7 @@ public class DevelopmentCardTest {
 		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.drawDevCard();
+		game.processPlayDevCardClick(DevCard.victory);
 		assertEquals(3, game.getVictoryPointsForPlayer(0));
 		assertEquals(0, player.getCards()[0]);
 		assertEquals(0, player.getCards()[2]);
@@ -201,8 +206,15 @@ public class DevelopmentCardTest {
 
 		Player[] players = { player, player2 };
 		field.set(game, players);
+
+		LinkedList<Resource> resources = new LinkedList<Resource>();
+		resources.add(Game.Resource.wheat);
+		resources.add(Game.Resource.wood);
+
+		game.configureTestableGame(resources, null, null, null, null, null);
+
 		game.drawDevCard();
-		game.adjustForMonopoly(Game.Resource.wheat);
+		game.playMonopolyDevCard();
 
 		assertEquals(0, player2.getCards()[0]);
 		assertEquals(1, player.getCards()[0]);
@@ -240,9 +252,16 @@ public class DevelopmentCardTest {
 		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.drawDevCard();
+		assertEquals(0, player.getDevCard(Game.DevCard.roadBuilder));
+
+		game.endTurn();
+
 		assertEquals(1, player.getDevCard(Game.DevCard.roadBuilder));
 
-		game.playRoadBuilder();
+		game.roll();
+		game.endTurn();
+
+		game.processPlayDevCardClick(DevCard.roadBuilder);
 		int roadBuild = roadBuildField.getInt(game);
 		assertEquals(2, roadBuild);
 		game.processBuildRoadClick(3, HexComponent.RoadPosition.southwest);
@@ -295,10 +314,14 @@ public class DevelopmentCardTest {
 		game.processBuildRoadClick(1, HexComponent.RoadPosition.southeast);
 
 		game.drawDevCard();
+		assertEquals(0, player.getDevCard(Game.DevCard.roadBuilder));
+		game.endTurn();
 		assertEquals(1, player.getDevCard(Game.DevCard.roadBuilder));
+		
+		game.roll();
+		game.endTurn();
 
-		game.playRoadBuilder();
-		System.out.println(roadMgr.getRoadCountForPlayer(0));
+		game.processPlayDevCardClick(DevCard.roadBuilder);
 		int roadBuild = roadBuildField.getInt(game);
 		assertEquals(1, roadBuild);
 		game.processBuildRoadClick(1, HexComponent.RoadPosition.south);
@@ -351,9 +374,14 @@ public class DevelopmentCardTest {
 		game.processBuildRoadClick(1, HexComponent.RoadPosition.south);
 
 		game.drawDevCard();
+		assertEquals(0, player.getDevCard(Game.DevCard.roadBuilder));
+		game.endTurn();
 		assertEquals(1, player.getDevCard(Game.DevCard.roadBuilder));
+		
+		game.roll();
+		game.endTurn();
 
-		game.playRoadBuilder();
+		game.processPlayDevCardClick(DevCard.roadBuilder);
 		int roadBuild = roadBuildField.getInt(game);
 		assertEquals(0, roadBuild);
 
@@ -382,22 +410,26 @@ public class DevelopmentCardTest {
 		Player[] players = { player, new Player() };
 		field.set(game, players);
 		game.drawDevCard();
-		assertEquals(1, player.getDevCard(Game.DevCard.knight));
-		game.playKnight();
+		assertEquals(0, player.getDevCard(Game.DevCard.knight));
 		game.endTurn(); // Change to player index 1's turn.
 
-		Player[] plyers = (Player[]) (field.get(game));
-		Player plyer = plyers[game.getCurrentPlayer()];
+		assertEquals(1, player.getDevCard(Game.DevCard.knight));
 
 		game.roll();
-		assertEquals(1, plyer.getCards()[1]);
-		assertEquals(0, plyer.getDevCard(DevCard.knight));
+		game.endTurn();
+
+		assertEquals(1, player.getDevCard(Game.DevCard.knight));
+
+		game.processPlayDevCardClick(DevCard.knight);
+
+		assertEquals(0, player.getDevCard(Game.DevCard.knight));
+
 	}
-	
+
 	@Test
 	public void TestLargestArmyVictoryPoints() throws Exception {
 		setUpGameEthan();
-		
+
 		LinkedList<Integer> robberMoveSelections = new LinkedList<Integer>();
 		robberMoveSelections.add(14);
 		robberMoveSelections.add(15);
@@ -415,7 +447,6 @@ public class DevelopmentCardTest {
 
 		game.configureTestableGame(null, null, playerStealSelections, null,
 				robberMoveSelections, resourceSelections);
-		
 
 		Field field = Game.class.getDeclaredField("players");
 		field.setAccessible(true);
@@ -427,44 +458,60 @@ public class DevelopmentCardTest {
 		int[] delta = { 1, 0, 1, 0, 1, 0 };
 		player.adjustCards(delta);
 
+		Player player2 = new Player();
+		int[] delta2 = { 1, 0, 1, 0, 1, 0 };
+		player2.adjustCards(delta2);
+
 		LinkedList<Game.DevCard> devCardDeck = (LinkedList<DevCard>) devField
 				.get(game);
 		devCardDeck.addFirst(Game.DevCard.knight);
 
-		Player[] players = { player, new Player() };
+		Player[] players = { player, player2 };
 		field.set(game, players);
-		
+
 		assertEquals(2, game.getVictoryPointsForPlayer(0));
-		
+
 		game.drawDevCard();
+		assertEquals(0, player.getDevCard(Game.DevCard.knight));
+		game.endTurn(); // Change to player index 1's turn.
+		// assert that the card is only added to your hand after your turn ends
 		assertEquals(1, player.getDevCard(Game.DevCard.knight));
-		game.playKnight();
+
+		game.roll();
+		game.endTurn();
+		assertEquals(0, game.getCurrentPlayer());
+		assertEquals(1, player.getDevCard(Game.DevCard.knight));
+		game.processPlayDevCardClick(DevCard.knight);
+		devCardDeck.addFirst(Game.DevCard.knight);
+		player.adjustCards(delta);
+		assertEquals(0, player.getDevCard(Game.DevCard.knight));
+
+		game.drawDevCard();
+		assertEquals(0, player.getDevCard(Game.DevCard.knight));
+		game.endTurn(); // Change to player index 1's turn.
+		assertEquals(1, player.getDevCard(Game.DevCard.knight));
+
+		game.roll();
+		game.endTurn();
+		assertEquals(0, game.getCurrentPlayer());
+
+		devCardDeck.addFirst(Game.DevCard.knight);
+		player.adjustCards(delta);
+
+		game.drawDevCard();
+		game.processPlayDevCardClick(DevCard.knight);
+		assertEquals(0, player.getDevCard(Game.DevCard.knight));
+
 		game.endTurn(); // Change to player index 1's turn.
 
 		game.roll();
 		game.endTurn();
 		assertEquals(0, game.getCurrentPlayer());
-		
-		devCardDeck.addFirst(Game.DevCard.knight);
-		player.adjustCards(delta);
-		
-		game.drawDevCard();
-		assertEquals(1, player.getDevCard(Game.DevCard.knight));
-		game.playKnight();
-		game.endTurn(); // Change to player index 1's turn.
-		
-		game.roll();
+
+		game.processPlayDevCardClick(DevCard.knight);
+
 		game.endTurn();
-		assertEquals(0, game.getCurrentPlayer());
-		
-		devCardDeck.addFirst(Game.DevCard.knight);
-		player.adjustCards(delta);
-		
-		game.drawDevCard();
-		assertEquals(1, player.getDevCard(Game.DevCard.knight));
-		game.playKnight();
-		game.endTurn(); // Change to player index 1's turn.
-		
+
 		assertEquals(4, game.getVictoryPointsForPlayer(0));
 	}
 
