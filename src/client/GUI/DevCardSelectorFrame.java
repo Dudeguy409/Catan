@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import client.Controller.Game;
+import client.Controller.Game.DevCard;
 
 public class DevCardSelectorFrame extends JFrame {
 	private static final Dimension DIMENSION = new Dimension(600, 300);
@@ -28,21 +31,69 @@ public class DevCardSelectorFrame extends JFrame {
 	};
 	private Game game;
 	private int[] devCardCounts;
+	private UserPanel userPanel;
 
 	public static final String[] labels = { "<html>Year of Plenty</html>",
-			"<html>Victory</html>", "<html>Monopoly</html>",
-			"<html>Knight</html>", "<html>Road Builder</html>" };
+			"<html>Monopoly</html>", "<html>Knight</html>",
+			"<html>Victory</html>", "<html>Road Builder</html>" };
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1549121935124223208L;
 
-	public DevCardSelectorFrame(Game game, int[] devCardCounts) {
+	public DevCardSelectorFrame(Game game, int[] devCardCounts,
+			UserPanel userPanel) {
 		super();
 		this.game = game;
+		this.userPanel = userPanel;
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.devCardCounts = devCardCounts;
+
+		this.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				handleCloseEvent();
+
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 		this.setSize(DIMENSION);
 		this.setLocation(700, 300);
@@ -81,25 +132,17 @@ public class DevCardSelectorFrame extends JFrame {
 			}
 		}
 
-		switch (index) {
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			this.game.playKnight();
-			break;
-		case 4:
-			this.game.playRoadBuilder();
-			break;
-		default:
-			break;
-		}
+		handleCloseEvent();
+		
+		this.game.processPlayDevCardClick(DevCard.values()[index]);
 
+		
+
+	}
+
+	protected void handleCloseEvent() {
+		this.userPanel.reEnableUserPanel();
 		setVisible(false); // you can't see me!
 		dispose(); // Destroy the JFrame object
-
 	}
 }

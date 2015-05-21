@@ -87,6 +87,8 @@ public class Game {
 	private int robberLocation = -1;
 	private int roadBuild = 0;
 	private PortManager portMgr;
+	private boolean hasPlayedNonVPDevCard = false;
+	private ArrayList<DevCard> purchasedDevCards = null;
 
 	/**
 	 * The number of hexes on the field.
@@ -117,6 +119,10 @@ public class Game {
 		this.players = new Player[this.numberOfPlayers];
 		for (int i = 0; i < this.numberOfPlayers; i++) {
 			this.players[i] = new Player();
+			// TODO remove
+			this.players[i].adjustCards(Resource.sheep, 21);
+			this.players[i].adjustCards(Resource.ore, 21);
+			this.players[i].adjustCards(Resource.wheat, 21);
 		}
 		this.roadMgr = new RoadManager(this.numberOfPlayers);
 		this.hexMgr = new HexManager();
@@ -245,9 +251,6 @@ public class Game {
 	public boolean addBuilding(int playerIndex, int hexId,
 			HexComponent.StructurePosition pos) {
 
-		// TODO Check for adjacent road not returned by
-		// getAdjacentRoadPositionsForStructure
-
 		int structureId = this.hexMgr.getStructureId(hexId, pos);
 
 		boolean isAdjacent = false;
@@ -255,6 +258,8 @@ public class Game {
 		HexComponent.RoadPosition[] adjRoads = HexComponent
 				.getAdjacentRoadPositionsForStructure(pos);
 
+		// Checks for adjacent road not returned by
+		// getAdjacentRoadPositionsForStructure
 		ArrayList<Integer> possibleRoads = new ArrayList<Integer>();
 		possibleRoads.add(this.hexMgr.getRoadId(hexId, adjRoads[0]));
 		possibleRoads.add(this.hexMgr.getRoadId(hexId, adjRoads[1]));
@@ -414,7 +419,7 @@ public class Game {
 	private void startMoveRobber() {
 		displayMoveRobberMessage();
 
-		this.userPanel.beginRobber();
+		this.userPanel.disableUserPanel();
 		this.currentBuildType = BuildType.robber;
 	}
 
@@ -430,7 +435,7 @@ public class Game {
 	}
 
 	protected void drawRandomCardFromOpponent(int playerToStealFrom) {
-		// TODO handle drawing a random card from someone's hand.
+
 		int[] cards = this.players[playerToStealFrom].getCards();
 
 		ArrayList<Integer> candidateCards = new ArrayList<Integer>();
@@ -444,8 +449,21 @@ public class Game {
 		int randomResourceNum = candidateCards.get((int) (Math.random()
 				* (candidateCards.size() - 1) + 1));
 
+		displayCardStolen(Resource.values()[randomResourceNum],
+				playerToStealFrom);
+
 		this.players[playerToStealFrom].adjustCards(randomResourceNum, -1);
 		this.players[currentPlayer].adjustCards(randomResourceNum, 1);
+		updateUserPanelCards();
+	}
+
+	protected void displayCardStolen(Resource resource, int playerToStealFrom) {
+		String message = "Player " + (this.currentPlayer + 1)
+				+ ", You have just stolen a " + resource.name()
+				+ " card from player " + (playerToStealFrom + 1) + ".";
+
+		JOptionPane.showMessageDialog(null, message);
+
 	}
 
 	private ArrayList<Hex> findRolledHexes(int rollNumber) {
@@ -465,61 +483,71 @@ public class Game {
 
 			displayDrawnDevCard(d);
 
-			this.players[this.currentPlayer].changeDevCardCount(d, 1);
+			if (d == DevCard.victory) {
+				// add it immediately to their hand.
+				this.players[this.currentPlayer].changeDevCardCount(d, 1);
+			} else {
+				// wait till the end of their turn to add to hand.
+
+				// if they haven't drawn any dev cards yet this turn...
+				if (this.purchasedDevCards == null) {
+					this.purchasedDevCards = new ArrayList<DevCard>();
+				}
+				this.purchasedDevCards.add(d);
+			}
+
 			int[] delta = { -1, 0, -1, 0, -1 };
 			this.players[this.currentPlayer].adjustCards(delta);
+			updateUserPanelCards();
 		}
 
 	}
 
 	protected void displayDrawnDevCard(DevCard d) {
-		String message = "Player " + (this.currentPlayer + 1)
+		String messageA = "Player " + (this.currentPlayer + 1)
 				+ ", You have just drawn a " + d.name() + " development card.";
+		String messageB;
+
+		if (d == DevCard.victory) {
+			messageB = "  It has been immediately added to your hand.";
+		} else {
+			messageB = "  It will be added to your hand at the end of your turn.";
+		}
+
+		String message = messageA + messageB;
 
 		JOptionPane.showMessageDialog(null, message);
 	}
 
-	public void useYearOfPlenty() {
-		if (players[this.currentPlayer].getDevCard(DevCard.yearOfPlenty) >= 1) {
-			Resource[] resources = new Resource[2];
-			resources[0] = selectResourceForYearOfPlenty(true);
-			resources[1] = selectResourceForYearOfPlenty(false);
-			adjustForYearOfPlenty(resources);
-		}
+	public void playYearOfPlenty() {
+		this.userPanel.disableUserPanel();
+
+		players[this.currentPlayer].adjustCards(
+				selectResourceForYearOfPlenty(true), 1);
+		players[this.currentPlayer].adjustCards(
+				selectResourceForYearOfPlenty(false), 1);
+
+		this.userPanel.reEnableUserPanel();
+		updateUserPanelCards();
 	}
 
-	public void adjustForYearOfPlenty(Resource[] resources) {
-		players[this.currentPlayer].adjustCards(resources[0], 1);
-		players[this.currentPlayer].adjustCards(resources[1], 1);
-		players[this.currentPlayer]
-				.changeDevCardCount(DevCard.yearOfPlenty, -1);
-	}
+	public void playMonopolyDevCard() {
+		this.userPanel.disableUserPanel();
+		Resource resource = selectResourceForMonopoly();
 
-	protected void useVictoryPointCard() {
-		this.players[this.currentPlayer].incrementDevVps();
-		this.players[this.currentPlayer]
-				.changeDevCardCount(DevCard.victory, -1);
-	}
-
-	public void useMonopoly() {
-		if (players[this.currentPlayer].getDevCard(DevCard.monopoly) >= 1) {
-			Resource resource = selectResourceForMonopoly();
-			adjustForMonopoly(resource);
-		}
-	}
-
-	public void adjustForMonopoly(Resource resource) {
 		for (int i = 0; i < players.length; i++) {
 			if (i != this.currentPlayer) {
-				if (players[i].getCard(resource) > 0) {
-					players[this.currentPlayer].adjustCards(resource,
-							players[i].getCard(resource));
-					players[i].adjustCards(resource,
-							-players[i].getCard(resource));
+				int cardCount = players[i].getCard(resource);
+				if (cardCount > 0) {
+					players[this.currentPlayer]
+							.adjustCards(resource, cardCount);
+					players[i].adjustCards(resource, -cardCount);
 				}
 			}
 		}
-		players[this.currentPlayer].changeDevCardCount(DevCard.monopoly, -1);
+
+		this.userPanel.reEnableUserPanel();
+		updateUserPanelCards();
 	}
 
 	public void setBuildType(BuildType type) {
@@ -527,6 +555,14 @@ public class Game {
 	}
 
 	public void endTurn() {
+		if (purchasedDevCards != null) {
+			for (DevCard d : purchasedDevCards) {
+				this.players[this.currentPlayer].changeDevCardCount(d, 1);
+			}
+			purchasedDevCards = null;
+		}
+		hasPlayedNonVPDevCard = false;
+
 		this.currentPlayer = (this.currentPlayer + 1) % this.numberOfPlayers;
 		this.userPanel.setCurrentPlayer(this.currentPlayer);
 		this.userPanel.setTurnPhase(TurnPhase.preroll);
@@ -569,7 +605,6 @@ public class Game {
 		}
 		points += structMgr
 				.calculateStructureVictoyPointsForPlayer(playerNumber);
-		userPanel.updateVPLabel(playerNumber, points);
 
 		// add points for knights
 		if (players[playerNumber].getKnightsPlayed() >= 3
@@ -577,7 +612,9 @@ public class Game {
 			points += 2;
 		}
 
-		points += players[playerNumber].getVictoryPointDevCards();
+		points += players[playerNumber].getDevCardVPs();
+
+		userPanel.updateVPLabel(playerNumber, points);
 
 		return points;
 	}
@@ -620,8 +657,19 @@ public class Game {
 	public void processBuildRoadClick(int hexID, HexComponent.RoadPosition pos) {
 		Player cp = players[this.currentPlayer];
 		if (this.preGameMode != true) {
-			if ((cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1)
-					|| this.roadBuild > 0) {
+			if (this.roadBuild > 0) {
+				if (addRoad(this.currentPlayer, hexID, pos)) {
+					this.roadBuild--;
+					this.players[this.currentPlayer].adjustCards(Resource.wood,
+							1);
+					this.players[this.currentPlayer].adjustCards(
+							Resource.brick, 1);
+					updateUserPanelCards();
+				}
+				if (this.roadBuild == 0) {
+					this.userPanel.reEnableUserPanel();
+				}
+			} else if (cp.getCards()[1] >= 1 && cp.getCards()[3] >= 1) {
 				addRoad(this.currentPlayer, hexID, pos);
 			}
 
@@ -848,29 +896,36 @@ public class Game {
 
 	public void setRobberLocation(int robberLoc) {
 		if (this.robberLocation == robberLoc) {
-			throw new IllegalArgumentException(
-					"Robber must move to a different hex.");
+			displayRobberErrorMessage();
+			return;
 		}
 		this.robberLocation = robberLoc;
 		board.moveRobber(robberLoc);
 		this.currentBuildType = BuildType.none;
-		this.userPanel.endRobber();
+		this.userPanel.reEnableUserPanel();
 
 		Set<Integer> playersToStealFrom = getPlayersToStealFrom(robberLoc);
+
+		// TODO only let people move the robber to a hex where all players
+		// touching it have more than 3 points
 
 		if (playersToStealFrom.size() == 0) {
 			// Do nothing.
 		} else if (playersToStealFrom.size() == 1) {
-			// TODO only let people move the robber to a hex where all players
-			// touching it have more than 3 points
+
 			int playerToStealFrom = playersToStealFrom.iterator().next();
 			drawRandomCardFromOpponent(playerToStealFrom);
-			updateUserPanelCards();
 		} else {
 			int playerToStealFrom = selectPlayerToStealFrom(playersToStealFrom);
 			drawRandomCardFromOpponent(playerToStealFrom);
-			updateUserPanelCards();
 		}
+	}
+
+	protected void displayRobberErrorMessage() {
+		String message = "Player " + (this.currentPlayer + 1)
+				+ ", you must select a different hex for the robber.";
+
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 	public Set<Integer> getPlayersToStealFrom(int robberLocation) {
@@ -892,31 +947,74 @@ public class Game {
 	}
 
 	public void playRoadBuilder() {
-		if (players[this.currentPlayer].getDevCard(DevCard.roadBuilder) >= 1) {
-			players[this.currentPlayer].changeDevCardCount(DevCard.roadBuilder,
-					-1);
-			setBuildType(BuildType.road);
-			int roadCount = this.roadMgr
-					.getRoadCountForPlayer(this.currentPlayer);
-			if (roadCount < 14)
-				this.roadBuild = 2;
-			else if (roadCount == 14)
-				this.roadBuild = 1;
+
+		this.userPanel.disableUserPanel();
+
+		setBuildType(BuildType.road);
+		int roadCount = this.roadMgr.getRoadCountForPlayer(this.currentPlayer);
+		if (roadCount < 14) {
+			this.roadBuild = 2;
+		} else if (roadCount == 14) {
+			this.roadBuild = 1;
+		} else {
+			this.userPanel.reEnableUserPanel();
 		}
 	}
 
 	public void playKnight() {
-		if (players[this.currentPlayer].getDevCard(DevCard.knight) >= 1) {
-			players[this.currentPlayer].changeDevCardCount(DevCard.knight, -1);
-			startMoveRobber();
-		}
-
+		startMoveRobber();
 		players[this.currentPlayer].incrementKnightsPlayed();
 
 		if (players[this.currentPlayer].getKnightsPlayed() > maxArmySize) {
 			maxArmySize = players[this.currentPlayer].getKnightsPlayed();
 			playerWithLargestArmy = this.currentPlayer;
 		}
+	}
+
+	public int[] getDevCardsForCurrentPlayer() {
+		return this.players[this.currentPlayer].getDevCardCounts();
+	}
+
+	public void processPlayDevCardClick(DevCard devCard) {
+		if (this.players[this.currentPlayer].getDevCard(devCard) > 0) {
+			if (devCard == DevCard.victory) {
+				this.players[this.currentPlayer]
+						.changeDevCardCount(devCard, -1);
+				this.players[this.currentPlayer].incrementDevVps();
+			} else if (this.hasPlayedNonVPDevCard) {
+				displayPlayDevCardError();
+			} else {
+				this.hasPlayedNonVPDevCard = true;
+				this.players[this.currentPlayer]
+						.changeDevCardCount(devCard, -1);
+				switch (devCard) {
+				case monopoly:
+					playMonopolyDevCard();
+					break;
+				case roadBuilder:
+					playRoadBuilder();
+					break;
+				case knight:
+					playKnight();
+					break;
+				case yearOfPlenty:
+					playYearOfPlenty();
+					break;
+				default:
+					break;
+				}
+			}
+
+		}
+
+	}
+
+	protected void displayPlayDevCardError() {
+		String message = "Player "
+				+ (this.currentPlayer + 1)
+				+ ", you may only play one development card per turn unless the card played is a victory point card.";
+
+		JOptionPane.showMessageDialog(null, message);
 	}
 
 }

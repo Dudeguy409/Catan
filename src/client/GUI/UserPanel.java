@@ -56,6 +56,7 @@ public class UserPanel extends JPanel implements IUserPanel {
 	private JButton startButton;
 	private JLabel[] quantityLabel;
 	private JLabel totalLabel;
+	private boolean[] enabledComponents;
 
 	public UserPanel() {
 
@@ -223,7 +224,10 @@ public class UserPanel extends JPanel implements IUserPanel {
 	}
 
 	protected void displayDevCardSelector() {
-		// TODO Auto-generated method stub
+		disableUserPanel();
+
+		new DevCardSelectorFrame(game, this.game.getDevCardsForCurrentPlayer(),
+				this);
 	}
 
 	private void addBuildPanel() {
@@ -450,7 +454,6 @@ public class UserPanel extends JPanel implements IUserPanel {
 		this.cityButton.setVisible(true);
 		this.dice.setVisible(true);
 		this.playDevButton.setVisible(true);
-		this.playDevButton.setEnabled(false);
 		this.setTurnPhase(Game.TurnPhase.preroll);
 	}
 
@@ -464,16 +467,72 @@ public class UserPanel extends JPanel implements IUserPanel {
 
 	}
 
-	public void beginRobber() {
+	public void disableUserPanel() {
+		boolean isRollEnabled = false;
+		boolean isTradeEnabled = false;
+		boolean isBuildEnabled = false;
+		boolean isBuildPanelVisible = false;
+		boolean isEndTurnEnabled = false;
+
+		if (this.rollButton.isEnabled()) {
+			isRollEnabled = true;
+		}
+
+		if (this.tradeButton.isEnabled()) {
+			isTradeEnabled = true;
+		}
+
+		if (this.buildButton.isEnabled()) {
+			isBuildEnabled = true;
+		}
+
+		if (this.endButton.isEnabled()) {
+			isEndTurnEnabled = true;
+		}
+
+		if (this.buildPanel.isVisible()) {
+			isBuildPanelVisible = true;
+		}
+
+		this.buildPanel.setVisible(false);
+		this.rollButton.setEnabled(false);
 		this.tradeButton.setEnabled(false);
 		this.buildButton.setEnabled(false);
 		this.endButton.setEnabled(false);
+		this.playDevButton.setEnabled(false);
+
+		boolean[] rslts = { isRollEnabled, isTradeEnabled, isBuildEnabled,
+				isEndTurnEnabled, isBuildPanelVisible };
+
+		this.enabledComponents = rslts;
 	}
 
-	public void endRobber() {
-		this.tradeButton.setEnabled(true);
-		this.buildButton.setEnabled(true);
-		this.endButton.setEnabled(true);
+	public void reEnableUserPanel() {
+
+		this.playDevButton.setEnabled(true);
+
+		if (enabledComponents[0]) {
+			this.rollButton.setEnabled(true);
+		}
+
+		if (enabledComponents[1]) {
+			this.tradeButton.setEnabled(true);
+		}
+
+		if (enabledComponents[2]) {
+			this.buildButton.setEnabled(true);
+		}
+
+		if (enabledComponents[3]) {
+			this.endButton.setEnabled(true);
+		}
+
+		if (enabledComponents[4]) {
+			this.buildPanel.setVisible(true);
+		}
+		
+		this.enabledComponents = null;
+
 	}
 
 }

@@ -63,7 +63,7 @@ public class Main {
 		frame.setVisible(true);
 		frame.setResizable(false);
 		// TODO remove
-		// int[] a = { 0, 2, 0, 0, 1 };
+		// int[] a = { 1, 2, 3, 4, 5 };
 		// new DevCardSelectorFrame(game, a);
 	}
 

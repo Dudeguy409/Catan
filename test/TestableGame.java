@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.util.LinkedList;
 import java.util.Set;
-
 import client.Controller.Game;
 import client.Controller.IDice;
 import client.GUI.IBoardRenderer;
@@ -96,6 +95,22 @@ public class TestableGame extends Game {
 
 	@Override
 	protected void displayDrawnDevCard(DevCard d) {
+		// does nothing.
+	}
+
+	@Override
+	protected void displayCardStolen(Resource resource, int player) {
+		// does nothing.
+
+	}
+
+	@Override
+	protected void displayRobberErrorMessage() {
+		// does nothing.
+	}
+
+	@Override
+	protected void displayPlayDevCardError() {
 		// does nothing.
 	}
 

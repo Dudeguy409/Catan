@@ -23,8 +23,8 @@ public interface IUserPanel {
 
 	void updateResourceCards(int[] cards);
 	
-	void beginRobber();
+	void disableUserPanel();
 	
-	void endRobber();
+	void reEnableUserPanel();
 
 }

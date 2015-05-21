@@ -68,12 +68,12 @@ public class FakeUserPanel implements IUserPanel {
 	}
 
 	@Override
-	public void beginRobber() {
+	public void disableUserPanel() {
 		
 	}
 	
 	@Override
-	public void endRobber() {
+	public void reEnableUserPanel() {
 		
 	}
 }

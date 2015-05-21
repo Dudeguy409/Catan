@@ -1,7 +1,6 @@
 package client.Model;
 
 import java.util.HashSet;
-
 import client.Controller.Game;
 
 /**
@@ -222,8 +221,8 @@ public class Player {
 		return this.knightsPlayed;
 	}
 
-	public int getVictoryPointDevCards() {
-		return victory;
+	public int[] getDevCardCounts() {
+		int[] rslt = { yearOfPlenty, monopoly, knight, victory, roadBuilder };
+		return rslt;
 	}
-
 }
