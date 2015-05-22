@@ -29,7 +29,7 @@ public class HexManager {
 	}
 
 	public ArrayList<Integer> getAdjacentHexesForSettlement(int structureId) {
-		ArrayList<Integer> rslts = new ArrayList<>();
+		ArrayList<Integer> rslts = new ArrayList<Integer>();
 
 		for (Entry<StructureLocationKey, Integer> e : this.structureMap
 				.entrySet()) {
